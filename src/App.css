@@ -1,9 +1,11 @@
-
-
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
@@ -12,21 +14,27 @@ body {
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
+  font-family: 'Inter', 'Helvetica Neue', sans-serif;
 }
+
+/* ========================= */
+/* HEADER */
+/* ========================= */
 
 header {
   width: 100%;
   height: 100vh;
+
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+
   text-align: center;
   padding: 0 2rem;
 }
 
 header h1 {
-  font-family: 'Inter', 'Helvetica Neue', sans-serif;
   font-size: clamp(2rem, 5vw, 3.5rem);
   font-weight: 700;
   color: #ffffff;
@@ -35,102 +43,622 @@ header h1 {
   letter-spacing: -0.01em;
 }
 
-
 header h2 {
-  font-family: 'Inter', 'Helvetica Neue', sans-serif;
   font-size: clamp(0.95rem, 2vw, 1.15rem);
   font-weight: 400;
   color: #8892a4;
   max-width: 600px;
   line-height: 1.6;
 }
-.sticky-section {
-  display: flex;
-  width: 100%;
-}
 
+/* ========================= */
+/* SECCIÓN VOYAGER GENERAL */
+/* ========================= */
 
-.sticky-section {
-  display: flex;
-  width: 100%;
-}
+.voyager-section {
+  position: relative;
+  height: 780vh;
+  color: white;
+  overflow: clip;
 
-.sticky-left {
-  position: sticky;
-  top: 0;
-  width: 50%;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background-color: rgba(2, 3, 10, 0.45);
+  background-image:
+    linear-gradient(
+      rgba(2, 3, 10, 0.45),
+      rgba(2, 3, 10, 0.65)
+    ),
+    url('./assets/espacio.jpg');
   background-size: cover;
   background-position: center;
+  background-attachment: fixed;
 }
 
-.sticky-overlay {
+/* Canvas 3D fijo */
+.voyager-canvas {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  z-index: 1;
+}
+
+.voyager-canvas canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ========================= */
+/* PRIMERA PARTE: DATOS */
+/* ========================= */
+
+.sticky-right {
   position: absolute;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 0;
-}
+  top: 0;
+  right: 0;
 
-.sticky-right {
-  width: 50%;
+  width: 50vw;
+  height: 300vh;
+
+  z-index: 2;
+
   display: flex;
   flex-direction: column;
-  background: #080d1a;
 }
 
 .sticky-block {
-  height: 75vh;
+  height: 100vh;
+  width: 100%;
+
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  gap: 12px;
+  align-items: center;
+
+  padding-left: 6vw;
+  padding-right: 5vw;
+
+  background: rgba(8, 13, 26, 0.72);
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+
+  backdrop-filter: blur(2px);
 }
 
 .sticky-numero {
-  font-size: clamp(3rem, 8vw, 6rem);
-  font-weight: 700;
-  color: #f5a623;
-  font-family: 'Inter', sans-serif;
-  line-height: 1;
-}
+  display: block;
 
-.sticky-unidad {
-  font-size: clamp(1rem, 2vw, 1.5rem);
-  color: #8892a4;
-  font-family: 'Inter', sans-serif;
-  font-weight: 400;
-}
-
-.sticky-right {
-  width: 50%;
-  display: flex;
-  flex-direction: column;
-  background: #080d1a;
-}
-
-.sticky-block {
-  height: 75vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-}
-.sticky-numero {
-  font-size: clamp(3rem, 8vw, 6rem);
-  font-weight: 700;
-  color: #f5a623;
-  font-family: 'Playfair Display', Georgia;
+  font-family: 'Playfair Display', Georgia, serif;
   font-style: italic;
-  line-height: 1;
+  font-weight: 700;
+
+  font-size: clamp(4rem, 7.5vw, 9rem);
+  line-height: 0.85;
+
+  color: #f5a623;
+  letter-spacing: -0.04em;
+  text-align: center;
+
+  max-width: 100%;
 }
+
 .sticky-unidad {
-  font-size: clamp(1rem, 2vw, 1.5rem);
-  color: #8892a4;
-  font-family: 'Inter', sans-serif;
+  display: block;
+
+  margin-top: 1.2rem;
+
+  font-size: clamp(1.2rem, 1.8vw, 2rem);
+  line-height: 1.3;
   font-weight: 400;
+
+  color: rgba(255, 255, 255, 0.72);
+  text-align: center;
+}
+
+/* ========================= */
+/* SEGUNDA PARTE: HISTORIA */
+/* ========================= */
+
+.story-wrapper {
+  position: absolute;
+  top: 300vh;
+  left: 0;
+
+  width: 100%;
+  height: 500vh;
+
+  z-index: 3;
+  pointer-events: none;
+}
+
+.story-step {
+  height: 100vh;
+  width: 50vw;
+
+  display: flex;
+  align-items: center;
+
+  padding-left: 7vw;
+  padding-right: 4vw;
+
+  background: linear-gradient(
+    90deg,
+    rgba(2, 3, 10, 0.82),
+    rgba(2, 3, 10, 0.38),
+    rgba(2, 3, 10, 0)
+  );
+}
+
+.story-text {
+  max-width: 580px;
+}
+
+.story-year {
+  display: block;
+
+  font-size: 0.85rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+
+  color: #f5a623;
+  margin-bottom: 1rem;
+}
+
+.story-text h2 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-style: italic;
+  font-weight: 700;
+
+  font-size: clamp(2.3rem, 4vw, 4.5rem);
+  line-height: 0.95;
+
+  color: #ffffff;
+
+  margin-bottom: 1.5rem;
+}
+
+.story-text p {
+  font-size: clamp(1rem, 1.2vw, 1.2rem);
+  line-height: 1.65;
+
+  color: rgba(255, 255, 255, 0.78);
+}
+
+/* ========================= */
+/* RESPONSIVE */
+/* ========================= */
+
+@media (max-width: 900px) {
+  .voyager-section {
+    height: 820vh;
+  }
+
+  .sticky-right {
+    width: 100vw;
+  }
+
+  .sticky-block {
+    padding-left: 8vw;
+    padding-right: 8vw;
+    background: rgba(8, 13, 26, 0.68);
+  }
+
+  .sticky-numero {
+    font-size: clamp(3.8rem, 15vw, 7rem);
+  }
+
+  .story-wrapper {
+    top: 260vh;
+    height: 500vh;
+  }
+
+  .story-step {
+    width: 100vw;
+    padding-left: 8vw;
+    padding-right: 8vw;
+
+    background: rgba(2, 3, 10, 0.72);
+  }
+
+  .story-text h2 {
+    font-size: clamp(2.2rem, 9vw, 4rem);
+  }
+
+  .story-text p {
+    font-size: 1rem;
+  }
+}
+
+/*  TIMELINE 1977 */
+
+/* ========================= */
+/* LA TIERRA EN 1977 */
+/* SCROLL HORIZONTAL */
+/* ========================= */
+
+.earth-timeline-section {
+  position: relative;
+  height: 420vh;
+  color: white;
+  overflow: clip;
+
+  background-color: rgba(2, 3, 10, 0.6);
+  background-image:
+    linear-gradient(
+      rgba(2, 3, 10, 0.75),
+      rgba(2, 3, 10, 0.85)
+    ),
+    url('./assets/espacio.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.earth-timeline-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+}
+
+.earth-timeline-intro {
+  position: absolute;
+  left: 7vw;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+
+  width: min(520px, 38vw);
+  pointer-events: none;
+}
+
+
+.earth-timeline-intro h2 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-style: italic;
+  font-weight: 700;
+
+  font-size: clamp(2.2rem, 3vw, 4.7rem);
+  line-height: 0.95;
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+.earth-timeline-intro p {
+  font-size: clamp(1rem, 1.2vw, 1.2rem);
+  line-height: 1.65;
+
+  color: rgba(255, 255, 255, 0.76);
+}
+
+.timeline-track {
+  position: absolute;
+  left: 52vw;
+  top: 0;
+  height: 100vh;
+
+  display: flex;
+  align-items: center;
+  gap: 8vw;
+
+  padding-right: 20vw;
+
+  z-index: 2;
+
+  transition: transform 0.08s linear;
+  will-change: transform;
+}
+
+.timeline-card {
+  position: relative;
+
+  width: 420px;
+  min-width: 420px;
+  min-height: 300px;
+
+  padding: 2rem;
+
+  background: rgba(8, 13, 26, 0.76);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  backdrop-filter: blur(4px);
+}
+
+.timeline-year {
+  display: block;
+
+  font-family: 'Playfair Display', Georgia, serif;
+  font-style: italic;
+  font-size: clamp(3rem, 6vw, 6rem);
+  font-weight: 700;
+  line-height: 0.9;
+
+  color: #f5a623;
+
+  margin-bottom: 1.5rem;
+}
+
+.timeline-dot {
+  position: absolute;
+  left: 2rem;
+  bottom: -3.65rem;
+
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+
+  background: #f5a623;
+  box-shadow: 0 0 24px rgba(245, 166, 35, 0.8);
+}
+
+.timeline-card h3 {
+  font-size: clamp(1.4rem, 2vw, 2rem);
+  line-height: 1.1;
+  margin-bottom: 1rem;
+}
+
+.timeline-card p {
+  font-size: 1rem;
+  line-height: 1.55;
+
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.timeline-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(50% + 190px);
+
+  height: 1px;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(245, 166, 35, 0.8),
+    rgba(255, 255, 255, 0.25),
+    transparent
+  );
+
+  z-index: 1;
+}
+
+/* ========================= */
+/* RESPONSIVE */
+/* ========================= */
+
+@media (max-width: 900px) {
+  .earth-timeline-section {
+    height: 460vh;
+  }
+
+  .earth-timeline-intro {
+    left: 8vw;
+    top: 18vh;
+    transform: none;
+
+    width: 84vw;
+  }
+
+  .earth-timeline-intro h2 {
+    font-size: clamp(2rem, 9vw, 4rem);
+  }
+
+  .timeline-track {
+    left: 8vw;
+    top: 18vh;
+
+    align-items: flex-end;
+    gap: 12vw;
+  }
+
+  .timeline-card {
+    width: 78vw;
+    min-width: 78vw;
+  }
+
+  .timeline-line {
+    top: auto;
+    bottom: 12vh;
+  }
+}
+/* ========================= */
+/* COMPARACIÓN DE ESCALA */
+/* ========================= */
+
+.scale-section {
+  position: relative;
+  height: 420vh;
+  color: white;
+
+  overflow: visible;
+  overflow-x: clip;
+
+  background-color: rgba(2, 3, 10, 0.65);
+  background-image:
+    linear-gradient(
+      rgba(2, 3, 10, 0.78),
+      rgba(2, 3, 10, 0.88)
+    ),
+    url('./assets/espacio.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.scale-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Texto fijo a la derecha */
+.scale-intro {
+  position: absolute;
+  right: 7vw;
+  top: 50%;
+  transform: translateY(-50%);
+
+  width: min(520px, 38vw);
+  z-index: 5;
+  pointer-events: none;
+}
+
+.scale-intro span {
+  display: block;
+  font-size: 0.85rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #f5a623;
+  margin-bottom: 1rem;
+}
+
+.scale-intro h2 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-style: italic;
+  font-weight: 700;
+  font-size: clamp(2.4rem, 4vw, 4.7rem);
+  line-height: 0.95;
+  margin-bottom: 1.5rem;
+}
+
+.scale-intro p {
+  font-size: clamp(1rem, 1.2vw, 1.2rem);
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.76);
+}
+
+/* Viewport: SOLO muestra la mitad izquierda */
+.scale-viewport {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 50vw;
+  height: 100vh;
+  overflow: hidden;
+  z-index: 3;
+}
+
+/* Track horizontal */
+.scale-horizontal-track {
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  height: 100vh;
+  width: max-content;
+
+  display: flex;
+  flex-direction: row;
+
+  will-change: transform;
+  transition: transform 0.08s linear;
+}
+
+/* Cada slide ocupa exactamente la mitad izquierda */
+.scale-panel {
+  width: 50vw;
+  height: 100vh;
+  flex: 0 0 50vw;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+
+  padding-bottom: 16vh;
+}
+
+/* Visual */
+.scale-object-visual {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.scale-object-visual canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.scale-object-visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* Tamaños */
+.scale-object-eiffel {
+  width: 800px;
+  height: 780px;
+}
+
+.scale-object-airplane {
+  width: 740px;
+  height: 300px;
+}
+
+.scale-object-voyager {
+  width: 240px;
+  height: 270px;
+}
+
+.scale-object-person {
+  width: 65px;
+  height: 130px;
+}
+
+/* Texto debajo */
+.scale-object-info {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.scale-object-info span {
+  display: block;
+
+  font-family: 'Playfair Display', Georgia, serif;
+  font-style: italic;
+  font-weight: 700;
+
+  font-size: clamp(1.8rem, 2.8vw, 3.2rem);
+  line-height: 0.95;
+  padding-bottom: 1rem;
+  color: #f5a623;
+}
+
+.scale-object-info p {
+  margin-top: 0.35rem;
+  margin-bottom: 50px;
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+
+  color: rgba(255, 255, 255, 0.66);
+}
+
+/* Línea de piso solo en la mitad izquierda */
+.scale-ground-line {
+  position: absolute;
+  left: 0;
+  width: 50vw;
+  bottom: 16vh;
+
+  height: 1px;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(245, 166, 35, 0.8),
+    rgba(255, 255, 255, 0.25),
+    transparent
+  );
+
+  z-index: 1;
 }
