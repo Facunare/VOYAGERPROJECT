@@ -303,6 +303,26 @@ header h2 {
   align-items: center;
 }
 
+.earth-timeline-sticky::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  width: 55vw;
+  height: 100vh;
+
+  background: linear-gradient(
+    90deg,
+    rgba(2, 3, 10, 0.96) 0%,
+    rgba(2, 3, 10, 0.88) 55%,
+    rgba(2, 3, 10, 0) 100%
+  );
+
+  z-index: 3;
+  pointer-events: none;
+}
+
 .earth-timeline-intro {
   position: absolute;
   left: 7vw;
