@@ -210,12 +210,13 @@ const steps = [
     kicker: 'Datos invisibles',
     title: 'No solo imágenes',
     text: 'Además de fotografiar, Voyager midió campos magnéticos y partículas. El encuentro con Júpiter también fue una forma de registrar fenómenos que no podían verse a simple vista.',
-    flourish: true,
+    flourishJupiter: true,
   },
   {
     kicker: '1980',
     title: 'Saturno y la decisión que cambió el destino',
     text: 'Después de Júpiter, Voyager 1 llegó a Saturno. Allí la misión tuvo uno de sus momentos clave.',
+    flourishSaturn: true,
   },
   {
     kicker: 'Titán',
@@ -268,7 +269,7 @@ export default function JupiterSaturnEncounter() {
             <h2>{step.title}</h2>
             <p>{step.text}</p>
 
-            {step.flourish && (
+            {step.flourishJupiter && (
               <div className="flourish-embed-container">
                 <iframe
                   src="https://flo.uri.sh/visualisation/29361863/embed"
@@ -276,6 +277,11 @@ export default function JupiterSaturnEncounter() {
                   className="flourish-iframe"
                   allowFullScreen
                 />
+              </div>
+            )}
+            {step.flourishSaturn && (
+              <div className="flourish-embed-container">
+                <iframe src='https://flo.uri.sh/visualisation/29362393/embed' title='Interactive or visual content' className="flourish-iframe"></iframe>
               </div>
             )}
           </article>
