@@ -689,7 +689,7 @@ header h2 {
 
 .jupiter-saturn-section {
   position: relative;
-  height: 720vh;
+  height: 1000vh;
   color: white;
 
   overflow: visible;
@@ -733,7 +733,7 @@ header h2 {
   left: 0;
 
   width: 45vw;
-  height: 720vh;
+  height: 1000vh;
 
   z-index: 3;
   pointer-events: none;
@@ -835,4 +835,267 @@ header h2 {
   .flourish-embed-container {
     width: 84vw;
   }
+}
+
+/* ========================= */
+/* GOLDEN RECORD */
+/* ========================= */
+
+.golden-section {
+  position: relative;
+  height: 520vh;
+  color: white;
+
+  overflow: visible;
+  overflow-x: clip;
+
+  background-color: rgba(2, 3, 10, 0.7);
+  background-image:
+    linear-gradient(
+      rgba(2, 3, 10, 0.8),
+      rgba(2, 3, 10, 0.9)
+    ),
+    url('./assets/espacio.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.golden-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* texto fijo */
+.golden-intro {
+  position: absolute;
+  left: 7vw;
+  top: 50%;
+  transform: translateY(-50%);
+
+  width: min(480px, 34vw);
+  z-index: 5;
+  pointer-events: none;
+}
+
+.golden-intro span {
+  display: block;
+  margin-bottom: 1rem;
+
+  font-size: 0.85rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #f5a623;
+}
+
+.golden-intro h2 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-style: italic;
+  font-weight: 700;
+  font-size: clamp(2.4rem, 4vw, 4.8rem);
+  line-height: 0.95;
+  margin-bottom: 1.5rem;
+}
+
+.golden-intro p {
+  font-size: clamp(1rem, 1.15vw, 1.15rem);
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.78);
+  margin-bottom: 1rem;
+}
+
+/* viewport horizontal */
+.golden-viewport {
+  position: absolute;
+  right: 0;
+  top: 0;
+
+  width: 58vw;
+  height: 100vh;
+  overflow: hidden;
+
+  z-index: 3;
+}
+
+.golden-track {
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  height: 100vh;
+  width: max-content;
+
+  display: flex;
+  flex-direction: row;
+
+  will-change: transform;
+  transition: transform 0.08s linear;
+}
+
+.golden-panel {
+  width: 55vw;
+  height: 100vh;
+  flex: 0 0 55vw;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 3vw;
+}
+
+.golden-panel-inner {
+  width: 100%;
+  max-width: 720px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.golden-visual {
+  width: min(34vw, 520px);
+  height: min(34vw, 520px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 2rem;
+}
+
+.golden-visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.golden-record-visual img {
+  animation: goldenSpin 24s linear infinite;
+  filter: drop-shadow(0 0 22px rgba(245, 166, 35, 0.18));
+}
+
+@keyframes goldenSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.golden-panel-caption {
+  text-align: center;
+  max-width: 620px;
+}
+
+.golden-panel-caption h3 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-style: italic;
+  font-weight: 700;
+
+  font-size: clamp(2rem, 3vw, 3rem);
+  line-height: 1;
+  color: #f5a623;
+
+  margin-bottom: 1rem;
+}
+
+.golden-panel-caption p {
+  font-size: clamp(1rem, 1.1vw, 1.1rem);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+/* responsive */
+@media (max-width: 900px) {
+  .golden-section {
+    height: 560vh;
+  }
+
+  .golden-intro {
+    width: 100vw;
+    left: 0;
+    padding: 0 8vw;
+  }
+
+  .golden-viewport {
+    width: 100vw;
+  }
+
+  .golden-panel {
+    width: 100vw;
+    flex: 0 0 100vw;
+    padding: 0 8vw;
+  }
+
+  .golden-track {
+    transition: transform 0.08s linear;
+  }
+
+  .golden-visual {
+    width: min(72vw, 360px);
+    height: min(72vw, 360px);
+  }
+}
+
+.golden-audio-button {
+  margin-top: 1.5rem;
+
+  padding: 0.9rem 1.4rem;
+
+  border: 1px solid rgba(245, 166, 35, 0.75);
+  border-radius: 999px;
+
+  background: rgba(245, 166, 35, 0.12);
+  color: #f5a623;
+
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.golden-audio-button:hover {
+  background: rgba(245, 166, 35, 0.22);
+  border-color: rgba(245, 166, 35, 1);
+  transform: translateY(-2px);
+}
+
+.golden-audio-button:active {
+  transform: translateY(0);
+}
+
+.golden-audio-buttons {
+  margin-top: 1.5rem;
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.8rem;
+}
+
+.golden-audio-buttons .golden-audio-button {
+  margin-top: 0;
+}
+
+.golden-audio-button-secondary {
+  border-color: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.86);
+}
+
+.golden-audio-button-secondary:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.65);
 }

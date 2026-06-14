@@ -96,88 +96,203 @@ function SaturnPlanet() {
   )
 }
 
-function VoyagerFlyby({ scrollProgress }) {
-  const { scene } = useGLTF('/VoyagerProbe.glb')
-  const voyagerScene = useMemo(() => scene.clone(), [scene])
-  const groupRef = useRef()
+function UranusPlanet() {
+  const texture = useTexture('/textures/uranus.jpg')
+  const planetRef = useRef()
 
   useFrame((state) => {
-    if (!groupRef.current) return
-
     const time = state.clock.getElapsedTime()
-
-    const jupiterFlyby = clamp(scrollProgress / 0.32, 0, 1)
-    const travelToSaturn = clamp((scrollProgress - 0.28) / 0.42, 0, 1)
-    const saturnFlyby = clamp((scrollProgress - 0.62) / 0.28, 0, 1)
-
-    let baseX
-    let baseY
-    let baseZ
-
-    if (scrollProgress < 0.32) {
-      /*
-        Sobrevuelo de Júpiter.
-      */
-      baseX = lerp(-3.1, 2.25, jupiterFlyby)
-      baseY = lerp(0.95, 0.55, jupiterFlyby)
-      baseZ = lerp(0.35, 0.75, jupiterFlyby)
-    } else if (scrollProgress < 0.62) {
-      /*
-        Baja desde Júpiter hacia Saturno.
-        Como la columna de planetas también sube,
-        la nave no necesita irse tan abajo.
-      */
-      baseX = lerp(2.25, 2.05, travelToSaturn)
-      baseY = lerp(0.55, -0.25, travelToSaturn)
-      baseZ = lerp(0.75, 0.85, travelToSaturn)
-    } else {
-      /*
-        Sobrevuela Saturno y empieza a salir.
-      */
-      baseX = lerp(2.05, 3.1, saturnFlyby)
-      baseY = lerp(-0.25, -0.65, saturnFlyby)
-      baseZ = lerp(0.85, 1.15, saturnFlyby)
-    }
-
-    const zigzagX = Math.sin(time * 1.5 + scrollProgress * 12) * 0.18
-    const zigzagY = Math.sin(time * 2.1 + scrollProgress * 9) * 0.1
-    const waveZ = Math.sin(time * 1.2 + scrollProgress * 6) * 0.07
-
-    const scale = lerp(0.18, 0.26, clamp(scrollProgress / 0.7, 0, 1))
-
-    groupRef.current.position.set(
-      baseX + zigzagX,
-      baseY + zigzagY,
-      baseZ + waveZ
-    )
-
-    groupRef.current.scale.set(scale, scale, scale)
-
-    groupRef.current.rotation.x = Math.sin(time * 1.5) * 0.12
-    groupRef.current.rotation.y = scrollProgress * Math.PI * 4 + 0.7
-    groupRef.current.rotation.z = Math.sin(time * 1.2) * 0.22
+    if (planetRef.current) planetRef.current.rotation.y = time * 0.12
   })
 
   return (
-    <group ref={groupRef}>
-      <primitive object={voyagerScene} />
-    </group>
+    <mesh ref={planetRef} position={[1.9, -8.0, -1.25]} scale={1.25}>
+      <sphereGeometry args={[1, 96, 96]} />
+      <meshStandardMaterial map={texture} roughness={0.85} />
+    </mesh>
+  )
+}
+
+function NeptunePlanet() {
+  const texture = useTexture('/textures/neptune.jpg')
+  const planetRef = useRef()
+
+  useFrame((state) => {
+    const time = state.clock.getElapsedTime()
+    if (planetRef.current) planetRef.current.rotation.y = time * 0.13
+  })
+
+  return (
+    <mesh ref={planetRef} position={[1.9, -11.4, -1.25]} scale={1.28}>
+      <sphereGeometry args={[1, 96, 96]} />
+      <meshStandardMaterial map={texture} roughness={0.85} />
+    </mesh>
+  )
+}
+
+function VoyagerFlyby({ scrollProgress }) {
+  const { scene } = useGLTF('/VoyagerProbe.glb')
+
+  const voyager1Scene = useMemo(() => scene.clone(), [scene])
+  const voyager2Scene = useMemo(() => scene.clone(), [scene])
+
+  const voyager1Ref = useRef()
+  const voyager2Ref = useRef()
+
+  useFrame((state) => {
+    const time = state.clock.getElapsedTime()
+
+    /*
+      =========================
+      VOYAGER 1
+      Júpiter → Saturno → sale
+      =========================
+    */
+
+    if (voyager1Ref.current) {
+      let baseX
+      let baseY
+      let baseZ
+
+      const jupiterProgress = clamp(scrollProgress / 0.35, 0, 1)
+      const saturnProgress = clamp((scrollProgress - 0.35) / 0.2, 0, 1)
+      const exitProgress = clamp((scrollProgress - 0.55) / 0.12, 0, 1)
+
+      if (scrollProgress < 0.35) {
+        // Sobrevuelo de Júpiter
+        baseX = lerp(-3.1, 2.25, jupiterProgress)
+        baseY = lerp(0.9, 0.35, jupiterProgress)
+        baseZ = lerp(0.35, 0.75, jupiterProgress)
+      } else if (scrollProgress < 0.55) {
+        // Baja hacia Saturno
+        baseX = lerp(2.25, 2.05, saturnProgress)
+        baseY = lerp(0.35, -0.3, saturnProgress)
+        baseZ = lerp(0.75, 0.85, saturnProgress)
+      } else {
+        // Después de Saturno se va hacia la derecha
+        baseX = lerp(2.05, 4.2, exitProgress)
+        baseY = lerp(-0.3, -0.15, exitProgress)
+        baseZ = lerp(0.85, 1.1, exitProgress)
+      }
+
+      const zigzagX = Math.sin(time * 1.5 + scrollProgress * 12) * 0.16
+      const zigzagY = Math.sin(time * 2.1 + scrollProgress * 9) * 0.09
+      const waveZ = Math.sin(time * 1.2 + scrollProgress * 6) * 0.06
+
+      const visible = scrollProgress < 0.68
+
+      voyager1Ref.current.visible = visible
+
+      voyager1Ref.current.position.set(
+        baseX + zigzagX,
+        baseY + zigzagY,
+        baseZ + waveZ
+      )
+
+      const scale = lerp(0.18, 0.25, clamp(scrollProgress / 0.55, 0, 1))
+      voyager1Ref.current.scale.set(scale, scale, scale)
+
+      voyager1Ref.current.rotation.x = Math.sin(time * 1.5) * 0.12
+      voyager1Ref.current.rotation.y = scrollProgress * Math.PI * 4 + 0.7
+      voyager1Ref.current.rotation.z = Math.sin(time * 1.2) * 0.22
+    }
+
+    /*
+  =========================
+  VOYAGER 2
+  Entra desde la izquierda
+  Saturno → Urano → Neptuno
+  =========================
+*/
+
+if (voyager2Ref.current) {
+  let baseX
+  let baseY
+  let baseZ
+
+  const voyager2Progress = clamp((scrollProgress - 0.62) / 0.38, 0, 1)
+
+  // Oculta la nave hasta que realmente empiece a entrar
+  voyager2Ref.current.visible = voyager2Progress > 0.03
+
+  if (voyager2Progress < 0.35) {
+    const p = clamp(voyager2Progress / 0.35, 0, 1)
+
+    // Entra desde la izquierda de forma continua
+    baseX = lerp(-4.2, 1.95, p)
+    baseY = lerp(0.1, -0.45, p)
+    baseZ = lerp(0.35, 0.85, p)
+  } else if (voyager2Progress < 0.7) {
+    const p = clamp((voyager2Progress - 0.35) / 0.35, 0, 1)
+
+    // Sigue hacia Urano
+    baseX = lerp(1.95, 2.0, p)
+    baseY = lerp(-0.45, -0.55, p)
+    baseZ = lerp(0.85, 0.95, p)
+  } else {
+    const p = clamp((voyager2Progress - 0.7) / 0.3, 0, 1)
+
+    // Sigue hacia Neptuno
+    baseX = lerp(2.0, 2.15, p)
+    baseY = lerp(-0.55, -0.75, p)
+    baseZ = lerp(0.95, 1.05, p)
+  }
+
+  const zigzagX = Math.sin(time * 1.45 + scrollProgress * 12) * 0.16
+  const zigzagY = Math.sin(time * 2.0 + scrollProgress * 9) * 0.09
+  const waveZ = Math.sin(time * 1.1 + scrollProgress * 6) * 0.06
+
+  voyager2Ref.current.position.set(
+    baseX + zigzagX,
+    baseY + zigzagY,
+    baseZ + waveZ
+  )
+
+  const scale = 0.24
+  voyager2Ref.current.scale.set(scale, scale, scale)
+
+  voyager2Ref.current.rotation.x = Math.sin(time * 1.5) * 0.12
+  voyager2Ref.current.rotation.y = scrollProgress * Math.PI * 4 + 1.1
+  voyager2Ref.current.rotation.z = Math.sin(time * 1.2) * 0.22
+}
+  })
+
+  return (
+    <>
+      <group ref={voyager1Ref}>
+        <primitive object={voyager1Scene} />
+      </group>
+
+      <group ref={voyager2Ref}>
+        <primitive object={voyager2Scene} />
+      </group>
+    </>
   )
 }
 
 function PlanetColumn({ scrollProgress }) {
-  /*
-    Mueve toda la columna de planetas hacia arriba.
-    Al principio se ve Júpiter.
-    Después, cuando la nave baja, Saturno entra al centro.
-  */
-  const travelProgress = clamp((scrollProgress - 0.25) / 0.48, 0, 1)
-  const groupY = lerp(0, 4.2, travelProgress)
+
+  let groupY = 0
+
+  if (scrollProgress < 0.35) {
+    groupY = 0
+  } else if (scrollProgress < 0.55) {
+    const p = clamp((scrollProgress - 0.35) / 0.2, 0, 1)
+    groupY = lerp(0, 4.2, p)
+  } else if (scrollProgress < 0.75) {
+    const p = clamp((scrollProgress - 0.55) / 0.2, 0, 1)
+    groupY = lerp(4.2, 8.0, p)
+  } else {
+    const p = clamp((scrollProgress - 0.75) / 0.2, 0, 1)
+    groupY = lerp(8.0, 11.4, p)
+  }
 
   return (
     <group position={[0, groupY, 0]}>
       <JupiterPlanet />
       <SaturnPlanet />
+      <UranusPlanet />
+      <NeptunePlanet />
     </group>
   )
 }
@@ -228,6 +343,27 @@ const steps = [
     title: 'El comienzo del viaje hacia afuera',
     text: 'Después de Saturno, Voyager 1 ya no seguiría visitando otros mundos. Desde ese momento empezó su salida definitiva hacia las afueras del sistema solar.',
   },
+  {
+  kicker: 'Voyager 2',
+  title: 'La hermana que siguió explorando',
+  text: 'Mientras Voyager 1 tomaba el camino hacia el espacio interestelar, Voyager 2 continuó su propio recorrido.',
+},
+{
+  kicker: 'Urano',
+  title: 'Un mundo visitado una sola vez',
+  text: 'Voyager 2 fue la única nave que sobrevoló Urano, ampliando la exploración más allá de Júpiter y Saturno.',
+},
+{
+  kicker: 'Neptuno',
+  title: 'El último planeta gigante',
+  text: 'En 1989, Voyager 2 llegó a Neptuno y completó una exploración histórica de los cuatro planetas gigantes.',
+},
+{
+  kicker: 'Dos caminos',
+  title: 'Una misión, dos destinos',
+  text: 'Voyager 1 llegó más lejos. Voyager 2, en cambio, completó el retrato más amplio de los mundos exteriores.',
+  compareVoyagers: true,
+},
 ]
 
 export default function JupiterSaturnEncounter() {
@@ -282,6 +418,11 @@ export default function JupiterSaturnEncounter() {
             {step.flourishSaturn && (
               <div className="flourish-embed-container">
                 <iframe src='https://flo.uri.sh/visualisation/29362393/embed' title='Interactive or visual content' className="flourish-iframe"></iframe>
+              </div>
+            )}
+            {step.compareVoyagers && (
+              <div className="flourish-embed-container">
+                <iframe src='https://flo.uri.sh/visualisation/29365005/embed' title='Interactive or visual content' className="flourish-iframe"></iframe>
               </div>
             )}
           </article>
