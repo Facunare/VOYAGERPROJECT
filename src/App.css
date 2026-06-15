@@ -45,10 +45,10 @@ header h1 {
 
 header h2 {
   font-size: clamp(0.95rem, 2vw, 1.15rem);
-  font-weight: 400;
-  color: #8892a4;
-  max-width: 600px;
-  line-height: 1.6;
+  font-weight:500;
+  color: #ffffff;
+  max-width: 700px;
+  line-height: 1.5;
 }
 
 /* ========================= */
@@ -1098,4 +1098,290 @@ header h2 {
 .golden-audio-button-secondary:hover {
   background: rgba(255, 255, 255, 0.14);
   border-color: rgba(255, 255, 255, 0.65);
+}
+
+/* ========================= */
+/* PALE BLUE DOT */
+/* ========================= */
+
+.pale-section {
+  position: relative;
+  height: 360vh;
+  color: white;
+
+  overflow: visible;
+  overflow-x: clip;
+
+  background-color: rgba(2, 3, 10, 0.75);
+  background-image:
+    linear-gradient(
+      rgba(2, 3, 10, 0.78),
+      rgba(2, 3, 10, 0.92)
+    ),
+    url('./assets/espacio.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.pale-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.pale-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.pale-canvas canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.pale-text-steps {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 45vw;
+  height: 360vh;
+
+  z-index: 3;
+  pointer-events: none;
+}
+
+.pale-text-step {
+  height: 100vh;
+  width: 100%;
+
+  padding-left: 7vw;
+  padding-right: 4vw;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  background: linear-gradient(
+    90deg,
+    rgba(2, 3, 10, 0.9),
+    rgba(2, 3, 10, 0.56),
+    rgba(2, 3, 10, 0)
+  );
+}
+
+.pale-text-step span {
+  display: block;
+
+  font-size: 0.85rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+
+  color: #f5a623;
+  margin-bottom: 1rem;
+}
+
+.pale-text-step h2 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-style: italic;
+  font-weight: 700;
+
+  font-size: clamp(2.5rem, 4vw, 4.8rem);
+  line-height: 0.95;
+
+  color: #ffffff;
+
+  margin-bottom: 1.5rem;
+  max-width: 620px;
+}
+
+.pale-text-step p {
+  font-size: clamp(1rem, 1.2vw, 1.2rem);
+  line-height: 1.65;
+
+  color: rgba(255, 255, 255, 0.78);
+
+  max-width: 560px;
+}
+
+.pale-text-step .flourish-embed-container {
+  pointer-events: auto;
+}
+
+/* ========================= */
+/* HELIOPAUSE SECTION */
+/* ========================= */
+
+.heliopause-section {
+  position: relative;
+  height: 460vh;
+  color: white;
+
+  overflow: visible;
+  overflow-x: clip;
+
+  background-color: rgba(2, 3, 10, 0.78);
+  background-image:
+    radial-gradient(
+      circle at 70% 50%,
+      rgba(80, 150, 255, 0.16),
+      transparent 34%
+    ),
+    linear-gradient(
+      rgba(2, 3, 10, 0.82),
+      rgba(2, 3, 10, 0.94)
+    ),
+    url('./assets/espacio.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.heliopause-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.heliopause-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.heliopause-canvas canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.heliopause-text-steps {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 45vw;
+  height: 460vh;
+
+  z-index: 3;
+  pointer-events: none;
+}
+
+.heliopause-text-step {
+  height: 100vh;
+  width: 100%;
+
+  padding-left: 7vw;
+  padding-right: 4vw;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  background: linear-gradient(
+    90deg,
+    rgba(2, 3, 10, 0.9),
+    rgba(2, 3, 10, 0.58),
+    rgba(2, 3, 10, 0)
+  );
+}
+
+.heliopause-text-step span {
+  display: block;
+
+  font-size: 0.85rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+
+  color: #7ec8ff;
+  margin-bottom: 1rem;
+}
+
+.heliopause-text-step h2 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-style: italic;
+  font-weight: 700;
+
+  font-size: clamp(2.5rem, 4vw, 4.8rem);
+  line-height: 0.95;
+
+  color: #ffffff;
+
+  margin-bottom: 1.5rem;
+  max-width: 620px;
+}
+
+.heliopause-text-step p {
+  font-size: clamp(1rem, 1.2vw, 1.2rem);
+  line-height: 1.65;
+
+  color: rgba(255, 255, 255, 0.78);
+
+  max-width: 560px;
+}
+
+.heliopause-graph-placeholder {
+  margin-top: 1.5rem;
+  width: min(620px, 36vw);
+  min-height: 300px;
+
+  padding: 1.5rem;
+
+  border: 1px solid rgba(126, 200, 255, 0.45);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(126, 200, 255, 0.12),
+      rgba(245, 166, 35, 0.06)
+    ),
+    rgba(8, 13, 26, 0.72);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  pointer-events: auto;
+}
+
+.heliopause-graph-placeholder span {
+  color: #7ec8ff;
+  margin-bottom: 0.8rem;
+}
+
+.heliopause-graph-placeholder p {
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+@media (max-width: 900px) {
+  .heliopause-section {
+    height: 500vh;
+  }
+
+  .heliopause-text-steps {
+    width: 100vw;
+    height: 460vh;
+  }
+
+  .heliopause-text-step {
+    padding-left: 8vw;
+    padding-right: 8vw;
+    background: rgba(2, 3, 10, 0.72);
+  }
+
+  .heliopause-text-step h2 {
+    font-size: clamp(2.2rem, 9vw, 4rem);
+  }
+
+  .heliopause-graph-placeholder {
+    width: 84vw;
+  }
 }

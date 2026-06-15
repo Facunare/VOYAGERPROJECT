@@ -4,7 +4,8 @@ import Earth1977Timeline from './Earth1977Timeline.jsx'
 import ScaleComparison from './ScaleComparison.jsx'
 import JupiterSaturnEncounter from './JupiterSaturnEncounter.jsx'
 import GoldenRecordSection from './GoldenRecordSection.jsx'
-
+import PaleBlueDotSection from './PaleBlueDotSection.jsx'
+import HeliopauseSection from './HeliopauseSection.jsx'
 function App() {
   return (
     <>
@@ -14,6 +15,8 @@ function App() {
       <ScaleComparison />
       <JupiterSaturnEncounter />
       <GoldenRecordSection />
+      <PaleBlueDotSection />
+      <HeliopauseSection />
     </>
   )
 }

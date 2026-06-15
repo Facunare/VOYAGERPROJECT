@@ -362,7 +362,6 @@ const steps = [
   kicker: 'Dos caminos',
   title: 'Una misión, dos destinos',
   text: 'Voyager 1 llegó más lejos. Voyager 2, en cambio, completó el retrato más amplio de los mundos exteriores.',
-  compareVoyagers: true,
 },
 ]
 
@@ -420,14 +419,15 @@ export default function JupiterSaturnEncounter() {
                 <iframe src='https://flo.uri.sh/visualisation/29362393/embed' title='Interactive or visual content' className="flourish-iframe"></iframe>
               </div>
             )}
-            {step.compareVoyagers && (
-              <div className="flourish-embed-container">
-                <iframe src='https://flo.uri.sh/visualisation/29365005/embed' title='Interactive or visual content' className="flourish-iframe"></iframe>
-              </div>
-            )}
           </article>
         ))}
       </div>
     </section>
   )
 }
+
+            // {step.compareVoyagers && (
+            //   <div className="flourish-embed-container">
+            //     <iframe src='https://flo.uri.sh/visualisation/29365005/embed' title='Interactive or visual content' className="flourish-iframe"></iframe>
+            //   </div>
+            // )}
