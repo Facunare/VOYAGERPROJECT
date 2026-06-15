@@ -6,6 +6,7 @@ import JupiterSaturnEncounter from './JupiterSaturnEncounter.jsx'
 import GoldenRecordSection from './GoldenRecordSection.jsx'
 import PaleBlueDotSection from './PaleBlueDotSection.jsx'
 import HeliopauseSection from './HeliopauseSection.jsx'
+import BackgroundMusic from './BackgroundMusic.jsx'
 function App() {
   return (
     <>
@@ -17,6 +18,7 @@ function App() {
       <GoldenRecordSection />
       <PaleBlueDotSection />
       <HeliopauseSection />
+      <BackgroundMusic />
     </>
   )
 }
