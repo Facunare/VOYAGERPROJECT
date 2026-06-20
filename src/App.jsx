@@ -7,6 +7,9 @@ import GoldenRecordSection from './GoldenRecordSection.jsx'
 import PaleBlueDotSection from './PaleBlueDotSection.jsx'
 import HeliopauseSection from './HeliopauseSection.jsx'
 import BackgroundMusic from './BackgroundMusic.jsx'
+import DistanceScaleSection from './DistanceScaleSection.jsx'
+import MissionPowerSection from './MissionPowerSection.jsx'
+import FinalVoyageSection from './FinalVoyageSection.jsx'
 function App() {
   return (
     <>
@@ -18,6 +21,9 @@ function App() {
       <GoldenRecordSection />
       <PaleBlueDotSection />
       <HeliopauseSection />
+      <DistanceScaleSection />
+      <MissionPowerSection />
+      <FinalVoyageSection />
       <BackgroundMusic />
     </>
   )

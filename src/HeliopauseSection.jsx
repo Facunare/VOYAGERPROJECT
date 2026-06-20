@@ -237,9 +237,9 @@ const steps = [
     text: 'Al cruzar esa región, las partículas asociadas al Sol disminuyen y aumenta la presencia de partículas provenientes del espacio interestelar.',
   },
   {
-    kicker: '',
-    title: '',
-    text: '',
+    kicker: 'Agosto de 2012',
+    title: 'Entrar al espacio interestelar',
+    text: 'Voyager 1 se convirtió en el primer objeto humano en alcanzar el espacio interestelar. El cruce no fue el final del viaje, sino el comienzo de una nueva etapa: explorar el espacio entre las estrellas.',
     graph: true,
   },
 ]
