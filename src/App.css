@@ -1,3 +1,15 @@
+@font-face {
+  font-family: "Nasalization";
+  src: url("/fonts/Nasalization Rg.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "BTTF";
+  src: url("/fonts/Conthrax-SemiBold.otf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -24,12 +36,10 @@ body {
 header {
   width: 100%;
   height: 100vh;
-
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
   text-align: center;
   padding: 0 2rem;
 }
@@ -38,17 +48,21 @@ header h1 {
   font-size: clamp(2rem, 5vw, 3.5rem);
   font-weight: 700;
   color: #ffffff;
+  
   margin-bottom: 1.25rem;
+  font-family: "Nasalization", sans-serif;
+  
   line-height: 1.15;
   letter-spacing: -0.01em;
 }
 
 header h2 {
   font-size: clamp(0.95rem, 2vw, 1.15rem);
-  font-weight:500;
   color: #ffffff;
-  max-width: 700px;
+  max-width: 1700px;
   line-height: 1.5;
+  font-family: "BTTF", sans-serif;
+
 }
 
 /* ========================= */
@@ -127,13 +141,13 @@ header h2 {
 .sticky-numero {
   display: block;
 
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: 'Nasalization', serif;
   font-style: italic;
   font-weight: 700;
 
-  font-size: clamp(4rem, 7.5vw, 9rem);
+  font-size: clamp(3rem, 6.5vw, 7rem);
   line-height: 0.85;
-
+  font-family: "Nasalization", sans-serif;
   color: #f5a623;
   letter-spacing: -0.04em;
   text-align: center;
@@ -143,7 +157,7 @@ header h2 {
 
 .sticky-unidad {
   display: block;
-
+  font-family: "BTTF", sans-serif;
   margin-top: 1.2rem;
 
   font-size: clamp(1.2rem, 1.8vw, 2rem);
@@ -190,6 +204,7 @@ header h2 {
 
 .story-text {
   max-width: 580px;
+    font-family: "BTTF", sans-serif;
 }
 
 .story-year {
@@ -198,21 +213,21 @@ header h2 {
   font-size: 0.85rem;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-
+  font-family: "Nasalization", sans-serif;
   color: #f5a623;
   margin-bottom: 1rem;
 }
 
 .story-text h2 {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: 'Nasalization', serif;
   font-style: italic;
   font-weight: 700;
 
-  font-size: clamp(2.3rem, 4vw, 4.5rem);
+  font-size: clamp(2.3rem, 4vw, 3rem);
   line-height: 0.95;
-
+  text-transform: uppercase;
   color: #ffffff;
-
+  font-family: "Nasalization", sans-serif;
   margin-bottom: 1.5rem;
 }
 
@@ -336,10 +351,11 @@ header h2 {
 
 
 .earth-timeline-intro h2 {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: 'Nasalization', serif;
   font-style: italic;
   font-weight: 700;
-
+  font-family: "Nasalization", sans-serif;
+  text-transform: uppercase;
   font-size: clamp(2.2rem, 3vw, 4.7rem);
   line-height: 0.95;
   width: 100%;
@@ -347,9 +363,9 @@ header h2 {
 }
 
 .earth-timeline-intro p {
-  font-size: clamp(1rem, 1.2vw, 1.2rem);
+  font-size: clamp(1rem, 1.2vw, 1rem);
   line-height: 1.65;
-
+  font-family: "BTTF", sans-serif;
   color: rgba(255, 255, 255, 0.76);
 }
 
@@ -358,16 +374,11 @@ header h2 {
   left: 52vw;
   top: 0;
   height: 100vh;
-
   display: flex;
   align-items: center;
   gap: 8vw;
-
   padding-right: 20vw;
-
-  z-index: 2;
-
-  transition: transform 0.08s linear;
+  z-index: 2;  transition: transform 0.08s linear;
   will-change: transform;
 }
 
@@ -388,8 +399,8 @@ header h2 {
 
 .timeline-year {
   display: block;
-
-  font-family: 'Playfair Display', Georgia, serif;
+  
+  font-family: 'Nasalization', Georgia, serif;
   font-style: italic;
   font-size: clamp(3rem, 6vw, 6rem);
   font-weight: 700;
@@ -414,15 +425,16 @@ header h2 {
 }
 
 .timeline-card h3 {
-  font-size: clamp(1.4rem, 2vw, 2rem);
+  font-size: clamp(1.4rem, 2vw, 1.5rem);
   line-height: 1.1;
   margin-bottom: 1rem;
+    font-family: "BTTF", sans-serif;
 }
 
 .timeline-card p {
   font-size: 1rem;
   line-height: 1.55;
-
+  font-family: "BTTF", sans-serif;
   color: rgba(255, 255, 255, 0.72);
 }
 
@@ -537,7 +549,7 @@ header h2 {
 }
 
 .scale-intro h2 {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: 'Nasalization', serif;
   font-style: italic;
   font-weight: 700;
   font-size: clamp(2.4rem, 4vw, 4.7rem);
@@ -643,7 +655,7 @@ header h2 {
 .scale-object-info span {
   display: block;
 
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: 'Nasalization', serif;
   font-style: italic;
   font-weight: 700;
 
@@ -659,11 +671,11 @@ header h2 {
   font-size: 0.85rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-
+  font-family: "BTTF", sans-serif;
   color: rgba(255, 255, 255, 0.66);
 }
 
-/* Línea de piso solo en la mitad izquierda */
+
 .scale-ground-line {
   position: absolute;
   left: 0;
@@ -770,7 +782,7 @@ header h2 {
 }
 
 .jupiter-saturn-text-step h2 {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: 'Nasalization', serif;
   font-style: italic;
   font-weight: 700;
 
@@ -891,7 +903,7 @@ header h2 {
 }
 
 .golden-intro h2 {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: 'Nasalization', serif;
   font-style: italic;
   font-weight: 700;
   font-size: clamp(2.4rem, 4vw, 4.8rem);
@@ -994,7 +1006,7 @@ header h2 {
 }
 
 .golden-panel-caption h3 {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: 'Nasalization', serif;
   font-style: italic;
   font-weight: 700;
 
@@ -1187,7 +1199,7 @@ header h2 {
 }
 
 .pale-text-step h2 {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: 'Nasalization', serif;
   font-style: italic;
   font-weight: 700;
 
@@ -1305,7 +1317,7 @@ header h2 {
 }
 
 .heliopause-text-step h2 {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: 'Nasalization', serif;
   font-style: italic;
   font-weight: 700;
 
@@ -1481,7 +1493,7 @@ header h2 {
   max-width: 570px;
   margin: 0 0 1.35rem;
   color: #fff;
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: 'Nasalization', serif;
   font-size: clamp(2.4rem, 4vw, 4.7rem);
   font-style: italic;
   line-height: 1;
@@ -1667,7 +1679,7 @@ header h2 {
 
 .mission-power-step h2 {
   margin: 0 0 1.4rem;
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: 'Nasalization', serif;
   font-size: clamp(2.45rem, 4vw, 4.7rem);
   font-style: italic;
   line-height: 1;
@@ -1966,7 +1978,7 @@ header h2 {
   bottom: 15vh;
   width: min(49vw, 760px);
   color: rgba(255,255,255,.85);
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: 'Nasalization', serif;
   font-size: clamp(1.15rem, 1.7vw, 1.75rem);
   font-style: italic;
   text-align: center;
@@ -2129,7 +2141,7 @@ header h2 {
 
 .final-voyage-step h2 {
   margin: 0 0 1.4rem;
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: 'Nasalization', serif;
   font-size: clamp(2.5rem, 4vw, 4.8rem);
   font-style: italic;
   line-height: 1;
@@ -2167,7 +2179,7 @@ header h2 {
 .final-voyage-ending h2 {
   max-width: 920px;
   margin: 0;
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: 'Nasalization', serif;
   font-size: clamp(2.4rem, 5vw, 5.8rem);
   font-style: italic;
   font-weight: 700;
@@ -2223,3 +2235,122 @@ header h2 {
     scroll-behavior: auto;
   }
 }
+
+/* ========================= */
+/* FUENTES FINALES */
+/* ========================= */
+
+/* Titulos principales */
+header h1,
+.sticky-numero,
+.story-text h2,
+.earth-timeline-intro h2,
+.timeline-card h3,
+.scale-intro h2,
+.scale-object-info span,
+.jupiter-saturn-text-step h2,
+.golden-intro h2,
+.golden-panel-caption h3,
+.pale-text-step h2,
+.heliopause-text-step h2,
+.distance-scale-step h2,
+.mission-power-step h2,
+.mission-closing-line,
+.final-voyage-step h2,
+.final-voyage-ending h2,
+.final-voyage-date strong {
+  font-family: "Nasalization", sans-serif;
+  text-transform: uppercase;
+}
+
+/* Labels superiores, como el anio 2012 */
+.story-year,
+.timeline-year,
+.scale-intro span,
+.jupiter-saturn-text-step span,
+.golden-intro span,
+.pale-text-step span,
+.heliopause-text-step span,
+.distance-scale-step span,
+.mission-power-step span,
+.final-voyage-step span {
+  display: block;
+  margin-bottom: 1rem;
+  color: #f5a623;
+  font-family: "Nasalization", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+/* Mismo tamano de titulo en toda la pagina */
+.story-text h2,
+.earth-timeline-intro h2,
+.timeline-card h3,
+.scale-intro h2,
+.jupiter-saturn-text-step h2,
+.golden-intro h2,
+.golden-panel-caption h3,
+.pale-text-step h2,
+.heliopause-text-step h2,
+.distance-scale-step h2,
+.mission-power-step h2,
+.final-voyage-step h2,
+.final-voyage-ending h2 {
+  margin-bottom: 1.5rem;
+  color: #ffffff;
+  font-family: "Nasalization", sans-serif;
+  font-size: clamp(2.3rem, 4vw, 3rem);
+  font-style: italic;
+  font-weight: 700;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+/* Textos debajo de cada titulo */
+header h2,
+.sticky-unidad,
+.story-text p,
+.earth-timeline-intro p,
+.timeline-card p,
+.scale-intro p,
+.scale-object-info p,
+.jupiter-saturn-text-step p,
+.golden-intro p,
+.golden-panel-caption p,
+.pale-text-step p,
+.heliopause-text-step p,
+.heliopause-graph-placeholder p,
+.distance-scale-step p,
+.mission-power-step p,
+.final-voyage-step p,
+.final-voyage-ending p {
+  font-family: "BTTF", sans-serif;
+  font-size: clamp(1rem, 1.2vw, 1rem);
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+/* Labels y bajadas chicas */
+.scale-object-info p {
+  font-family: "BTTF", sans-serif;
+}
+
+/*
+
+=== COSAS QUE NO ENTIENDO ===
+Cambiar los scrollings horizontales
+Darle aire a las últimas partes porque esta muy junto 
+Ordenar las secciones.
+Mejorar los gráficos.
+
+== COSAS QUE NO PIENSO CAMBIAR==
+Que el Voyager no se zarandee.
+Y tal vez medio innecesario que este la nave y los planetas, pero eso se lo preguntamos mañana porque no lo entendí bien 
+
+=== PARA HACER ===
+Hacer bien las jerarquías de las secciones (como te pase en la foto)
+
+*/

@@ -268,7 +268,7 @@ const datos = [
 const storyBlocks = [
   {
     year: '1977',
-    title: 'Una misión científica',
+    title: 'UNA MISION CIENTIFICA',
     text: 'En 1977, dos naves idénticas fueron lanzadas al espacio para explorar los planetas gigantes del sistema solar.',
   },
   {
