@@ -179,7 +179,6 @@ function EndlessPath({ progress }) {
 function FinalScene({ progress }) {
   return (
     <>
-      <color attach="background" args={['#010308']} />
       <ambientLight intensity={lerp(0.24, 0.06, progress)} />
       <directionalLight
         position={[3, 2, 4]}
@@ -247,7 +246,7 @@ export default function FinalVoyageSection() {
         <Canvas
           camera={{ position: [0, 0, 4.8], fov: 48 }}
           dpr={[1, 1.5]}
-          gl={{ antialias: true, alpha: false }}
+          gl={{ antialias: true, alpha: true }}
         >
           <Suspense fallback={null}>
             <FinalScene progress={progress} />

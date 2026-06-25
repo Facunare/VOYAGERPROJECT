@@ -259,7 +259,6 @@ function Galaxy({ progress }) {
 function ScaleScene({ progress }) {
   return (
     <>
-      <color attach="background" args={['#02040b']} />
       <BackgroundStars />
       <SolarSystem progress={progress} />
       <Galaxy progress={progress} />
@@ -346,27 +345,29 @@ export default function DistanceScaleSection() {
   return (
     <section ref={sectionRef} className="distance-scale-section">
       <div className="distance-scale-sticky">
-        <Canvas
-          camera={{ position: [0, 0, 7], fov: 48 }}
-          dpr={[1, 1.5]}
-          gl={{ antialias: true, alpha: false }}
-        >
-          <ScaleScene progress={progress} />
-        </Canvas>
+    <Canvas
+      camera={{ position: [0, 0, 7], fov: 48 }}
+      dpr={[1, 1.5]}
+      gl={{ antialias: true, alpha: true }}
+    >
+      <ScaleScene progress={progress} />
+    </Canvas>
         <ScaleIndicator progress={progress} />
       </div>
 
       <div className="distance-scale-steps">
-        {steps.map((step) => (
-          <article className="distance-scale-step" key={step.title}>
-            <div>
-              <span>{step.kicker}</span>
-              <h2>{step.title}</h2>
-              <p>{step.text}</p>
-            </div>
-          </article>
-        ))}
+  {steps.map((step) => (
+    <article className="distance-scale-step" key={step.title}>
+      <div>
+        <span>{step.kicker}</span>
+        <h2>{step.title}</h2>
+        <p>{step.text}</p>
       </div>
+    </article>
+  ))}
+
+  <div className="distance-scale-bottom-spacer" aria-hidden="true" />
+</div>
     </section>
   )
 }

@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState, useMemo } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { useGLTF, useTexture } from '@react-three/drei'
-import { DoubleSide } from 'three'
+import { DoubleSide, RingGeometry, Vector3, ClampToEdgeWrapping } from 'three'
 
 function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max)
@@ -10,33 +10,81 @@ function clamp(value, min, max) {
 function lerp(a, b, t) {
   return a + (b - a) * t
 }
+function smooth(from, to, value) {
+  const t = clamp((value - from) / (to - from), 0, 1)
+  return t * t * (3 - 2 * t)
+}
+function SaturnRing({ size, ringTexture }) {
+  const ringMap = useTexture(ringTexture)
 
-function Planet({ position, size, texture, ringTexture }) {
+  useEffect(() => {
+    ringMap.wrapS = ClampToEdgeWrapping
+    ringMap.wrapT = ClampToEdgeWrapping
+    ringMap.needsUpdate = true
+  }, [ringMap])
+
+  const ringGeometry = useMemo(() => {
+    const innerRadius = size * 1.35
+    const outerRadius = size * 2.15
+
+    const geometry = new RingGeometry(innerRadius, outerRadius, 160)
+
+    const position = geometry.attributes.position
+    const uv = geometry.attributes.uv
+    const v3 = new Vector3()
+
+    for (let i = 0; i < position.count; i++) {
+      v3.fromBufferAttribute(position, i)
+
+      const radius = Math.sqrt(v3.x * v3.x + v3.y * v3.y)
+      const t = (radius - innerRadius) / (outerRadius - innerRadius)
+
+      /*
+        Esto es lo importante:
+        la textura recorre el radio del anillo,
+        como en el archivo donde Saturno se ve bien.
+      */
+      uv.setXY(i, t, 0.5)
+    }
+
+    uv.needsUpdate = true
+    return geometry
+  }, [size])
+
+  return (
+    <mesh geometry={ringGeometry} rotation={[Math.PI / 2.4, 0, 0]}>
+      <meshBasicMaterial
+        map={ringMap}
+        transparent
+        side={DoubleSide}
+        opacity={0.85}
+        depthWrite={false}
+      />
+    </mesh>
+  )
+}
+
+function Planet({ position, size, texture, ringTexture, opacity = 1 }) {
   const planetTexture = useTexture(texture)
-  const ringMap = ringTexture ? useTexture(ringTexture) : null
 
   return (
     <group position={position}>
       <mesh>
         <sphereGeometry args={[size, 64, 64]} />
-        <meshStandardMaterial map={planetTexture} roughness={0.8} />
+        <meshStandardMaterial
+          map={planetTexture}
+          roughness={0.8}
+          transparent
+          opacity={opacity}
+        />
       </mesh>
 
       {ringTexture && (
-        <mesh rotation={[Math.PI / 2.4, 0, 0]}>
-          <ringGeometry args={[size * 1.35, size * 2.15, 96]} />
-          <meshBasicMaterial
-            map={ringMap}
-            transparent
-            side={DoubleSide}
-            opacity={0.85}
-          />
-        </mesh>
-      )}
+  <SaturnRing size={size} ringTexture={ringTexture} />
+)}
     </group>
   )
 }
-
 function InterstellarBoundary({ position }) {
   return (
     <group position={position}>
@@ -55,16 +103,22 @@ function InterstellarBoundary({ position }) {
 
 function Milestones({ scrollProgress }) {
   /*
-    Los planetas conservan tu separación.
-    Lo que se mueve es el grupo entero.
+    Los planetas ya existen antes de verse,
+    pero arrancan abajo, fuera de pantalla.
   */
-  const milestonesProgress = clamp((scrollProgress - 0.45) / 0.55, 0, 1)
+
+  const enterProgress = clamp((scrollProgress - 0.48) / 0.12, 0, 1)
+  const travelProgress = clamp((scrollProgress - 0.55) / 0.30, 0, 1)
 
   /*
-    Si los últimos hitos siguen quedando muy abajo,
-    subí el 3.6 a 4 o 4.5.
+    - Antes de 0.58: están abajo, fuera de cámara.
+    - Entre 0.58 y 0.70: entran suavemente a la pantalla.
+    - Después de 0.70: siguen subiendo como antes.
   */
-  const groupY = lerp(0.15, 3.6, milestonesProgress)
+  const enterY = lerp(-4.2, 0.15, enterProgress)
+  const travelY = lerp(0, 3.6, travelProgress)
+
+  const groupY = enterY + travelY
 
   return (
     <group position={[0, groupY, 0]}>
@@ -74,6 +128,7 @@ function Milestones({ scrollProgress }) {
         position={[2.65, 1.25, -1]}
         size={0.32}
       />
+
       <Planet
         texture="/textures/jupiter.jpg"
         position={[2.65, 0, -1]}
@@ -122,60 +177,85 @@ function VoyagerModel({ scrollProgress }) {
 
     const time = state.clock.getElapsedTime()
 
-    const introProgress = clamp(scrollProgress / 0.28, 0, 1)
-    const crossProgress = clamp((scrollProgress - 0.35) / 0.22, 0, 1)
-    const downProgress = clamp((scrollProgress - 0.57) / 0.43, 0, 1)
+    const headerProgress = clamp(scrollProgress / 0.16, 0, 1)
+    const crossProgress = clamp((scrollProgress - 0.34) / 0.22, 0, 1)
+    const downProgress = clamp((scrollProgress - 0.56) / 0.44, 0, 1)
+
+    /*
+      Salida final:
+      en el último tramo del sticky scroll, la nave abandona la escena
+      por el costado derecho.
+    */
+    const exitProgress = smooth(0.9, 1, scrollProgress)
 
     let x
     let y
     let z
     let scale
 
-    if (scrollProgress < 0.35) {
-      scale = lerp(0.15, 0.3, introProgress)
+    if (scrollProgress < 0.34) {
+      /*
+        Primera etapa:
+        esta es la Voyager del header.
+        Ya no aparece otra nave.
+      */
+      const floatStrength = lerp(1, 0.55, headerProgress)
+
+      scale = lerp(0.2, 0.14, headerProgress)
 
       x =
-        -2.4 +
-        Math.sin(time * 1.2 + scrollProgress * 8) * 0.35 * introProgress
+        lerp(-1.45, -2.4, headerProgress) +
+        Math.sin(time * 0.8) * 0.08 * floatStrength
 
       y =
-        Math.sin(time * 1.8 + scrollProgress * 5) * 0.18 * introProgress
+        lerp(0.05, 0, headerProgress) +
+        Math.sin(time * 0.9) * 0.14 * floatStrength
 
-      z = lerp(-8, 0, introProgress) + Math.sin(time * 0.8) * 0.08
+      z =
+        lerp(0.15, 0, headerProgress) +
+        Math.sin(time * 0.65) * 0.04 * floatStrength
     } else {
-      scale = lerp(0.3, 0.24, downProgress)
+      /*
+        Segunda etapa:
+        la misma nave cruza y empieza a bajar
+        por la línea narrativa del sticky scroll.
+      */
+      scale = lerp(0.14, 0.14, downProgress)
+      scale = lerp(scale, 0.08, exitProgress)
 
-const baseX = lerp(-2.4, 2.15, crossProgress)
+      const baseX = lerp(-2.4, 2.15, crossProgress)
 
-/*
-  Primero sube suavemente mientras cruza.
-  Después baja pasando por los planetas.
-  Así evitamos el salto de y = 0 a y = 1.35.
-*/
-const riseY = lerp(0, 1.35, crossProgress)
-const fallY = lerp(0, -3.0, downProgress)
+      const riseY = lerp(0, 1.35, crossProgress)
+      const fallY = lerp(0, -3.0, downProgress)
 
-const baseY = riseY + fallY
-const baseZ = lerp(0, -0.4, downProgress)
+      const baseY = riseY + fallY
+      const baseZ = lerp(0, -0.4, downProgress)
 
-/*
-  El zigzag también entra suavemente.
-  Así no aparece de golpe justo cuando cambia de etapa.
-*/
-const zigzagStrength = lerp(0, 1, crossProgress)
+      const zigzagStrength = lerp(0, 1, crossProgress) * (1 - exitProgress)
 
-const zigzagX =
-  Math.sin(time * 1.5 + scrollProgress * 12) * 0.22 * zigzagStrength
+      const zigzagX =
+        Math.sin(time * 1.5 + scrollProgress * 12) * 0.22 * zigzagStrength
 
-const zigzagY =
-  Math.sin(time * 2.1 + scrollProgress * 9) * 0.12 * zigzagStrength
+      const zigzagY =
+        Math.sin(time * 2.1 + scrollProgress * 9) * 0.12 * zigzagStrength
 
-const waveZ =
-  Math.sin(time * 1.1 + scrollProgress * 6) * 0.08 * zigzagStrength
+      const waveZ =
+        Math.sin(time * 1.1 + scrollProgress * 6) * 0.08 * zigzagStrength
 
-x = baseX + zigzagX
-y = baseY + zigzagY
-z = baseZ + waveZ
+      /*
+        Posición normal de la nave en el recorrido.
+      */
+      const normalX = baseX + zigzagX
+      const normalY = baseY + zigzagY
+      const normalZ = baseZ + waveZ
+
+      /*
+        Posición final fuera de pantalla, hacia la derecha.
+        Si querés que se vaya más rápido o más lejos, subí el 5.2.
+      */
+      x = lerp(normalX, 5.2, exitProgress)
+      y = lerp(normalY, -1.15, exitProgress)
+      z = lerp(normalZ, -0.15, exitProgress)
     }
 
     groupRef.current.position.set(x, y, z)
@@ -185,10 +265,10 @@ z = baseZ + waveZ
       manualRotation.current.x + Math.sin(time * 1.5) * 0.12
 
     groupRef.current.rotation.y =
-      scrollProgress * Math.PI * 4 + manualRotation.current.y
+      scrollProgress * Math.PI * 4 + manualRotation.current.y + exitProgress * 0.9
 
     groupRef.current.rotation.z =
-      Math.sin(time * 1.2 + scrollProgress * 8) * 0.22
+      Math.sin(time * 1.2 + scrollProgress * 8) * 0.22 - exitProgress * 0.35
   })
 
   const handlePointerDown = (e) => {
@@ -243,9 +323,8 @@ z = baseZ + waveZ
     </group>
   )
 }
-
 function SpaceScene({ scrollProgress }) {
-  const showMilestones = scrollProgress > 0.35
+  const showMilestones = scrollProgress > 0.48
 
   return (
     <>
@@ -258,7 +337,6 @@ function SpaceScene({ scrollProgress }) {
     </>
   )
 }
-
 const datos = [
   { numero: '24 mil millones', unidad: 'km de la Tierra' },
   { numero: '48', unidad: 'años en el espacio' },
@@ -317,33 +395,57 @@ export default function StickyScroll() {
   }, [])
 
   return (
-    <section ref={sectionRef} className="voyager-section">
-      <div className="voyager-canvas">
-        <Canvas camera={{ position: [0, 0, 4], fov: 50 }}>
-          <SpaceScene scrollProgress={scrollProgress} />
-        </Canvas>
-      </div>
+  <section ref={sectionRef} className="voyager-section">
+    <div className="voyager-canvas">
+      <Canvas camera={{ position: [0, 0, 4], fov: 50 }}>
+        <SpaceScene scrollProgress={scrollProgress} />
+      </Canvas>
+    </div>
 
-      <div className="sticky-right">
-        {datos.map((dato, i) => (
-          <div key={i} className="sticky-block">
-            <span className="sticky-numero">{dato.numero}</span>
-            <span className="sticky-unidad">{dato.unidad}</span>
-          </div>
-        ))}
-      </div>
+    <div
+      className="voyager-hero-content"
+      style={{
+        opacity: 1 - smooth(0.06, 0.16, scrollProgress),
+        transform: `translateY(${-smooth(0.06, 0.16, scrollProgress) * 35}px)`,
+      }}
+    >
+      <div className="hero-text">
+        <h1>
+          <span style={{ color: '#f5a623' }}>
+            VOYAGER:
+          </span>{' '}
+          <span className="title">
+            LA HISTORIA EN EL MAS ALLA
+          </span>
+        </h1>
 
-      <div className="story-wrapper">
-        {storyBlocks.map((block, i) => (
-          <div key={i} className="story-step">
-            <div className="story-text">
-              <span className="story-year">{block.year}</span>
-              <h2>{block.title}</h2>
-              <p>{block.text}</p>
-            </div>
-          </div>
-        ))}
+        <h2>
+          El viaje que empezó como una misión y terminó
+          como una historia de la humanidad
+        </h2>
       </div>
-    </section>
-  )
+    </div>
+
+    <div className="sticky-right">
+      {datos.map((dato, i) => (
+        <div key={i} className="sticky-block">
+          <span className="sticky-numero">{dato.numero}</span>
+          <span className="sticky-unidad">{dato.unidad}</span>
+        </div>
+      ))}
+    </div>
+
+    <div className="story-wrapper">
+      {storyBlocks.map((block, i) => (
+        <div key={i} className="story-step">
+          <div className="story-text">
+            <span className="story-year">{block.year}</span>
+            <h2>{block.title}</h2>
+            <p>{block.text}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+)
 }

@@ -104,24 +104,41 @@ export default function ScaleComparison() {
               transform: `translateX(${translateX}vw)`,
             }}
           >
-            {scaleItems.map((item, index) => (
-              <div key={index} className="scale-panel">
-                <div className={`scale-object-visual ${item.visualClass}`}>
-                  {item.type === 'voyager' ? (
-                    <Canvas camera={{ position: [0, 0, 4], fov: 45 }}>
-                      <VoyagerScaleModel />
-                    </Canvas>
-                  ) : (
-                    <img src={item.src} alt={item.label} />
-                  )}
-                </div>
+{scaleItems.map((item, index) => {
+  const currentPanel = progress * (scaleItems.length - 1)
+  const distance = Math.abs(index - currentPanel)
 
-                <div className="scale-object-info">
-                  <span>{item.size}</span>
-                  <p>{item.label}</p>
-                </div>
-              </div>
-            ))}
+  const panelOpacity = clamp(1 - distance * 0.85, 0, 1)
+  const panelBlur = clamp(distance * 5, 0, 5)
+  const panelScale = clamp(1 - distance * 0.04, 0.95, 1)
+
+  return (
+    <div
+      key={index}
+      className="scale-panel"
+      style={{
+        opacity: panelOpacity,
+        filter: `blur(${panelBlur}px)`,
+        transform: `scale(${panelScale})`,
+      }}
+    >
+      <div className={`scale-object-visual ${item.visualClass}`}>
+        {item.type === 'voyager' ? (
+          <Canvas camera={{ position: [0, 0, 4], fov: 45 }}>
+            <VoyagerScaleModel />
+          </Canvas>
+        ) : (
+          <img src={item.src} alt={item.label} />
+        )}
+      </div>
+
+      <div className="scale-object-info">
+        <span>{item.size}</span>
+        <p>{item.label}</p>
+      </div>
+    </div>
+  )
+})}
           </div>
         </div>
 

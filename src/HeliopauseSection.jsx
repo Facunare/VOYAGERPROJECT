@@ -26,7 +26,7 @@ function VoyagerBoundaryCrossing({ scrollProgress }) {
       La nave avanza de izquierda a derecha
       y cruza la frontera invisible.
     */
-    const x = lerp(-3.2, 2.9, p)
+    const x = lerp(-3.2, 3.9, p)
     const y = lerp(0.15, -0.05, p)
     const z = lerp(0.25, 0.95, p)
 
@@ -89,7 +89,7 @@ function HeliopauseMembrane({ scrollProgress }) {
       </mesh>
 
       {/* Borde luminoso */}
-      <mesh ref={ringRef} scale={[0.85, 2.65, 1]}>
+      <mesh ref={ringRef} scale={[0.65, 2, 1]}>
         <torusGeometry args={[1, 0.01, 16, 160]} />
         <meshBasicMaterial
           color="#9fd8ff"

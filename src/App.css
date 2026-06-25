@@ -27,24 +27,42 @@ body {
   background-position: center;
   background-attachment: fixed;
   font-family: 'Inter', 'Helvetica Neue', sans-serif;
+    background-color: rgba(2, 3, 10, 0.65);
+  background-image:
+    linear-gradient(
+      rgba(2, 3, 10, 0.78),
+      rgba(2, 3, 10, 0.88)
+    ),
+    url('./assets/espacio.jpg');
 }
 
 /* ========================= */
 /* HEADER */
 /* ========================= */
-
-header {
+.hero-header {
   width: 100%;
   height: 100vh;
+
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  text-align: center;
-  padding: 0 2rem;
+
+  gap: 4rem;
+
+  padding: 0 5vw;
+  text-align: left;
+}
+.hero-text {
+  max-width: 900px;
+}
+.hero-voyager {
+  width: 420px;
+  height: 420px;
+
+  flex-shrink: 0;
 }
 
-header h1 {
+.hero-text h1{
   font-size: clamp(2rem, 5vw, 3.5rem);
   font-weight: 700;
   color: #ffffff;
@@ -56,7 +74,7 @@ header h1 {
   letter-spacing: -0.01em;
 }
 
-header h2 {
+.hero-text h2{
   font-size: clamp(0.95rem, 2vw, 1.15rem);
   color: #ffffff;
   max-width: 1700px;
@@ -65,28 +83,60 @@ header h2 {
 
 }
 
+.voyager-hero-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100vh;
+
+  z-index: 4;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  padding: 0 7vw;
+
+  pointer-events: none;
+
+  transition:
+    opacity 0.12s linear,
+    transform 0.12s linear;
+}
+
+.voyager-hero-content .hero-text {
+  width: min(900px, 56vw);
+}
+
+.voyager-hero-content .hero-text h1 {
+  font-family: "Nasalization", sans-serif;
+  font-size: clamp(2.8rem, 6vw, 6rem);
+  line-height: 0.95;
+  text-transform: uppercase;
+  color: #ffffff;
+  margin-bottom: 1.5rem;
+}
+
+.voyager-hero-content .hero-text h2 {
+  font-family: "BTTF", sans-serif;
+  font-size: clamp(1rem, 1.4vw, 1.35rem);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.78);
+  max-width: 760px;
+}
+
 /* ========================= */
 /* SECCIÓN VOYAGER GENERAL */
 /* ========================= */
 
 .voyager-section {
   position: relative;
-  height: 780vh;
+  height: 880vh;
   color: white;
   overflow: clip;
-
-  background-color: rgba(2, 3, 10, 0.45);
-  background-image:
-    linear-gradient(
-      rgba(2, 3, 10, 0.45),
-      rgba(2, 3, 10, 0.65)
-    ),
-    url('./assets/espacio.jpg');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
 }
-
 /* Canvas 3D fijo */
 .voyager-canvas {
   position: sticky;
@@ -108,16 +158,11 @@ header h2 {
 
 .sticky-right {
   position: absolute;
-  top: 0;
+  top: 100vh;
   right: 0;
 
   width: 50vw;
   height: 300vh;
-
-  z-index: 2;
-
-  display: flex;
-  flex-direction: column;
 }
 
 .sticky-block {
@@ -131,11 +176,6 @@ header h2 {
 
   padding-left: 6vw;
   padding-right: 5vw;
-
-  background: rgba(8, 13, 26, 0.72);
-  border-left: 1px solid rgba(255, 255, 255, 0.08);
-
-  backdrop-filter: blur(2px);
 }
 
 .sticky-numero {
@@ -159,11 +199,9 @@ header h2 {
   display: block;
   font-family: "BTTF", sans-serif;
   margin-top: 1.2rem;
-
-  font-size: clamp(1.2rem, 1.8vw, 2rem);
   line-height: 1.3;
   font-weight: 400;
-
+  font-size: 25px !important;
   color: rgba(255, 255, 255, 0.72);
   text-align: center;
 }
@@ -174,16 +212,12 @@ header h2 {
 
 .story-wrapper {
   position: absolute;
-  top: 300vh;
+  top: 400vh;
   left: 0;
 
   width: 100%;
   height: 500vh;
-
-  z-index: 3;
-  pointer-events: none;
 }
-
 .story-step {
   height: 100vh;
   width: 50vw;
@@ -194,12 +228,7 @@ header h2 {
   padding-left: 7vw;
   padding-right: 4vw;
 
-  background: linear-gradient(
-    90deg,
-    rgba(2, 3, 10, 0.82),
-    rgba(2, 3, 10, 0.38),
-    rgba(2, 3, 10, 0)
-  );
+
 }
 
 .story-text {
@@ -220,7 +249,6 @@ header h2 {
 
 .story-text h2 {
   font-family: 'Nasalization', serif;
-  font-style: italic;
   font-weight: 700;
 
   font-size: clamp(2.3rem, 4vw, 3rem);
@@ -283,220 +311,8 @@ header h2 {
   }
 }
 
-/*  TIMELINE 1977 */
 
-/* ========================= */
-/* LA TIERRA EN 1977 */
-/* SCROLL HORIZONTAL */
-/* ========================= */
-
-.earth-timeline-section {
-  position: relative;
-  height: 420vh;
-  color: white;
-  overflow: clip;
-
-  background-color: rgba(2, 3, 10, 0.6);
-  background-image:
-    linear-gradient(
-      rgba(2, 3, 10, 0.75),
-      rgba(2, 3, 10, 0.85)
-    ),
-    url('./assets/espacio.jpg');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-}
-
-.earth-timeline-sticky {
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  overflow: hidden;
-
-  display: flex;
-  align-items: center;
-}
-
-.earth-timeline-sticky::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-
-  width: 55vw;
-  height: 100vh;
-
-  background: linear-gradient(
-    90deg,
-    rgba(2, 3, 10, 0.96) 0%,
-    rgba(2, 3, 10, 0.88) 55%,
-    rgba(2, 3, 10, 0) 100%
-  );
-
-  z-index: 3;
-  pointer-events: none;
-}
-
-.earth-timeline-intro {
-  position: absolute;
-  left: 7vw;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 3;
-
-  width: min(520px, 38vw);
-  pointer-events: none;
-}
-
-
-.earth-timeline-intro h2 {
-  font-family: 'Nasalization', serif;
-  font-style: italic;
-  font-weight: 700;
-  font-family: "Nasalization", sans-serif;
-  text-transform: uppercase;
-  font-size: clamp(2.2rem, 3vw, 4.7rem);
-  line-height: 0.95;
-  width: 100%;
-  margin-bottom: 1.5rem;
-}
-
-.earth-timeline-intro p {
-  font-size: clamp(1rem, 1.2vw, 1rem);
-  line-height: 1.65;
-  font-family: "BTTF", sans-serif;
-  color: rgba(255, 255, 255, 0.76);
-}
-
-.timeline-track {
-  position: absolute;
-  left: 52vw;
-  top: 0;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  gap: 8vw;
-  padding-right: 20vw;
-  z-index: 2;  transition: transform 0.08s linear;
-  will-change: transform;
-}
-
-.timeline-card {
-  position: relative;
-
-  width: 420px;
-  min-width: 420px;
-  min-height: 300px;
-
-  padding: 2rem;
-
-  background: rgba(8, 13, 26, 0.76);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-
-  backdrop-filter: blur(4px);
-}
-
-.timeline-year {
-  display: block;
-  
-  font-family: 'Nasalization', Georgia, serif;
-  font-style: italic;
-  font-size: clamp(3rem, 6vw, 6rem);
-  font-weight: 700;
-  line-height: 0.9;
-
-  color: #f5a623;
-
-  margin-bottom: 1.5rem;
-}
-
-.timeline-dot {
-  position: absolute;
-  left: 2rem;
-  bottom: -3.65rem;
-
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-
-  background: #f5a623;
-  box-shadow: 0 0 24px rgba(245, 166, 35, 0.8);
-}
-
-.timeline-card h3 {
-  font-size: clamp(1.4rem, 2vw, 1.5rem);
-  line-height: 1.1;
-  margin-bottom: 1rem;
-    font-family: "BTTF", sans-serif;
-}
-
-.timeline-card p {
-  font-size: 1rem;
-  line-height: 1.55;
-  font-family: "BTTF", sans-serif;
-  color: rgba(255, 255, 255, 0.72);
-}
-
-.timeline-line {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: calc(50% + 190px);
-
-  height: 1px;
-
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(245, 166, 35, 0.8),
-    rgba(255, 255, 255, 0.25),
-    transparent
-  );
-
-  z-index: 1;
-}
-
-/* ========================= */
-/* RESPONSIVE */
-/* ========================= */
-
-@media (max-width: 900px) {
-  .earth-timeline-section {
-    height: 460vh;
-  }
-
-  .earth-timeline-intro {
-    left: 8vw;
-    top: 18vh;
-    transform: none;
-
-    width: 84vw;
-  }
-
-  .earth-timeline-intro h2 {
-    font-size: clamp(2rem, 9vw, 4rem);
-  }
-
-  .timeline-track {
-    left: 8vw;
-    top: 18vh;
-
-    align-items: flex-end;
-    gap: 12vw;
-  }
-
-  .timeline-card {
-    width: 78vw;
-    min-width: 78vw;
-  }
-
-  .timeline-line {
-    top: auto;
-    bottom: 12vh;
-  }
-}
-/* ========================= */
+/* ======================== */
 /* COMPARACIÓN DE ESCALA */
 /* ========================= */
 
@@ -550,7 +366,6 @@ header h2 {
 
 .scale-intro h2 {
   font-family: 'Nasalization', serif;
-  font-style: italic;
   font-weight: 700;
   font-size: clamp(2.4rem, 4vw, 4.7rem);
   line-height: 0.95;
@@ -568,12 +383,49 @@ header h2 {
   position: absolute;
   left: 0;
   top: 0;
+
   width: 50vw;
   height: 100vh;
   overflow: hidden;
   z-index: 3;
+
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 8%,
+    black 88%,
+    transparent 100%
+  );
+
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 8%,
+    black 88%,
+    transparent 100%
+  );
 }
 
+.scale-panel {
+  width: 50vw;
+  height: 100vh;
+  flex: 0 0 50vw;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+
+  padding-bottom: 16vh;
+
+  transform-origin: center;
+  will-change: opacity, filter, transform;
+
+  transition:
+    opacity 0.12s linear,
+    filter 0.12s linear,
+    transform 0.12s linear;
+}
 /* Track horizontal */
 .scale-horizontal-track {
   position: absolute;
@@ -656,7 +508,7 @@ header h2 {
   display: block;
 
   font-family: 'Nasalization', serif;
-  font-style: italic;
+
   font-weight: 700;
 
   font-size: clamp(1.8rem, 2.8vw, 3.2rem);
@@ -783,7 +635,6 @@ header h2 {
 
 .jupiter-saturn-text-step h2 {
   font-family: 'Nasalization', serif;
-  font-style: italic;
   font-weight: 700;
 
   font-size: clamp(2.5rem, 4vw, 4.8rem);
@@ -904,7 +755,6 @@ header h2 {
 
 .golden-intro h2 {
   font-family: 'Nasalization', serif;
-  font-style: italic;
   font-weight: 700;
   font-size: clamp(2.4rem, 4vw, 4.8rem);
   line-height: 0.95;
@@ -929,6 +779,42 @@ header h2 {
   overflow: hidden;
 
   z-index: 3;
+
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 9%,
+    black 91%,
+    transparent 100%
+  );
+
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 9%,
+    black 91%,
+    transparent 100%
+  );
+}
+
+.golden-panel {
+  width: 55vw;
+  height: 100vh;
+  flex: 0 0 55vw;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 3vw;
+
+  transform-origin: center;
+  will-change: opacity, filter, transform;
+
+  transition:
+    opacity 0.12s linear,
+    filter 0.12s linear,
+    transform 0.12s linear;
 }
 
 .golden-track {
@@ -982,8 +868,8 @@ header h2 {
 .golden-visual img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
   display: block;
+  border-radius: 100px;
 }
 
 .golden-record-visual img {
@@ -1007,7 +893,6 @@ header h2 {
 
 .golden-panel-caption h3 {
   font-family: 'Nasalization', serif;
-  font-style: italic;
   font-weight: 700;
 
   font-size: clamp(2rem, 3vw, 3rem);
@@ -1200,7 +1085,6 @@ header h2 {
 
 .pale-text-step h2 {
   font-family: 'Nasalization', serif;
-  font-style: italic;
   font-weight: 700;
 
   font-size: clamp(2.5rem, 4vw, 4.8rem);
@@ -1237,13 +1121,9 @@ header h2 {
   overflow: visible;
   overflow-x: clip;
 
-  background-color: rgba(2, 3, 10, 0.78);
+  
   background-image:
-    radial-gradient(
-      circle at 70% 50%,
-      rgba(80, 150, 255, 0.16),
-      transparent 34%
-    ),
+
     linear-gradient(
       rgba(2, 3, 10, 0.82),
       rgba(2, 3, 10, 0.94)
@@ -1297,12 +1177,7 @@ header h2 {
   flex-direction: column;
   justify-content: center;
 
-  background: linear-gradient(
-    90deg,
-    rgba(2, 3, 10, 0.9),
-    rgba(2, 3, 10, 0.58),
-    rgba(2, 3, 10, 0)
-  );
+
 }
 
 .heliopause-text-step span {
@@ -1318,7 +1193,6 @@ header h2 {
 
 .heliopause-text-step h2 {
   font-family: 'Nasalization', serif;
-  font-style: italic;
   font-weight: 700;
 
   font-size: clamp(2.5rem, 4vw, 4.8rem);
@@ -1436,15 +1310,33 @@ header h2 {
   height: 500vh;
   overflow-x: clip;
   color: #fff;
-  background: #02040b;
+
+  background: transparent;
 }
+
 
 .distance-scale-sticky {
   position: sticky;
   top: 0;
   height: 100vh;
   overflow: hidden;
+  background: transparent;
+
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    black 0%,
+    black 78%,
+    transparent 100%
+  );
+
+  mask-image: linear-gradient(
+    to bottom,
+    black 0%,
+    black 78%,
+    transparent 100%
+  );
 }
+
 
 .distance-scale-sticky canvas {
   position: absolute;
@@ -1467,12 +1359,7 @@ header h2 {
   align-items: center;
   min-height: 100vh;
   padding: 7vw;
-  background: linear-gradient(
-    90deg,
-    rgba(2, 4, 11, 0.92) 0%,
-    rgba(2, 4, 11, 0.63) 62%,
-    transparent 100%
-  );
+
 }
 
 .distance-scale-step > div {
@@ -1495,7 +1382,6 @@ header h2 {
   color: #fff;
   font-family: 'Nasalization', serif;
   font-size: clamp(2.4rem, 4vw, 4.7rem);
-  font-style: italic;
   line-height: 1;
   letter-spacing: 0;
 }
@@ -1623,7 +1509,17 @@ header h2 {
   height: 400vh;
   overflow-x: clip;
   color: #f4f7fb;
-  background: #03070c;
+
+  background-color: rgba(2, 3, 10, 0.65);
+  background-image:
+    linear-gradient(
+      rgba(2, 3, 10, 0.78),
+      rgba(2, 3, 10, 0.88)
+    ),
+    url('./assets/espacio.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
 }
 
 .mission-power-sticky {
@@ -1631,9 +1527,8 @@ header h2 {
   top: 0;
   height: 100vh;
   overflow: hidden;
-  background:
-    radial-gradient(circle at 78% 42%, rgba(39, 105, 149, 0.13), transparent 34%),
-    linear-gradient(120deg, #03070c, #07111b 70%, #020508);
+
+  background: transparent;
 }
 
 .mission-stars {
@@ -1661,7 +1556,6 @@ header h2 {
   align-items: center;
   min-height: 100vh;
   padding: 7vw;
-  background: linear-gradient(90deg, rgba(3,7,12,.96), rgba(3,7,12,.7) 70%, transparent);
 }
 
 .mission-power-step > div {
@@ -1681,7 +1575,6 @@ header h2 {
   margin: 0 0 1.4rem;
   font-family: 'Nasalization', serif;
   font-size: clamp(2.45rem, 4vw, 4.7rem);
-  font-style: italic;
   line-height: 1;
   letter-spacing: 0;
 }
@@ -1975,12 +1868,11 @@ header h2 {
 .mission-closing-line {
   position: absolute;
   right: 5vw;
-  bottom: 15vh;
+  bottom: 12vh;
   width: min(49vw, 760px);
   color: rgba(255,255,255,.85);
   font-family: 'Nasalization', serif;
   font-size: clamp(1.15rem, 1.7vw, 1.75rem);
-  font-style: italic;
   text-align: center;
   transition: opacity .25s ease;
 }
@@ -2081,7 +1973,17 @@ header h2 {
   height: 400vh;
   overflow-x: clip;
   color: #fff;
-  background: #010308;
+
+  background-color: rgba(2, 3, 10, 0.65);
+  background-image:
+    linear-gradient(
+      rgba(2, 3, 10, 0.78),
+      rgba(2, 3, 10, 0.88)
+    ),
+    url('./assets/espacio.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
 }
 
 .final-voyage-sticky {
@@ -2089,7 +1991,8 @@ header h2 {
   top: 0;
   height: 100vh;
   overflow: hidden;
-  background: #010308;
+
+  background: transparent;
 }
 
 .final-voyage-sticky::after {
@@ -2097,9 +2000,7 @@ header h2 {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background:
-    radial-gradient(circle at 55% 42%, transparent 0 18%, rgba(1,3,8,.22) 65%, rgba(1,3,8,.7)),
-    linear-gradient(90deg, rgba(1,3,8,.7), transparent 48%);
+
 }
 
 .final-voyage-sticky canvas {
@@ -2143,7 +2044,6 @@ header h2 {
   margin: 0 0 1.4rem;
   font-family: 'Nasalization', serif;
   font-size: clamp(2.5rem, 4vw, 4.8rem);
-  font-style: italic;
   line-height: 1;
   letter-spacing: 0;
 }
@@ -2181,7 +2081,6 @@ header h2 {
   margin: 0;
   font-family: 'Nasalization', serif;
   font-size: clamp(2.4rem, 5vw, 5.8rem);
-  font-style: italic;
   font-weight: 700;
   line-height: 1.02;
   letter-spacing: 0;
@@ -2207,7 +2106,7 @@ header h2 {
   font-family: Georgia, 'Times New Roman', serif;
   font-size: 2rem;
   font-weight: 400;
-  margin-bottom: 5px;
+  margin-bottom: 1px;
 }
 
 @media (max-width: 900px) {
@@ -2303,7 +2202,6 @@ header h1,
   color: #ffffff;
   font-family: "Nasalization", sans-serif;
   font-size: clamp(2.3rem, 4vw, 3rem);
-  font-style: italic;
   font-weight: 700;
   line-height: 0.95;
   text-transform: uppercase;
@@ -2337,20 +2235,194 @@ header h2,
 .scale-object-info p {
   font-family: "BTTF", sans-serif;
 }
+.footer {
+  position: relative;
+  height: 75vh;
+  min-height: 520px;
+
+  overflow: hidden;
+
+  color: #ffd576;
+
+  background: transparent;
+  font-family: "Nasalization", sans-serif;
+}
+
+/* Fade superior suave, sin tapar el fondo del body */
+.fade {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+
+  height: 22%;
+
+  background: linear-gradient(
+    180deg,
+    rgba(2, 3, 10, 0.88) 0%,
+    rgba(2, 3, 10, 0.45) 45%,
+    rgba(2, 3, 10, 0) 100%
+  );
+
+  z-index: 5;
+  pointer-events: none;
+}
+
+/* Contenedor del texto */
+.crawl-wrap {
+  position: absolute;
+  left: 50%;
+  top: 72%;
+
+  width: min(900px, 82vw);
+
+  transform: translateX(-50%);
+  perspective: 800px;
+
+  z-index: 2;
+}
+
+/* Menos inclinado y más lento */
+.crawl {
+  transform-origin: 50% 100%;
+  transform: rotateX(25deg);
+
+  animation: crawl 45s linear infinite;
+}
+
+/* Títulos */
+.title h1,
+.title h2 {
+  margin: 0;
+  text-align: center;
+  color: #ffd576;
+}
+
+.title h1 {
+  margin-bottom: 1rem;
+
+  font-family: "Nasalization", sans-serif;
+  font-size: clamp(2.6rem, 5vw, 5.2rem);
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.title h2 {
+  margin-bottom: 3rem;
+
+  font-family: "BTTF", sans-serif;
+  font-size: clamp(1.1rem, 1.8vw, 1.6rem);
+  line-height: 1.4;
+  color: rgba(255, 213, 118, 0.86);
+}
+
+/* Créditos */
+.credits {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.credits .lead {
+  margin-bottom: 1.4rem;
+
+  font-family: "BTTF", sans-serif;
+  font-size: clamp(1rem, 1.5vw, 1.35rem);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+
+  color: rgba(255, 213, 118, 0.9);
+}
+
+.credits ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2rem 0;
+}
+
+.credits li {
+  margin: 0.9rem 0;
+
+  font-family: "Nasalization", sans-serif;
+  font-size: clamp(1.7rem, 3vw, 3rem);
+  line-height: 1.1;
+  text-transform: uppercase;
+
+  color: #ffd576;
+  text-shadow: 0 0 18px rgba(255, 213, 118, 0.18);
+}
+
+.saludo {
+  margin-top: 2.5rem;
+
+  font-family: "BTTF", sans-serif;
+  font-size: clamp(1.2rem, 2vw, 1.8rem);
+  font-weight: 700;
+
+  color: rgba(255, 213, 118, 0.95);
+}
+
+/* Movimiento más lento y menos brusco */
+@keyframes crawl {
+  0% {
+    transform: translateY(80%) rotateX(25deg);
+  }
+
+  100% {
+    transform: translateY(-230%) rotateX(25deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .footer {
+    height: 80vh;
+    min-height: 560px;
+  }
+
+  .crawl-wrap {
+    width: 92vw;
+    perspective: 650px;
+  }
+
+  .crawl {
+    animation-duration: 70s;
+    transform: rotateX(9deg);
+  }
+
+  .title h1 {
+    font-size: clamp(2rem, 10vw, 3.4rem);
+  }
+
+  .title h2 {
+    font-size: 1rem;
+  }
+
+  .credits li {
+    font-size: clamp(1.4rem, 7vw, 2.4rem);
+  }
+
+  @keyframes crawl {
+    0% {
+      transform: translateY(85%) rotateX(9deg);
+    }
+
+    100% {
+      transform: translateY(-230%) rotateX(9deg);
+    }
+  }
+}
 
 /*
 
-=== COSAS QUE NO ENTIENDO ===
-Cambiar los scrollings horizontales
-Darle aire a las últimas partes porque esta muy junto 
-Ordenar las secciones.
-Mejorar los gráficos.
-
-== COSAS QUE NO PIENSO CAMBIAR==
-Que el Voyager no se zarandee.
-Y tal vez medio innecesario que este la nave y los planetas, pero eso se lo preguntamos mañana porque no lo entendí bien 
-
 === PARA HACER ===
-Hacer bien las jerarquías de las secciones (como te pase en la foto)
+
+1) Que el Voyager no se zarandee: que no haga ese movimiento tipo infinito.
+2) Ver de mejorar esa transicion entre heliopausa y alejamiento xq hay 2 naves a la vez
+
+3) Hacer bien las jerarquías de las secciones (como te pase en la foto)
+4) Mejorar los gráficos (voy a intentarlos ponerlos ocupando toda la pantalla, y que sean animados)
+      a) que tengan misma font, mejorar popups, que sean "el centro"
+      b) Darle aire a los graficos muy juntitos (aunque igual todo eso va a cambiar)
 
 */

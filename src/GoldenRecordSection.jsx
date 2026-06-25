@@ -123,48 +123,65 @@ const handleAudioClick = () => {
             className="golden-track"
             style={{ transform: `translateX(${translateX}vw)` }}
           >
-            {panels.map((panel, index) => (
-              <div key={index} className="golden-panel">
-                <div className="golden-panel-inner">
-                  <div
-                    className={
-                      panel.type === 'record'
-                        ? 'golden-visual golden-record-visual'
-                        : 'golden-visual'
-                    }
-                  >
-                    <img src={panel.image} alt={panel.title} />
-                  </div>
+{panels.map((panel, index) => {
+  const currentPanel = progress * (panels.length - 1)
+  const distance = Math.abs(index - currentPanel)
 
-                  <div className="golden-panel-caption">
-                    <h3>{panel.title}</h3>
-                    <p>{panel.text}</p>
+  const panelOpacity = clamp(1 - distance * 0.85, 0, 1)
+  const panelBlur = clamp(distance * 7, 0, 7)
+  const panelScale = clamp(1 - distance * 0.04, 0.94, 1)
 
-                    {panel.type === 'earth-info' && (
-  <div className="golden-audio-buttons">
-    <button
-      className="golden-audio-button"
-      onClick={handleAudioClick}
+  return (
+    <div
+      key={index}
+      className="golden-panel"
+      style={{
+        opacity: panelOpacity,
+        filter: `blur(${panelBlur}px)`,
+        transform: `scale(${panelScale})`,
+      }}
     >
-      {isPlaying
-        ? 'Pausar mensaje'
-        : '¿Querés escuchar lo que mandamos?'}
-    </button>
+      <div className="golden-panel-inner">
+        <div
+          className={
+            panel.type === 'record'
+              ? 'golden-visual golden-record-visual'
+              : 'golden-visual'
+          }
+        >
+          <img src={panel.image} alt={panel.title} />
+        </div>
 
-    <button
-      className="golden-audio-button golden-audio-button-secondary"
-      onClick={handleEnglishAudioClick}
-    >
-      {isEnglishPlaying
-        ? 'Pausar saludo en inglés'
-        : 'Escuchar el saludo en inglés'}
-    </button>
-  </div>
-)}
-                  </div>
-                </div>
-              </div>
-            ))}
+        <div className="golden-panel-caption">
+          <h3>{panel.title}</h3>
+          <p>{panel.text}</p>
+
+          {panel.type === 'earth-info' && (
+            <div className="golden-audio-buttons">
+              <button
+                className="golden-audio-button"
+                onClick={handleAudioClick}
+              >
+                {isPlaying
+                  ? 'Pausar mensaje'
+                  : '¿Querés escuchar lo que mandamos?'}
+              </button>
+
+              <button
+                className="golden-audio-button golden-audio-button-secondary"
+                onClick={handleEnglishAudioClick}
+              >
+                {isEnglishPlaying
+                  ? 'Pausar saludo en inglés'
+                  : 'Escuchar el saludo en inglés'}
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+})}
           </div>
         </div>
       </div>

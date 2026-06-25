@@ -204,7 +204,6 @@ function VoyagerFlyby({ scrollProgress }) {
   Saturno → Urano → Neptuno
   =========================
 */
-
 if (voyager2Ref.current) {
   let baseX
   let baseY
@@ -212,35 +211,50 @@ if (voyager2Ref.current) {
 
   const voyager2Progress = clamp((scrollProgress - 0.62) / 0.38, 0, 1)
 
-  // Oculta la nave hasta que realmente empiece a entrar
   voyager2Ref.current.visible = voyager2Progress > 0.03
 
   if (voyager2Progress < 0.35) {
     const p = clamp(voyager2Progress / 0.35, 0, 1)
 
-    // Entra desde la izquierda de forma continua
+    // Entra desde la izquierda
     baseX = lerp(-4.2, 1.95, p)
     baseY = lerp(0.1, -0.45, p)
     baseZ = lerp(0.35, 0.85, p)
-  } else if (voyager2Progress < 0.7) {
-    const p = clamp((voyager2Progress - 0.35) / 0.35, 0, 1)
+  } else if (voyager2Progress < 0.68) {
+    const p = clamp((voyager2Progress - 0.35) / 0.33, 0, 1)
 
     // Sigue hacia Urano
     baseX = lerp(1.95, 2.0, p)
     baseY = lerp(-0.45, -0.55, p)
     baseZ = lerp(0.85, 0.95, p)
-  } else {
-    const p = clamp((voyager2Progress - 0.7) / 0.3, 0, 1)
+  } else if (voyager2Progress < 0.86) {
+    const p = clamp((voyager2Progress - 0.68) / 0.18, 0, 1)
 
-    // Sigue hacia Neptuno
+    // Llega a Neptuno
     baseX = lerp(2.0, 2.15, p)
     baseY = lerp(-0.55, -0.75, p)
     baseZ = lerp(0.95, 1.05, p)
+  } else {
+    const p = clamp((voyager2Progress - 0.86) / 0.14, 0, 1)
+
+    // Al final se va por la derecha y desaparece
+    baseX = lerp(2.15, 5.3, p)
+    baseY = lerp(-0.75, -0.55, p)
+    baseZ = lerp(1.05, 1.35, p)
   }
 
-  const zigzagX = Math.sin(time * 1.45 + scrollProgress * 12) * 0.16
-  const zigzagY = Math.sin(time * 2.0 + scrollProgress * 9) * 0.09
-  const waveZ = Math.sin(time * 1.1 + scrollProgress * 6) * 0.06
+  const exitProgress = clamp((voyager2Progress - 0.86) / 0.14, 0, 1)
+
+  const zigzagStrength = 1 - exitProgress * 0.45
+
+  const zigzagX =
+    Math.sin(time * 1.45 + scrollProgress * 12) * 0.16 * zigzagStrength
+
+  const zigzagY =
+    Math.sin(time * 2.0 + scrollProgress * 9) * 0.09 * zigzagStrength
+
+  const waveZ =
+    Math.sin(time * 1.1 + scrollProgress * 6) * 0.06 * zigzagStrength
 
   voyager2Ref.current.position.set(
     baseX + zigzagX,
@@ -248,11 +262,11 @@ if (voyager2Ref.current) {
     baseZ + waveZ
   )
 
-  const scale = 0.24
+  const scale = lerp(0.24, 0.16, exitProgress)
   voyager2Ref.current.scale.set(scale, scale, scale)
 
   voyager2Ref.current.rotation.x = Math.sin(time * 1.5) * 0.12
-  voyager2Ref.current.rotation.y = scrollProgress * Math.PI * 4 + 1.1
+  voyager2Ref.current.rotation.y = scrollProgress * Math.PI * 4 + 1.1 + exitProgress * 0.8
   voyager2Ref.current.rotation.z = Math.sin(time * 1.2) * 0.22
 }
   })
