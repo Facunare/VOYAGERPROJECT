@@ -10,6 +10,12 @@ function clamp(value, min, max) {
 function lerp(a, b, t) {
   return a + (b - a) * t
 }
+
+function smooth(from, to, value) {
+  const t = clamp((value - from) / (to - from), 0, 1)
+  return t * t * (3 - 2 * t)
+}
+
 function JupiterPlanet() {
   const texture = useTexture('/textures/jupiter.jpg')
   const planetRef = useRef()
@@ -175,9 +181,9 @@ function VoyagerFlyby({ scrollProgress }) {
         baseZ = lerp(0.85, 1.1, exitProgress)
       }
 
-      const zigzagX = Math.sin(time * 1.5 + scrollProgress * 12) * 0.16
-      const zigzagY = Math.sin(time * 2.1 + scrollProgress * 9) * 0.09
-      const waveZ = Math.sin(time * 1.2 + scrollProgress * 6) * 0.06
+      const zigzagX = Math.sin(time * 0.65) * 0.020
+      const zigzagY = Math.sin(time * 0.55) * 0.01
+      const waveZ = 0
 
       const visible = scrollProgress < 0.68
 
@@ -192,9 +198,9 @@ function VoyagerFlyby({ scrollProgress }) {
       const scale = lerp(0.18, 0.25, clamp(scrollProgress / 0.55, 0, 1))
       voyager1Ref.current.scale.set(scale, scale, scale)
 
-      voyager1Ref.current.rotation.x = Math.sin(time * 1.5) * 0.12
-      voyager1Ref.current.rotation.y = scrollProgress * Math.PI * 4 + 0.7
-      voyager1Ref.current.rotation.z = Math.sin(time * 1.2) * 0.22
+      voyager1Ref.current.rotation.x = Math.sin(time * 0.75) * 0.035
+      voyager1Ref.current.rotation.y = scrollProgress * Math.PI * 4 + 0.6
+      voyager1Ref.current.rotation.z =  Math.sin(time * 0.7) * 0.06
     }
 
     /*
@@ -247,14 +253,13 @@ if (voyager2Ref.current) {
 
   const zigzagStrength = 1 - exitProgress * 0.45
 
-  const zigzagX =
-    Math.sin(time * 1.45 + scrollProgress * 12) * 0.16 * zigzagStrength
+const zigzagX =
+  Math.sin(time * 0.7) * 0.024 * zigzagStrength
 
-  const zigzagY =
-    Math.sin(time * 2.0 + scrollProgress * 9) * 0.09 * zigzagStrength
+const zigzagY =
+  Math.sin(time * 0.6) * 0.01 * zigzagStrength
 
-  const waveZ =
-    Math.sin(time * 1.1 + scrollProgress * 6) * 0.06 * zigzagStrength
+const waveZ = 0
 
   voyager2Ref.current.position.set(
     baseX + zigzagX,
@@ -265,9 +270,9 @@ if (voyager2Ref.current) {
   const scale = lerp(0.24, 0.16, exitProgress)
   voyager2Ref.current.scale.set(scale, scale, scale)
 
-  voyager2Ref.current.rotation.x = Math.sin(time * 1.5) * 0.12
-  voyager2Ref.current.rotation.y = scrollProgress * Math.PI * 4 + 1.1 + exitProgress * 0.8
-  voyager2Ref.current.rotation.z = Math.sin(time * 1.2) * 0.22
+voyager2Ref.current.rotation.x = Math.sin(time * 0.75) * 0.04
+voyager2Ref.current.rotation.y = lerp(0.9, 2.2, voyager2Progress) + exitProgress * 0.8
+voyager2Ref.current.rotation.z = Math.sin(time * 0.7) * 0.06
 }
   })
 
@@ -339,13 +344,11 @@ const steps = [
     kicker: 'Datos invisibles',
     title: 'No solo imágenes',
     text: 'Además de fotografiar, Voyager midió campos magnéticos y partículas. El encuentro con Júpiter también fue una forma de registrar fenómenos que no podían verse a simple vista.',
-    flourishJupiter: true,
   },
   {
     kicker: '1980',
     title: 'Saturno y la decisión que cambió el destino',
     text: 'Después de Júpiter, Voyager 1 llegó a Saturno. Allí la misión tuvo uno de sus momentos clave.',
-    flourishSaturn: true,
   },
   {
     kicker: 'Titán',
@@ -379,9 +382,320 @@ const steps = [
 },
 ]
 
-export default function JupiterSaturnEncounter() {
+const magnetometerCharts = {
+  jupiter: {
+    kicker: 'Datos de cruce',
+    title: 'Cuando Jupiter dejo de ser solo una imagen',
+    subtitle:
+      'Mediciones del magnetometro de Voyager 1 durante su sobrevuelo de Jupiter, marzo de 1979.',
+    xStart: '1979-03-03',
+    xEnd: '1979-03-16',
+    yMax: 3500,
+    annotation: 'Maximo acercamiento a Jupiter',
+    points: [
+      20, 15, 18, 24, 20, 34, 38, 52, 80, 120, 260, 620, 1320, 2450,
+      3300, 1850, 760, 260, 120, 70, 45, 34, 28, 25, 20, 22, 18, 16,
+      18, 15, 14, 18, 12,
+    ],
+  },
+  saturn: {
+    kicker: 'Datos de cruce',
+    title: 'El encuentro que cambio el destino de Voyager',
+    subtitle:
+      'Mediciones del magnetometro de Voyager 1 durante su sobrevuelo de Saturno, noviembre de 1980.',
+    xStart: '1980-11-10',
+    xEnd: '1980-11-21',
+    yMax: 1100,
+    annotation: 'Maximo acercamiento a Saturno',
+    points: [
+      2, 3, 2, 3, 2, 4, 5, 12, 18, 22, 34, 65, 140, 360, 1080, 360,
+      120, 42, 24, 16, 12, 9, 7, 5, 4, 4, 3, 3, 2, 2, 2, 2,
+    ],
+  },
+}
+function MagnetometerGraphSection({ chart, sceneStart, sceneEnd }) {
   const sectionRef = useRef()
-  const [scrollProgress, setScrollProgress] = useState(0)
+  const [progress, setProgress] = useState(0)
+
+  useEffect(() => {
+    let frame = 0
+
+    const update = () => {
+      cancelAnimationFrame(frame)
+
+      frame = requestAnimationFrame(() => {
+        const section = sectionRef.current
+        if (!section) return
+
+        const rect = section.getBoundingClientRect()
+        const scrollable = section.offsetHeight - window.innerHeight
+        const nextProgress = clamp(-rect.top / scrollable, 0, 1)
+
+        setProgress(nextProgress)
+      })
+    }
+
+    window.addEventListener('scroll', update, { passive: true })
+    window.addEventListener('resize', update)
+    update()
+
+    return () => {
+      cancelAnimationFrame(frame)
+      window.removeEventListener('scroll', update)
+      window.removeEventListener('resize', update)
+    }
+  }, [])
+
+  const sceneProgress = lerp(sceneStart, sceneEnd, progress)
+
+  return (
+    <section ref={sectionRef} className="mission-graph-section">
+      <div className="mission-graph-sticky">
+
+        <div className="mission-scroll-graph">
+          <div className="mission-scroll-graph-header">
+            <span>{chart.kicker}</span>
+            <h2>{chart.title}</h2>
+            <p>{chart.subtitle}</p>
+          </div>
+
+          <MagnetometerGraph chart={chart} progress={progress} />
+
+          <div className="mission-graph-legend">
+            <span><i />BMAG_NT</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+function MagnetometerGraphStep({ chart, progress }) {
+  return (
+    <article className="jupiter-saturn-graph-step">
+      <div className="jupiter-saturn-graph-sticky">
+        <div className="jupiter-saturn-graph-dark-overlay" />
+
+        <div className="mission-scroll-graph">
+          <div className="mission-scroll-graph-header">
+            <span>{chart.kicker}</span>
+            <h2>{chart.title}</h2>
+            <p>{chart.subtitle}</p>
+          </div>
+
+          <MagnetometerGraph chart={chart} progress={progress} />
+
+          <div className="mission-graph-legend">
+            <span><i />BMAG_NT</span>
+          </div>
+        </div>
+      </div>
+    </article>
+  )
+}
+function ScrollDrawPath({ d, className, progress }) {
+  const pathRef = useRef(null)
+  const [length, setLength] = useState(1)
+
+  useEffect(() => {
+    if (!pathRef.current) return
+    setLength(pathRef.current.getTotalLength())
+  }, [d])
+
+  return (
+    <path
+      ref={pathRef}
+      d={d}
+      className={className}
+      style={{
+        strokeDasharray: length,
+        strokeDashoffset: length * (1 - progress),
+      }}
+    />
+  )
+}
+
+function MagnetometerGraph({ chart, progress }) {
+  const draw = clamp((progress - 0.05) / 0.9, 0, 1)
+
+  const width = 1000
+  const height = 520
+
+  const padding = {
+    top: 70,
+    right: 80,
+    bottom: 90,
+    left: 120,
+  }
+
+  const chartWidth = width - padding.left - padding.right
+  const chartHeight = height - padding.top - padding.bottom
+
+  const points = chart.points.map((value, index) => {
+    const x = padding.left + (index / (chart.points.length - 1)) * chartWidth
+    const y = padding.top + chartHeight - (value / chart.yMax) * chartHeight
+
+    return { x, y, value }
+  })
+
+  const path = points.reduce((acc, point, index) => {
+  if (index === 0) {
+    return `M ${point.x} ${point.y}`
+  }
+
+  const prev = points[index - 1]
+  const midX = (prev.x + point.x) / 2
+  const midY = (prev.y + point.y) / 2
+
+  return `${acc} Q ${prev.x} ${prev.y} ${midX} ${midY}`
+}, '')
+
+const lastPoint = points[points.length - 1]
+const beforeLastPoint = points[points.length - 2]
+
+const smoothPath = `${path} Q ${beforeLastPoint.x} ${beforeLastPoint.y} ${lastPoint.x} ${lastPoint.y}`
+
+  const maxPoint = points.reduce((best, point) =>
+    point.value > best.value ? point : best
+  )
+
+  return (
+    <svg
+      className="mission-svg-graph"
+      viewBox={`0 0 ${width} ${height}`}
+      preserveAspectRatio="none"
+    >
+      <text
+        x="-400"
+        y="10"
+        transform="rotate(-90)"
+        className="mission-axis-title"
+      >
+        Intensidad BMAG_NT
+      </text>
+
+      {[0, 0.25, 0.5, 0.75, 1].map((tick) => {
+        const y = padding.top + chartHeight - tick * chartHeight
+        const value = Math.round(chart.yMax * tick)
+
+        return (
+          <g key={tick}>
+            <line
+              x1={padding.left}
+              x2={padding.left + chartWidth}
+              y1={y}
+              y2={y}
+              className="mission-grid-line"
+            />
+            <text
+              x={padding.left - 18}
+              y={y + 5}
+              className="mission-graph-label"
+              textAnchor="end"
+            >
+              {value}
+            </text>
+          </g>
+        )
+      })}
+
+      <line
+        x1={padding.left}
+        y1={padding.top}
+        x2={padding.left}
+        y2={padding.top + chartHeight}
+        className="mission-axis"
+      />
+
+      <line
+        x1={padding.left}
+        y1={padding.top + chartHeight}
+        x2={padding.left + chartWidth}
+        y2={padding.top + chartHeight}
+        className="mission-axis"
+      />
+
+      <text
+        x={padding.left}
+        y={padding.top + chartHeight + 65}
+        className="mission-graph-label"
+        textAnchor="middle"
+      >
+        {chart.xStart}
+      </text>
+
+      <text
+        x={padding.left + chartWidth}
+        y={padding.top + chartHeight + 65}
+        className="mission-graph-label"
+        textAnchor="middle"
+      >
+        {chart.xEnd}
+      </text>
+
+      <path
+        d={smoothPath}
+        className="mission-graph-line-shadow"
+      />
+
+      <ScrollDrawPath
+        d={smoothPath}
+        className="mission-graph-line-yellow"
+        progress={draw}
+      />
+
+      <line
+        x1={maxPoint.x}
+        x2={maxPoint.x}
+        y1={padding.top}
+        y2={padding.top + chartHeight}
+        className="mission-graph-crossing-line"
+        style={{ opacity: clamp((draw - 0.48) / 0.14, 0, 1) }}
+      />
+
+      <rect
+        x={maxPoint.x + 18}
+        y={Math.max(maxPoint.y + 4, padding.top + 10)}
+        width="290"
+        height="44"
+        rx="6"
+        className="mission-graph-label-bg"
+        style={{ opacity: clamp((draw - 0.55) / 0.15, 0, 1) }}
+      />
+
+      <text
+        x={maxPoint.x + 32}
+        y={Math.max(maxPoint.y + 31, padding.top + 37)}
+        className="mission-graph-annotation"
+        style={{ opacity: clamp((draw - 0.55) / 0.15, 0, 1) }}
+      >
+        {chart.annotation}
+      </text>
+
+      <line
+        x1={padding.left}
+        x2={width - 40}
+        y1={height - 48}
+        y2={height - 48}
+        className="mission-graph-footer-line"
+      />
+
+      <text
+        x={padding.left}
+        y={height+35}
+        className="mission-graph-footnote"
+      >
+        BMAG_NT = MAGNITUD DEL CAMPO MAGNETICO
+      </text>
+    </svg>
+  )
+}
+
+function JupiterSaturnStoryBlock({ blockSteps, sceneStart, sceneEnd }) {
+  const sectionRef = useRef()
+  const [localProgress, setLocalProgress] = useState(0)
+
+  const sectionHeight = `${blockSteps.length * 100}vh`
+  const sceneProgress = lerp(sceneStart, sceneEnd, localProgress)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -392,17 +706,120 @@ export default function JupiterSaturnEncounter() {
       const sectionHeight = section.offsetHeight - window.innerHeight
       const scrolled = -rect.top
 
-      setScrollProgress(clamp(scrolled / sectionHeight, 0, 1))
+      setLocalProgress(clamp(scrolled / sectionHeight, 0, 1))
     }
 
     window.addEventListener('scroll', handleScroll)
+    window.addEventListener('resize', handleScroll)
     handleScroll()
 
-    return () => window.removeEventListener('scroll', handleScroll)
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('resize', handleScroll)
+    }
   }, [])
 
   return (
-    <section ref={sectionRef} className="jupiter-saturn-section">
+    <section
+      ref={sectionRef}
+      className="jupiter-saturn-section"
+      style={{ height: sectionHeight }}
+    >
+      <div className="jupiter-saturn-sticky">
+        <div className="jupiter-saturn-canvas">
+          <Canvas camera={{ position: [0, 0, 4.2], fov: 48 }}>
+            <JupiterSaturnScene scrollProgress={sceneProgress} />
+          </Canvas>
+        </div>
+      </div>
+
+      <div
+        className="jupiter-saturn-text-steps"
+        style={{ height: sectionHeight }}
+      >
+        {blockSteps.map((step, index) => (
+          <article key={index} className="jupiter-saturn-text-step">
+            <span>{step.kicker}</span>
+            <h2>{step.title}</h2>
+            <p>{step.text}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  )
+}
+export default function JupiterSaturnEncounter() {
+  const sectionRef = useRef()
+  const [scrollProgress, setScrollProgress] = useState(0)
+
+  const timelineItems = [
+    { type: 'story', step: steps[0], units: 1 },
+    { type: 'story', step: steps[1], units: 1 },
+    { type: 'story', step: steps[2], units: 1 },
+
+    { type: 'graph', chart: magnetometerCharts.jupiter, units: 2.4 },
+
+    { type: 'story', step: steps[3], units: 1 },
+
+    { type: 'graph', chart: magnetometerCharts.saturn, units: 2.4 },
+
+    { type: 'story', step: steps[4], units: 1 },
+    { type: 'story', step: steps[5], units: 1 },
+    { type: 'story', step: steps[6], units: 1 },
+    { type: 'story', step: steps[7], units: 1 },
+    { type: 'story', step: steps[8], units: 1 },
+    { type: 'story', step: steps[9], units: 1 },
+  ]
+
+  const totalUnits = timelineItems.reduce((sum, item) => sum + item.units, 0)
+  const sectionHeight = `${totalUnits * 100}vh`
+
+  const itemStarts = timelineItems.reduce((acc, item, index) => {
+    if (index === 0) return [0]
+    return [...acc, acc[index - 1] + timelineItems[index - 1].units]
+  }, [])
+
+  useEffect(() => {
+    let frame = 0
+
+    const handleScroll = () => {
+      cancelAnimationFrame(frame)
+
+      frame = requestAnimationFrame(() => {
+        const section = sectionRef.current
+        if (!section) return
+
+        const rect = section.getBoundingClientRect()
+        const sectionScrollable = section.offsetHeight - window.innerHeight
+        const scrolled = -rect.top
+
+        setScrollProgress(clamp(scrolled / sectionScrollable, 0, 1))
+      })
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    window.addEventListener('resize', handleScroll)
+    handleScroll()
+
+    return () => {
+      cancelAnimationFrame(frame)
+      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('resize', handleScroll)
+    }
+  }, [])
+
+  /*
+    El scroll real disponible es totalUnits - 1 porque el sticky principal
+    ocupa 100vh. Esto permite calcular en qué bloque estamos.
+  */
+  const unitsScrolled = scrollProgress * (totalUnits - 1)
+
+  return (
+    <section
+      ref={sectionRef}
+      className="jupiter-saturn-section"
+      style={{ height: sectionHeight }}
+    >
       <div className="jupiter-saturn-sticky">
         <div className="jupiter-saturn-canvas">
           <Canvas camera={{ position: [0, 0, 4.2], fov: 48 }}>
@@ -411,37 +828,42 @@ export default function JupiterSaturnEncounter() {
         </div>
       </div>
 
-      <div className="jupiter-saturn-text-steps">
-        {steps.map((step, index) => (
-          <article key={index} className="jupiter-saturn-text-step">
-            <span>{step.kicker}</span>
-            <h2>{step.title}</h2>
-            <p>{step.text}</p>
+      <div
+        className="jupiter-saturn-timeline"
+        style={{ height: sectionHeight }}
+      >
+        {timelineItems.map((item, index) => {
+          const start = itemStarts[index]
 
-            {step.flourishJupiter && (
-              <div className="flourish-embed-container">
-                <iframe
-                  src="https://flo.uri.sh/visualisation/29361863/embed"
-                  title="Voyager no solo fotografió Júpiter: también midió lo invisible"
-                  className="flourish-iframe"
-                  allowFullScreen
-                />
-              </div>
-            )}
-            {step.flourishSaturn && (
-              <div className="flourish-embed-container">
-                <iframe src='https://flo.uri.sh/visualisation/29362393/embed' title='Interactive or visual content' className="flourish-iframe"></iframe>
-              </div>
-            )}
-          </article>
-        ))}
+          if (item.type === 'graph') {
+            /*
+              Como el gráfico mide 2.4 pantallas y su contenido sticky mide 1 pantalla,
+              el tiempo útil del sticky es item.units - 1.
+            */
+            const graphProgress = clamp(
+              (unitsScrolled - start) / (item.units - 1),
+              0,
+              1
+            )
+
+            return (
+              <MagnetometerGraphStep
+                key={index}
+                chart={item.chart}
+                progress={graphProgress}
+              />
+            )
+          }
+
+          return (
+            <article key={index} className="jupiter-saturn-text-step">
+              <span>{item.step.kicker}</span>
+              <h2>{item.step.title}</h2>
+              <p>{item.step.text}</p>
+            </article>
+          )
+        })}
       </div>
     </section>
   )
 }
-
-            // {step.compareVoyagers && (
-            //   <div className="flourish-embed-container">
-            //     <iframe src='https://flo.uri.sh/visualisation/29365005/embed' title='Interactive or visual content' className="flourish-iframe"></iframe>
-            //   </div>
-            // )}

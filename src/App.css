@@ -217,6 +217,7 @@ body {
 
   width: 100%;
   height: 500vh;
+  padding-top: 100vh;
 }
 .story-step {
   height: 100vh;
@@ -1112,18 +1113,13 @@ body {
 /* ========================= */
 /* HELIOPAUSE SECTION */
 /* ========================= */
-
 .heliopause-section {
   position: relative;
-  height: 460vh;
+  height: 640vh;
   color: white;
-
   overflow: visible;
   overflow-x: clip;
-
-  
   background-image:
-
     linear-gradient(
       rgba(2, 3, 10, 0.82),
       rgba(2, 3, 10, 0.94)
@@ -1158,10 +1154,8 @@ body {
   position: absolute;
   top: 0;
   left: 0;
-
   width: 45vw;
-  height: 460vh;
-
+  height: 400vh;
   z-index: 3;
   pointer-events: none;
 }
@@ -1169,92 +1163,182 @@ body {
 .heliopause-text-step {
   height: 100vh;
   width: 100%;
-
   padding-left: 7vw;
   padding-right: 4vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 
+.heliopause-graph-section {
+  position: absolute;
+  top: 400vh;
+  left: 0;
+  width: 100vw;
+  height: 240vh;
+  z-index: 5;
+}
+
+.heliopause-graph-sticky {
+  position: sticky;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: transparent;
+}
+.heliopause-scroll-graph {
+  width: 100vw;
+  height: 100vh;
+  padding: 7vh 7vw 6vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
 
-
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(1, 2, 7, 0.65) 28%,
+    rgba(1, 2, 7, 0.65) 100%
+  );
 }
 
-.heliopause-text-step span {
-  display: block;
+.heliopause-scroll-graph-header {
+  max-width: 780px;
+  margin-bottom: 3vh;
+}
 
+.heliopause-scroll-graph-header span {
+  display: block;
+  margin-bottom: 1rem;
+  color: #7ec8ff;
+  font-family: "Nasalization", sans-serif;
   font-size: 0.85rem;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-
-  color: #7ec8ff;
-  margin-bottom: 1rem;
 }
 
-.heliopause-text-step h2 {
-  font-family: 'Nasalization', serif;
-  font-weight: 700;
-
-  font-size: clamp(2.5rem, 4vw, 4.8rem);
+.heliopause-scroll-graph-header h2 {
+  font-family: "Nasalization", sans-serif;
+  font-size: clamp(2.3rem, 4vw, 3rem);
   line-height: 0.95;
-
-  color: #ffffff;
-
-  margin-bottom: 1.5rem;
-  max-width: 620px;
+  text-transform: uppercase;
+  margin-bottom: 1.2rem;
 }
 
-.heliopause-text-step p {
-  font-size: clamp(1rem, 1.2vw, 1.2rem);
+.heliopause-scroll-graph-header p {
+  max-width: 720px;
+  font-family: "BTTF", sans-serif;
+  font-size: clamp(1rem, 1.2vw, 1rem);
   line-height: 1.65;
-
   color: rgba(255, 255, 255, 0.78);
-
-  max-width: 560px;
 }
 
-.heliopause-graph-placeholder {
-  margin-top: 1.5rem;
-  width: min(620px, 36vw);
-  min-height: 300px;
+.heliopause-svg-graph {
+  width: 100%;
+  height: min(58vh, 560px);
+  overflow: visible;
+}
 
-  padding: 1.5rem;
+.graph-axis {
+  stroke: rgba(255, 255, 255, 0.22);
+  stroke-width: 2;
+}
 
-  border: 1px solid rgba(126, 200, 255, 0.45);
-  background:
-    linear-gradient(
-      135deg,
-      rgba(126, 200, 255, 0.12),
-      rgba(245, 166, 35, 0.06)
-    ),
-    rgba(8, 13, 26, 0.72);
+.graph-label {
+  fill: rgba(255, 255, 255, 0.62);
+  font-family: "BTTF", sans-serif;
+  font-size: 18px;
+}
 
+.graph-axis-title {
+  fill: rgba(255, 255, 255, 0.349);
+  font-family: "BTTF", sans-serif;
+  font-size: 15px;
+  letter-spacing: 0.2em;
+}
+
+.graph-label-bg {
+  fill: rgba(1, 2, 7, 0.72);
+}
+
+.graph-crossing-label {
+  fill: #ffffff;
+  font-family: "BTTF", sans-serif;
+  font-size: 18px;
+}
+
+.graph-line {
+  fill: none;
+  stroke-width: 8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke-dashoffset 0.08s linear;
+}
+
+.graph-line-solar {
+  stroke: #f5a623;
+  filter: drop-shadow(0 0 10px rgba(245, 166, 35, 0.55));
+}
+
+.graph-line-cosmic {
+  stroke: #7ec8ff;
+  filter: drop-shadow(0 0 10px rgba(126, 200, 255, 0.55));
+}
+
+.graph-crossing-line {
+  stroke: rgba(255, 255, 255, 0.5);
+  stroke-width: 2;
+  stroke-dasharray: 10 10;
+}
+
+.graph-crossing-label {
+  fill: #ffffff;
+  font-family: "BTTF", sans-serif;
+  font-size: 20px;
+  
+}
+
+.heliopause-graph-legend {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-
-  pointer-events: auto;
+  gap: 2rem;
+  margin-top: 1.5rem;
+  font-family: "BTTF", sans-serif;
+  color: rgba(255, 255, 255, 0.76);
 }
 
-.heliopause-graph-placeholder span {
-  color: #7ec8ff;
-  margin-bottom: 0.8rem;
+.heliopause-graph-legend span {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
 }
 
-.heliopause-graph-placeholder p {
-  font-size: 0.95rem;
-  line-height: 1.55;
-  color: rgba(255, 255, 255, 0.72);
+.heliopause-graph-legend i {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.heliopause-graph-legend .solar {
+  background: #f5a623;
+}
+
+.heliopause-graph-legend .cosmic {
+  background: #7ec8ff;
 }
 
 @media (max-width: 900px) {
   .heliopause-section {
-    height: 500vh;
+    height: 660vh;
   }
 
   .heliopause-text-steps {
     width: 100vw;
-    height: 460vh;
+    height: 400vh;
   }
 
   .heliopause-text-step {
@@ -1263,12 +1347,18 @@ body {
     background: rgba(2, 3, 10, 0.72);
   }
 
-  .heliopause-text-step h2 {
-    font-size: clamp(2.2rem, 9vw, 4rem);
+  .heliopause-graph-section {
+    top: 400vh;
+    height: 260vh;
   }
 
-  .heliopause-graph-placeholder {
-    width: 84vw;
+  .heliopause-scroll-graph {
+    padding: 8vh 6vw;
+  }
+
+  .heliopause-graph-legend {
+    flex-direction: column;
+    gap: 0.8rem;
   }
 }
 .background-music-button {
@@ -2272,7 +2362,7 @@ header h2,
 .crawl-wrap {
   position: absolute;
   left: 50%;
-  top: 72%;
+  top: 48%;
 
   width: min(900px, 82vw);
 
@@ -2366,7 +2456,7 @@ header h2,
 /* Movimiento más lento y menos brusco */
 @keyframes crawl {
   0% {
-    transform: translateY(80%) rotateX(25deg);
+    transform: translateY(70%) rotateX(25deg);
   }
 
   100% {
@@ -2404,7 +2494,7 @@ header h2,
 
   @keyframes crawl {
     0% {
-      transform: translateY(85%) rotateX(9deg);
+      transform: translateY(75%) rotateX(9deg);
     }
 
     100% {
@@ -2413,16 +2503,506 @@ header h2,
   }
 }
 
+/* GRAFICO 1 */
+.mission-graph-section {
+  position: relative;
+  height: 240vh;
+  width: 100vw;
+  overflow-x: clip;
+  color: white;
+
+  background-image:
+    linear-gradient(
+      rgba(2, 3, 10, 0.86),
+      rgba(2, 3, 10, 0.94)
+    ),
+    url('./assets/espacio.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.mission-graph-sticky {
+  position: sticky;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background:
+    radial-gradient(
+      circle at 50% 45%,
+      rgba(245, 166, 35, 0.08),
+      transparent 38%
+    ),
+    rgba(1, 2, 7, 0.38);
+}
+
+.mission-scroll-graph {
+  width: 100vw;
+  height: 100vh;
+  padding: 7vh 7vw 6vh;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  box-sizing: border-box;
+}
+
+.mission-scroll-graph-header {
+  max-width: 900px;
+  margin-bottom: 3vh;
+}
+
+.mission-scroll-graph-header span {
+  display: block;
+  margin-bottom: 1rem;
+
+  color: #f5a623;
+  font-family: "Nasalization", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.mission-scroll-graph-header h2 {
+  max-width: 940px;
+  margin-bottom: 1.2rem;
+
+  color: #ffffff;
+  font-family: "Nasalization", sans-serif;
+  font-size: clamp(2.3rem, 4vw, 3rem);
+  font-weight: 700;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+.mission-scroll-graph-header p {
+  max-width: 840px;
+
+  color: rgba(255, 255, 255, 0.78);
+  font-family: "BTTF", sans-serif;
+  font-size: clamp(1rem, 1.2vw, 1rem);
+  line-height: 1.65;
+}
+
+.mission-svg-graph {
+  width: 100%;
+  max-width: 100%;
+  height: min(58vh, 560px);
+  overflow: hidden;
+  display: block;
+}
+
+.mission-axis-title {
+  fill: rgba(255, 255, 255, 0.58);
+  font-family: "BTTF", sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.mission-axis {
+  stroke: rgba(255, 255, 255, 0.36);
+  stroke-width: 2;
+}
+
+.mission-grid-line {
+  stroke: rgba(255, 255, 255, 0.06);
+}
+
+.mission-graph-label {
+  fill: rgba(255, 255, 255, 0.68);
+  font-family: "BTTF", sans-serif;
+  font-size: 16px;
+}
+
+.mission-graph-line-shadow {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.15);
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.mission-graph-line-yellow {
+  fill: none;
+  stroke: #f5a623;
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 12px rgba(245, 166, 35, 0.58));
+}
+
+.mission-graph-line-blue {
+  fill: none;
+  stroke: #7ec8ff;
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 12px rgba(126, 200, 255, 0.58));
+}
+
+.mission-graph-crossing-line {
+  stroke: rgba(255, 255, 255, 0.5);
+  stroke-width: 2;
+  stroke-dasharray: 10 10;
+}
+
+.mission-graph-label-bg {
+  fill: transparent;
+}
+
+.mission-graph-annotation {
+  fill: #ffffff;
+  font-family: "BTTF", sans-serif;
+  font-size: 16px;
+}
+
+.mission-graph-footer-line {
+  stroke: rgba(255, 255, 255, 0.38);
+  stroke-width: 1;
+}
+
+.mission-graph-footnote {
+  fill: rgba(255, 255, 255, 0.72);
+  font-family: "BTTF", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.mission-graph-legend {
+  display: flex;
+  gap: 2rem;
+  margin-top: 1.5rem;
+
+  color: rgba(255, 255, 255, 0.76);
+  font-family: "BTTF", sans-serif;
+}
+
+.mission-graph-legend span {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.mission-graph-legend i {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+
+  background: #f5a623;
+  box-shadow: 0 0 12px rgba(245, 166, 35, 0.8);
+}
+
+.mission-graph-line-blue {
+  fill: none;
+  stroke: #7ec8ff;
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+
+  filter: drop-shadow(0 0 12px rgba(126, 200, 255, 0.58));
+  transition: stroke-dashoffset 0.02s linear;
+}
+
+.mission-graph-annotation-yellow {
+  fill: #f5a623;
+}
+
+.mission-graph-annotation-blue {
+  fill: #7ec8ff;
+}
+
+.mission-graph-legend .is-blue {
+  background: #7ec8ff;
+  box-shadow: 0 0 12px rgba(126, 200, 255, 0.8);
+}
+
 /*
 
 === PARA HACER ===
 
-1) Que el Voyager no se zarandee: que no haga ese movimiento tipo infinito.
-2) Ver de mejorar esa transicion entre heliopausa y alejamiento xq hay 2 naves a la vez
+1) Hacer bien las jerarquías de las secciones (como te pase en la foto) y la jerarquia de los titulos
 
-3) Hacer bien las jerarquías de las secciones (como te pase en la foto)
-4) Mejorar los gráficos (voy a intentarlos ponerlos ocupando toda la pantalla, y que sean animados)
-      a) que tengan misma font, mejorar popups, que sean "el centro"
-      b) Darle aire a los graficos muy juntitos (aunque igual todo eso va a cambiar)
+2) ordenar las secciones no entiendo
+3) arreglar sincronizaciones y que el footer arranque al llegar abajo
+4) mejoras personales, revision y hacer algo mejor con los graficos si se me ocurre
 
 */
+
+.jupiter-saturn-timeline {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  max-width: 100%;
+  z-index: 3;
+  pointer-events: none;
+
+  overflow-x: clip;
+}
+
+.jupiter-saturn-text-step {
+  height: 100vh;
+}
+
+.jupiter-saturn-graph-step {
+  position: relative;
+  width: 100%;
+  height: 240vh;
+  pointer-events: none;
+}
+
+.jupiter-saturn-graph-sticky {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.jupiter-saturn-graph-dark-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+
+  background:
+    radial-gradient(
+      circle at 50% 45%,
+      rgba(245, 166, 35, 0.08),
+      transparent 38%
+    ),
+    rgba(1, 2, 7, 0.58);
+
+  pointer-events: none;
+}
+.jupiter-saturn-graph-sticky .mission-scroll-graph {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100vh;
+  padding: 7vh 7vw 6vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+/* Evita scroll horizontal sin romper sticky scroll */
+html {
+  width: 100%;
+}
+
+body {
+  width: 100%;
+  margin: 0;
+}
+
+#root {
+  width: 100%;
+}
+
+/* Contenedores grandes */
+.jupiter-saturn-section,
+.jupiter-saturn-timeline,
+.jupiter-saturn-sticky,
+.jupiter-saturn-canvas,
+.jupiter-saturn-graph-step,
+.jupiter-saturn-graph-sticky,
+.mission-scroll-graph,
+.pale-section,
+.heliopause-section,
+.golden-section,
+.scale-section {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+/* Reemplazo seguro de 100vw donde puede generar overflow */
+.jupiter-saturn-graph-step,
+.jupiter-saturn-graph-sticky,
+.jupiter-saturn-graph-sticky .mission-scroll-graph {
+  width: 100%;
+}
+
+/* El SVG puede causar overflow por labels/textos fuera del viewBox */
+.mission-svg-graph {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  display: block;
+}
+
+/* Por si algún canvas queda midiendo más que el viewport */
+canvas {
+  max-width: 100%;
+}
+
+/* FIX DEFINITIVO SCROLL HORIZONTAL SIN ROMPER STICKY */
+
+.mission-graph-section,
+.mission-graph-sticky,
+.mission-scroll-graph,
+.heliopause-graph-section,
+.heliopause-graph-sticky,
+.heliopause-scroll-graph {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box;
+}
+
+/* estos dos eran 100vw y suelen generar overflow por el ancho de la scrollbar */
+.mission-graph-section,
+.heliopause-graph-section {
+  left: 0;
+  right: 0;
+  overflow-x: clip;
+}
+
+/* evita que el gráfico SVG o labels empujen la página */
+.mission-svg-graph,
+.heliopause-svg-graph {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  display: block;
+}
+
+/* por si algún bloque absoluto se pasa del contenedor */
+.jupiter-saturn-section,
+.heliopause-section,
+.pale-section,
+.golden-section,
+.scale-section,
+.distance-scale-section,
+.mission-power-section,
+.final-voyage-section {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+.section-intro-title {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  z-index: 6;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  pointer-events: none;
+  text-align: center;
+}
+
+.shooting-title {
+  position: relative;
+  width: min(1000px, 88vw);
+  height: 180px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.shooting-title h2 {
+  position: relative;
+  z-index: 2;
+
+  font-family: "Nasalization", sans-serif;
+  font-size: clamp(1.8rem, 4.8vw, 4.6rem);
+  line-height: 1;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #ffffff;
+
+  max-width: 1000px;
+  margin: 0;
+
+  text-shadow:
+    0 0 8px rgba(255, 255, 255, 0.45),
+    0 0 22px rgba(245, 166, 35, 0.25);
+}
+
+.shooting-title h2 span {
+  display: inline-block;
+  transition:
+    opacity 0.08s linear,
+    filter 0.08s linear,
+    transform 0.08s linear;
+}
+
+.shooting-star {
+  position: absolute;
+  z-index: 3;
+
+  left: calc(-10vw + var(--starMove) * 108vw);
+  top: 50%;
+
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+
+  background: #ffffff;
+  box-shadow:
+    0 0 10px rgba(255, 255, 255, 1),
+    0 0 24px rgba(245, 166, 35, 0.9),
+    0 0 46px rgba(245, 166, 35, 0.55);
+
+  transform: translateY(-50%);
+}
+
+.shooting-star::before {
+  content: "";
+  position: absolute;
+  right: 6px;
+  top: 50%;
+
+  width: clamp(140px, 28vw, 430px);
+  height: 2px;
+
+  transform: translateY(-50%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(245, 166, 35, 0.14),
+    rgba(255, 255, 255, 0.95)
+  );
+
+  filter: blur(1px);
+}
+
+.shooting-star::after {
+  content: "";
+  position: absolute;
+  right: 2px;
+  top: 50%;
+
+  width: clamp(70px, 14vw, 220px);
+  height: 10px;
+
+  transform: translateY(-50%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(245, 166, 35, 0.35),
+    rgba(255, 255, 255, 0.8)
+  );
+
+  filter: blur(7px);
+}
+

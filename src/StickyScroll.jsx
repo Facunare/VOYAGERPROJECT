@@ -233,14 +233,13 @@ function VoyagerModel({ scrollProgress }) {
 
       const zigzagStrength = lerp(0, 1, crossProgress) * (1 - exitProgress)
 
-      const zigzagX =
-        Math.sin(time * 1.5 + scrollProgress * 12) * 0.22 * zigzagStrength
+    const zigzagX =
+      Math.sin(time * 0.7) * 0.024 * zigzagStrength
 
-      const zigzagY =
-        Math.sin(time * 2.1 + scrollProgress * 9) * 0.12 * zigzagStrength
+    const zigzagY =
+      Math.sin(time * 0.6) * 0.01 * zigzagStrength
 
-      const waveZ =
-        Math.sin(time * 1.1 + scrollProgress * 6) * 0.08 * zigzagStrength
+      const waveZ = 0
 
       /*
         Posición normal de la nave en el recorrido.
@@ -262,13 +261,13 @@ function VoyagerModel({ scrollProgress }) {
     groupRef.current.scale.set(scale, scale, scale)
 
     groupRef.current.rotation.x =
-      manualRotation.current.x + Math.sin(time * 1.5) * 0.12
+      manualRotation.current.x + Math.sin(time * 0.75) * 0.04
 
     groupRef.current.rotation.y =
-      scrollProgress * Math.PI * 4 + manualRotation.current.y + exitProgress * 0.9
+      lerp(0.9, 2.2, scrollProgress) + manualRotation.current.y + exitProgress * 0.9
 
     groupRef.current.rotation.z =
-      Math.sin(time * 1.2 + scrollProgress * 8) * 0.22 - exitProgress * 0.35
+      Math.sin(time * 0.7) * 0.06 - exitProgress * 0.35
   })
 
   const handlePointerDown = (e) => {
@@ -425,7 +424,6 @@ export default function StickyScroll() {
         </h2>
       </div>
     </div>
-
     <div className="sticky-right">
       {datos.map((dato, i) => (
         <div key={i} className="sticky-block">
@@ -433,8 +431,45 @@ export default function StickyScroll() {
           <span className="sticky-unidad">{dato.unidad}</span>
         </div>
       ))}
+      
     </div>
+<div
+  className="section-intro-title"
+  style={{
+    opacity:
+      smooth(0.36, 0.42, scrollProgress) *
+      (1 - smooth(0.55, 0.61, scrollProgress)),
+  }}
+>
+  <div
+    className="shooting-title"
+    style={{
+      '--starMove': smooth(0.39, 0.56, scrollProgress),
+    }}
+  >
+    <div className="shooting-star" />
 
+    <h2>
+      {'EL VIAJE MÁS LEJANO DE LA HUMANIDAD'.split('').map((char, i) => {
+        const progress = smooth(0.39, 0.56, scrollProgress)
+        const letterProgress = progress * 38 - i
+
+        return (
+          <span
+            key={i}
+            style={{
+              opacity: clamp(letterProgress, 0, 1),
+              filter: `blur(${(1 - clamp(letterProgress, 0, 1)) * 8}px)`,
+              transform: `translateY(${(1 - clamp(letterProgress, 0, 1)) * 18}px)`,
+            }}
+          >
+            {char === ' ' ? '\u00A0' : char}
+          </span>
+        )
+      })}
+    </h2>
+  </div>
+</div>
     <div className="story-wrapper">
       {storyBlocks.map((block, i) => (
         <div key={i} className="story-step">

@@ -11,6 +11,10 @@ function lerp(a, b, t) {
   return a + (b - a) * t
 }
 
+function smoothstep(from, to, value) {
+  const t = clamp((value - from) / (to - from), 0, 1)
+  return t * t * (3 - 2 * t)
+}
 function VoyagerBoundaryCrossing({ scrollProgress }) {
   const { scene } = useGLTF('/VoyagerProbe.glb')
   const voyagerScene = useMemo(() => scene.clone(), [scene])
@@ -22,27 +26,23 @@ function VoyagerBoundaryCrossing({ scrollProgress }) {
     const time = state.clock.getElapsedTime()
     const p = clamp(scrollProgress, 0, 1)
 
-    /*
-      La nave avanza de izquierda a derecha
-      y cruza la frontera invisible.
-    */
-    const x = lerp(-3.2, 3.9, p)
-    const y = lerp(0.15, -0.05, p)
-    const z = lerp(0.25, 0.95, p)
+    const enter = smoothstep(0.06, 1, p)
 
-    const scale = lerp(0.18, 0.28, p)
+    const x = lerp(-4.4, 3.9, enter)
+    const y = lerp(0.15, -0.05, enter)
+    const z = lerp(0.25, 0.95, enter)
+
+    const scale = lerp(0.18, 0.28, enter)
 
     groupRef.current.position.set(
-      x + Math.sin(time * 1.4) * 0.05,
-      y + Math.sin(time * 1.8) * 0.04,
+      x + Math.sin(time * 0.7) * 0.038,
+      y + Math.sin(time * 0.6) * 0.03,
       z
     )
-
-    groupRef.current.scale.set(scale, scale, scale)
-
-    groupRef.current.rotation.x = Math.sin(time * 1.3) * 0.1
-    groupRef.current.rotation.y = lerp(0.9, 2.2, p)
-    groupRef.current.rotation.z = Math.sin(time * 1.1) * 0.16
+groupRef.current.scale.set(scale, scale, scale)
+    groupRef.current.rotation.x = Math.sin(time * 0.75) * 0.04
+    groupRef.current.rotation.y = lerp(0.9, 2.2, enter)
+    groupRef.current.rotation.z = Math.sin(time * 0.7) * 0.06
   })
 
   return (
@@ -219,6 +219,94 @@ function HeliopauseScene({ scrollProgress }) {
     </>
   )
 }
+function HeliopauseScrollGraph({ progress }) {
+  const draw = clamp(progress, 0, 1)
+
+  return (
+    <div className="heliopause-scroll-graph">
+      <div className="heliopause-scroll-graph-header">
+        <span>Datos de cruce</span>
+        <h2>El cruce se vio en las mediciones</h2>
+        <p>
+          A medida que Voyager 1 atravesó la heliopausa, las partículas solares
+          bajaron y las partículas interestelares empezaron a dominar.
+        </p>
+      </div>
+
+      <svg
+  className="heliopause-svg-graph"
+  viewBox="0 0 1000 520"
+  preserveAspectRatio="none"
+>
+  <line x1="125" y1="430" x2="940" y2="430" className="graph-axis" />
+  <line x1="125" y1="70" x2="125" y2="430" className="graph-axis" />
+
+    <text
+      x="-390"
+      y="10"
+      className="graph-axis-title"
+      transform="rotate(-90)"
+    >
+      INTENSIDAD RELATIVA
+    </text>
+
+  <text x="42" y="100" className="graph-label">Alta</text>
+  <text x="42" y="430" className="graph-label">Baja</text>
+
+  <text x="125" y="475" className="graph-label">2011</text>
+  <text x="470" y="475" className="graph-label">2012</text>
+  <text x="820" y="475" className="graph-label">2013</text>
+
+  <path
+    d="M 130 120 C 240 130, 350 145, 455 170 C 555 210, 630 300, 700 365 C 770 415, 860 425, 940 420"
+    className="graph-line graph-line-solar"
+    pathLength="1"
+    style={{ strokeDasharray: 1, strokeDashoffset: 1 - draw }}
+  />
+
+  <path
+    d="M 130 405 C 260 398, 370 390, 485 360 C 585 320, 645 210, 720 140 C 790 88, 865 75, 940 82"
+    className="graph-line graph-line-cosmic"
+    pathLength="1"
+    style={{ strokeDasharray: 1, strokeDashoffset: 1 - draw }}
+  />
+
+  <line
+    x1="635"
+    y1="70"
+    x2="635"
+    y2="430"
+    className="graph-crossing-line"
+    style={{ opacity: smoothstep(0.45, 0.62, draw) }}
+  />
+
+  <rect
+    x="650"
+    y="82"
+    width="285"
+    height="38"
+    rx="6"
+    className="graph-label-bg"
+    style={{ opacity: smoothstep(0.55, 0.7, draw) }}
+  />
+
+  <text
+    x="665"
+    y="108"
+    className="graph-crossing-label"
+    style={{ opacity: smoothstep(0.55, 0.7, draw) }}
+  >
+    Heliopausa · Agosto 2012
+  </text>
+</svg>
+
+      <div className="heliopause-graph-legend">
+        <span><i className="solar" />Partículas solares</span>
+        <span><i className="cosmic" />Rayos cósmicos interestelares</span>
+      </div>
+    </div>
+  )
+}
 
 const steps = [
   {
@@ -246,24 +334,37 @@ const steps = [
 
 export default function HeliopauseSection() {
   const sectionRef = useRef()
+  const graphRef = useRef()
   const [scrollProgress, setScrollProgress] = useState(0)
+  const [graphProgress, setGraphProgress] = useState(0)
 
   useEffect(() => {
     const handleScroll = () => {
       const section = sectionRef.current
+      const graph = graphRef.current
       if (!section) return
 
       const rect = section.getBoundingClientRect()
-      const sectionHeight = section.offsetHeight - window.innerHeight
       const scrolled = -rect.top
 
-      setScrollProgress(clamp(scrolled / sectionHeight, 0, 1))
+      const textScrollable = window.innerHeight * (steps.length - 1)
+      setScrollProgress(clamp(scrolled / textScrollable, 0, 1))
+
+      if (graph) {
+        const graphRect = graph.getBoundingClientRect()
+        const graphScrollable = graph.offsetHeight - window.innerHeight
+        setGraphProgress(clamp(-graphRect.top / graphScrollable, 0, 1))
+      }
     }
 
     window.addEventListener('scroll', handleScroll)
+    window.addEventListener('resize', handleScroll)
     handleScroll()
 
-    return () => window.removeEventListener('scroll', handleScroll)
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('resize', handleScroll)
+    }
   }, [])
 
   return (
@@ -282,14 +383,14 @@ export default function HeliopauseSection() {
             <span>{step.kicker}</span>
             <h2>{step.title}</h2>
             <p>{step.text}</p>
-
-            {step.graph && (
-              <div className="flourish-embed-container">
-                 <iframe src='https://flo.uri.sh/visualisation/29372266/embed' title='Interactive or visual content' className='flourish-embed-iframe flourish-iframe'></iframe>
-              </div>
-            )}
           </article>
         ))}
+      </div>
+
+      <div ref={graphRef} className="heliopause-graph-section">
+        <div className="heliopause-graph-sticky">
+          <HeliopauseScrollGraph progress={graphProgress} />
+        </div>
       </div>
     </section>
   )
