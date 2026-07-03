@@ -23,7 +23,7 @@ function App() {
       <ScaleComparison />
       <SpaceTransition title="RUMBO A LOS PLANETAS GIGANTES" />
       <JupiterSaturnEncounter />
-      <SpaceTransition title="UNA FOTO DESDE EL BORDE" />
+      <SpaceTransition title="EL PEQUEÑO PUNTO AZUL" />
       <PaleBlueDotSection />
       <SpaceTransition title="CRUZAR LA FRONTERA INVISIBLE" />
       <HeliopauseSection />

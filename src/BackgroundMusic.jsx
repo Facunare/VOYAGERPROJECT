@@ -65,11 +65,25 @@ export default function BackgroundMusic() {
       />
 
       <button
-        className="background-music-button"
-        onClick={toggleMusic}
-      >
-        {isPlaying ? 'Pausar música' : 'Activar música'}
-      </button>
+  className={`background-music-button ${isPlaying ? 'is-playing' : ''}`}
+  onClick={toggleMusic}
+  aria-label={isPlaying ? 'Pausar música' : 'Activar música'}
+>
+  <span className="music-orbit">
+    <span className="music-planet" />
+    <span className="music-moon" />
+  </span>
+
+  <span className="music-label">
+    {isPlaying ? 'Música activa' : 'Activar música'}
+  </span>
+
+  <span className="music-equalizer">
+    <i />
+    <i />
+    <i />
+  </span>
+</button>
     </>
   )
 }

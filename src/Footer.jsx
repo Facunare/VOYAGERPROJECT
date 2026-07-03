@@ -1,4 +1,4 @@
-import { useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 
 const creditos = [
   {
@@ -11,10 +11,36 @@ const creditos = [
 
 export default function Footer() {
   const sectionRef = useRef()
+  const [active, setActive] = useState(false)
   const data = creditos[0]
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const section = sectionRef.current
+      if (!section) return
+
+      const rect = section.getBoundingClientRect()
+
+      /*
+        Se activa recién cuando el footer llega a la pantalla.
+        Como el footer está al final de la página, esto ocurre al llegar abajo.
+      */
+      if (rect.top <= window.innerHeight * 0.85) {
+        setActive(true)
+      }
+    }
+
+    window.addEventListener("scroll", handleScroll)
+    handleScroll()
+
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
+
   return (
-    <section className="footer" ref={sectionRef}>
+    <section
+      className={`footer ${active ? "footer-active" : ""}`}
+      ref={sectionRef}
+    >
       <div className="fade" />
 
       <div className="crawl-wrap">

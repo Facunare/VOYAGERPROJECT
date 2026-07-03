@@ -1353,31 +1353,316 @@ body {
 
   z-index: 9999;
 
-  padding: 0.85rem 1.25rem;
+  height: 56px;
+  padding: 0 1.25rem 0 0.85rem;
 
-  border: 1px solid rgba(245, 166, 35, 0.7);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  border: 1px solid rgba(126, 200, 255, 0.42);
   border-radius: 999px;
 
-  background: rgba(8, 13, 26, 0.72);
-  color: #f5a623;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(126, 200, 255, 0.24), transparent 34%),
+    radial-gradient(circle at 80% 80%, rgba(245, 166, 35, 0.18), transparent 36%),
+    rgba(3, 7, 18, 0.78);
 
-  font-size: 0.9rem;
-  font-weight: 600;
+  color: #ffffff;
+
+  font-family: "BTTF", sans-serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 
   cursor: pointer;
 
-  backdrop-filter: blur(8px);
+  overflow: hidden;
+  isolation: isolate;
+
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.06) inset,
+    0 0 24px rgba(126, 200, 255, 0.18),
+    0 14px 42px rgba(0, 0, 0, 0.45);
+
+  backdrop-filter: blur(12px);
 
   transition:
-    background 0.2s ease,
-    transform 0.2s ease,
-    border-color 0.2s ease;
+    transform 0.22s ease,
+    border-color 0.22s ease,
+    box-shadow 0.22s ease,
+    background 0.22s ease;
+}
+
+.background-music-button::before {
+  content: '';
+  position: absolute;
+  inset: -40%;
+
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, 0.7) 0 1px, transparent 2px),
+    radial-gradient(circle, rgba(126, 200, 255, 0.6) 0 1px, transparent 2px);
+
+  background-size: 34px 34px, 52px 52px;
+  background-position: 0 0, 16px 22px;
+
+  opacity: 0.18;
+  z-index: -2;
+
+  animation: music-stars-drift 12s linear infinite;
+}
+
+.background-music-button::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.2) 42%,
+    rgba(126, 200, 255, 0.38) 50%,
+    rgba(255, 255, 255, 0.16) 58%,
+    transparent 100%
+  );
+
+  transform: translateX(-130%);
+  opacity: 0;
+  pointer-events: none;
 }
 
 .background-music-button:hover {
-  background: rgba(245, 166, 35, 0.16);
-  border-color: rgba(245, 166, 35, 1);
-  transform: translateY(-2px);
+  transform: scale(1.03);
+  border-color: rgba(126, 200, 255, 0.95);
+
+  box-shadow:
+    0 0 0 1px rgba(126, 200, 255, 0.18) inset,
+    0 0 34px rgba(126, 200, 255, 0.35),
+    0 18px 54px rgba(0, 0, 0, 0.55);
+}
+
+.background-music-button:active {
+  transform: translateY(0) scale(0.96);
+}
+
+.background-music-button:active::after {
+  opacity: 1;
+  animation: music-hyperjump 0.55s ease;
+}
+
+.background-music-button.is-playing {
+  border-color: rgba(245, 166, 35, 0.9);
+
+  background:
+    radial-gradient(circle at 20% 20%, rgba(245, 166, 35, 0.32), transparent 34%),
+    radial-gradient(circle at 80% 80%, rgba(126, 200, 255, 0.22), transparent 36%),
+    rgba(6, 8, 18, 0.84);
+
+  box-shadow:
+    0 0 0 1px rgba(245, 166, 35, 0.14) inset,
+    0 0 34px rgba(245, 166, 35, 0.28),
+    0 16px 48px rgba(0, 0, 0, 0.5);
+}
+
+.music-orbit {
+  position: relative;
+
+  width: 34px;
+  height: 34px;
+
+  flex: 0 0 34px;
+
+  border: 1px solid rgba(126, 200, 255, 0.45);
+  border-radius: 50%;
+
+  display: grid;
+  place-items: center;
+
+  box-shadow: 0 0 16px rgba(126, 200, 255, 0.22);
+}
+
+.music-planet {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+
+  background: #7ec8ff;
+  box-shadow:
+    0 0 10px rgba(126, 200, 255, 0.9),
+    0 0 24px rgba(126, 200, 255, 0.45);
+}
+
+.music-moon {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+
+  width: 5px;
+  height: 5px;
+
+  border-radius: 50%;
+  background: #ffd576;
+
+  transform-origin: -13px -13px;
+  animation: music-orbit 2.8s linear infinite;
+}
+
+.music-rocket {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 26px;
+  height: 26px;
+
+  font-size: 1.25rem;
+
+  transition: transform 0.25s ease;
+}
+
+.background-music-button:hover .music-rocket {
+  transform: translateY(-2px) rotate(-12deg);
+}
+
+.background-music-button.is-playing .music-rocket {
+  animation: rocket-float 1.4s ease-in-out infinite;
+}
+
+.background-music-button.is-playing .music-rocket::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -7px;
+
+  width: 9px;
+  height: 18px;
+
+  background: linear-gradient(
+    180deg,
+    rgba(245, 166, 35, 0.95),
+    rgba(255, 95, 31, 0.4),
+    transparent
+  );
+
+  border-radius: 999px;
+
+  transform: translateX(-50%);
+  filter: blur(1px);
+
+  animation: rocket-flame 0.28s ease-in-out infinite alternate;
+}
+
+.music-label {
+  position: relative;
+  z-index: 2;
+  white-space: nowrap;
+}
+
+.music-equalizer {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+
+  height: 18px;
+  width: 18px;
+}
+
+.music-equalizer i {
+  width: 3px;
+  height: 6px;
+
+  border-radius: 999px;
+  background: rgba(126, 200, 255, 0.8);
+
+  transform-origin: bottom;
+}
+
+.background-music-button.is-playing .music-equalizer i:nth-child(1) {
+  animation: music-bar 0.55s ease-in-out infinite;
+}
+
+.background-music-button.is-playing .music-equalizer i:nth-child(2) {
+  animation: music-bar 0.55s ease-in-out 0.12s infinite;
+}
+
+.background-music-button.is-playing .music-equalizer i:nth-child(3) {
+  animation: music-bar 0.55s ease-in-out 0.24s infinite;
+}
+
+@keyframes music-stars-drift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(44px, 44px, 0);
+  }
+}
+
+@keyframes music-hyperjump {
+  0% {
+    transform: translateX(-130%);
+  }
+
+  100% {
+    transform: translateX(130%);
+  }
+}
+
+@keyframes music-orbit {
+  from {
+    transform: rotate(0deg) translateX(17px) rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg) translateX(17px) rotate(-360deg);
+  }
+}
+
+@keyframes rocket-float {
+  0%, 100% {
+    transform: translateY(0) rotate(-8deg);
+  }
+
+  50% {
+    transform: translateY(-4px) rotate(-16deg);
+  }
+}
+
+@keyframes rocket-flame {
+  from {
+    height: 12px;
+    opacity: 0.65;
+  }
+
+  to {
+    height: 22px;
+    opacity: 1;
+  }
+}
+
+@keyframes music-bar {
+  0%, 100% {
+    height: 5px;
+  }
+
+  50% {
+    height: 17px;
+  }
+}
+
+@media (max-width: 720px) {
+  .background-music-button {
+    right: 1rem;
+    bottom: 1rem;
+    height: 52px;
+    padding: 0 0.95rem 0 0.65rem;
+  }
+
+  .music-label {
+    display: none;
+  }
 }
 
 .distance-scale-section {
@@ -2348,14 +2633,16 @@ header h2,
   z-index: 2;
 }
 
-/* Menos inclinado y más lento */
 .crawl {
   transform-origin: 50% 100%;
-  transform: rotateX(25deg);
-
-  animation: crawl 45s linear infinite;
+  transform: translateY(70%) rotateX(25deg);
+  animation: crawl 35s linear infinite;
+  animation-play-state: paused;
 }
 
+.footer.footer-active .crawl {
+  animation-play-state: running;
+}
 /* Títulos */
 .title h1,
 .title h2 {
@@ -2451,10 +2738,10 @@ header h2,
     perspective: 650px;
   }
 
-  .crawl {
-    animation-duration: 70s;
-    transform: rotateX(9deg);
-  }
+.crawl {
+  animation-duration: 45s;
+  transform: translateY(75%) rotateX(9deg);
+}
 
   .title h1 {
     font-size: clamp(2rem, 10vw, 3.4rem);
@@ -3194,7 +3481,7 @@ canvas {
 1) Hacer bien las jerarquías de las secciones (como te pase en la foto) y la jerarquia de los titulos - EN PROCESO
 2) Mas espacio entre secciones, dejar mas "aire" ya que es del espacio - EN PROCESO/CREO QUE YA ESTA TERMINADO
 
-5) arreglar sincronizaciones y que el footer arranque al llegar abajo
+5) arreglar sincronizaciones
 6) mejoras personales, revision y hacer algo mejor con los graficos si se me ocurre, cambiar titulos, etc
 
 */
@@ -3248,3 +3535,5 @@ canvas {
   width: 790px;
   height: 710px;
 }
+
+
