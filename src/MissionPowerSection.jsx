@@ -197,7 +197,7 @@ export default function MissionPowerSection({ flourishUrl = '' }) {
   return (
     <section ref={sectionRef} className="mission-power-section">
       <div className="mission-power-sticky">
-        <div className="mission-stars" aria-hidden="true" />
+        
 
         <div className="mission-control">
           <div className="mission-control__topbar">

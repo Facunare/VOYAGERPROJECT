@@ -18,78 +18,6 @@ const smooth = (from, to, value) => {
   return t * t * (3 - 2 * t)
 }
 
-function seededRandom(seed) {
-  const value = Math.sin(seed * 951.73) * 43758.5453
-  return value - Math.floor(value)
-}
-
-function DeepStars({ progress }) {
-  const nearRef = useRef()
-  const farRef = useRef()
-
-  const { nearGeometry, farGeometry } = useMemo(() => {
-    const near = []
-    const far = []
-
-    for (let i = 0; i < 650; i += 1) {
-      const target = i < 160 ? near : far
-      target.push(
-        (seededRandom(i * 3 + 1) - 0.5) * 18,
-        (seededRandom(i * 3 + 2) - 0.5) * 10,
-        -seededRandom(i * 3 + 3) * 9
-      )
-    }
-
-    const nearResult = new BufferGeometry()
-    nearResult.setAttribute('position', new Float32BufferAttribute(near, 3))
-
-    const farResult = new BufferGeometry()
-    farResult.setAttribute('position', new Float32BufferAttribute(far, 3))
-
-    return { nearGeometry: nearResult, farGeometry: farResult }
-  }, [])
-
-  useFrame((state, delta) => {
-    const time = state.clock.getElapsedTime()
-
-    if (nearRef.current) {
-      nearRef.current.rotation.z = Math.sin(time * 0.035) * 0.025
-      nearRef.current.position.x -= delta * lerp(0.014, 0.035, progress)
-      if (nearRef.current.position.x < -0.6) nearRef.current.position.x = 0
-    }
-
-    if (farRef.current) {
-      farRef.current.rotation.z -= delta * 0.003
-    }
-  })
-
-  return (
-    <>
-      <points ref={farRef} geometry={farGeometry}>
-        <pointsMaterial
-          color="#c8d8ea"
-          size={0.018}
-          transparent
-          opacity={0.42}
-          sizeAttenuation
-          depthWrite={false}
-        />
-      </points>
-
-      <points ref={nearRef} geometry={nearGeometry}>
-        <pointsMaterial
-          color="#ffffff"
-          size={0.032}
-          transparent
-          opacity={0.65}
-          sizeAttenuation
-          depthWrite={false}
-        />
-      </points>
-    </>
-  )
-}
-
 function VoyagerLeaving({ progress }) {
   const { scene } = useGLTF('/VoyagerProbe.glb')
   const voyager = useMemo(() => scene.clone(true), [scene])
@@ -185,7 +113,6 @@ function FinalScene({ progress }) {
         color="#e8f3ff"
         intensity={lerp(1.15, 0.18, progress)}
       />
-      <DeepStars progress={progress} />
       <EndlessPath progress={progress} />
       <VoyagerLeaving progress={progress} />
     </>

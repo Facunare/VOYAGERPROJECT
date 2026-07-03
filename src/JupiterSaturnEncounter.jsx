@@ -752,7 +752,9 @@ export default function JupiterSaturnEncounter() {
   const sectionRef = useRef()
   const [scrollProgress, setScrollProgress] = useState(0)
 
+
   const timelineItems = [
+
     { type: 'story', step: steps[0], units: 1 },
     { type: 'story', step: steps[1], units: 1 },
     { type: 'story', step: steps[2], units: 1 },
@@ -814,6 +816,13 @@ export default function JupiterSaturnEncounter() {
   */
   const unitsScrolled = scrollProgress * (totalUnits - 1)
 
+  /*
+    El titulo usa solo el primer bloque intro.
+    Como el intro mide 1.6 units, el titulo aparece y desaparece
+    antes de que empiece el primer texto.
+  */
+
+
   return (
     <section
       ref={sectionRef}
@@ -826,6 +835,7 @@ export default function JupiterSaturnEncounter() {
             <JupiterSaturnScene scrollProgress={scrollProgress} />
           </Canvas>
         </div>
+
       </div>
 
       <div
@@ -834,6 +844,16 @@ export default function JupiterSaturnEncounter() {
       >
         {timelineItems.map((item, index) => {
           const start = itemStarts[index]
+
+          if (item.type === 'intro') {
+            return (
+              <article
+                key={index}
+                className="jupiter-saturn-intro-spacer"
+                style={{ height: `${item.units * 100}vh` }}
+              />
+            )
+          }
 
           if (item.type === 'graph') {
             /*
@@ -856,7 +876,10 @@ export default function JupiterSaturnEncounter() {
           }
 
           return (
-            <article key={index} className="jupiter-saturn-text-step">
+            <article
+              key={index}
+              className="jupiter-saturn-text-step"
+            >
               <span>{item.step.kicker}</span>
               <h2>{item.step.title}</h2>
               <p>{item.step.text}</p>

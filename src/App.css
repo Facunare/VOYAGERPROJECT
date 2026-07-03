@@ -133,7 +133,7 @@ body {
 
 .voyager-section {
   position: relative;
-  height: 880vh;
+  height: 1120vh;
   color: white;
   overflow: clip;
 }
@@ -212,12 +212,12 @@ body {
 
 .story-wrapper {
   position: absolute;
-  top: 400vh;
+  top: 620vh;
   left: 0;
 
   width: 100%;
   height: 500vh;
-  padding-top: 100vh;
+  padding-top: 0;
 }
 .story-step {
   height: 100vh;
@@ -490,10 +490,9 @@ body {
 }
 
 .scale-object-voyager {
-  width: 240px;
-  height: 270px;
+  width: 500px;
+  height: 500px;
 }
-
 .scale-object-person {
   width: 65px;
   height: 130px;
@@ -615,12 +614,7 @@ body {
   flex-direction: column;
   justify-content: center;
 
-  background: linear-gradient(
-    90deg,
-    rgba(2, 3, 10, 0.9),
-    rgba(2, 3, 10, 0.56),
-    rgba(2, 3, 10, 0)
-  );
+
 }
 
 .jupiter-saturn-text-step span {
@@ -1065,12 +1059,7 @@ body {
   flex-direction: column;
   justify-content: center;
 
-  background: linear-gradient(
-    90deg,
-    rgba(2, 3, 10, 0.9),
-    rgba(2, 3, 10, 0.56),
-    rgba(2, 3, 10, 0)
-  );
+
 }
 
 .pale-text-step span {
@@ -1119,12 +1108,7 @@ body {
   color: white;
   overflow: visible;
   overflow-x: clip;
-  background-image:
-    linear-gradient(
-      rgba(2, 3, 10, 0.82),
-      rgba(2, 3, 10, 0.94)
-    ),
-    url('./assets/espacio.jpg');
+
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -1202,8 +1186,9 @@ body {
   background: linear-gradient(
     180deg,
     transparent 0%,
-    rgba(1, 2, 7, 0.65) 28%,
-    rgba(1, 2, 7, 0.65) 100%
+    rgba(1, 2, 7, 0.65) 24%,
+    rgba(1, 2, 7, 0.65) 76%,
+    transparent 100%
   );
 }
 
@@ -1621,16 +1606,7 @@ body {
   background: transparent;
 }
 
-.mission-stars {
-  position: absolute;
-  inset: 0;
-  opacity: 0.48;
-  background-image:
-    radial-gradient(circle, rgba(255,255,255,.75) 0 1px, transparent 1.4px),
-    radial-gradient(circle, rgba(126,200,255,.6) 0 1px, transparent 1.5px);
-  background-position: 0 0, 47px 83px;
-  background-size: 131px 137px, 197px 211px;
-}
+
 
 .mission-power-steps {
   position: absolute;
@@ -1958,7 +1934,7 @@ body {
 .mission-closing-line {
   position: absolute;
   right: 5vw;
-  bottom: 12vh;
+  bottom: 5vh;
   width: min(49vw, 760px);
   color: rgba(255,255,255,.85);
   font-family: 'Nasalization', serif;
@@ -2504,22 +2480,14 @@ header h2,
 }
 
 /* GRAFICO 1 */
+
 .mission-graph-section {
   position: relative;
   height: 240vh;
-  width: 100vw;
+  width: 100%;
+  overflow: visible;
   overflow-x: clip;
   color: white;
-
-  background-image:
-    linear-gradient(
-      rgba(2, 3, 10, 0.86),
-      rgba(2, 3, 10, 0.94)
-    ),
-    url('./assets/espacio.jpg');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
 }
 
 .mission-graph-sticky {
@@ -2533,16 +2501,38 @@ header h2,
   align-items: center;
   justify-content: center;
 
+  background: transparent;
+}
+
+.mission-graph-dark-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+
   background:
+    linear-gradient(
+      180deg,
+      rgba(1, 2, 7, 0) 0%,
+      rgba(1, 2, 7, 0.22) 18%,
+      rgba(1, 2, 7, 0.52) 38%,
+      rgba(1, 2, 7, 0.52) 62%,
+      rgba(1, 2, 7, 0.22) 82%,
+      rgba(1, 2, 7, 0) 100%
+    ),
     radial-gradient(
       circle at 50% 45%,
-      rgba(245, 166, 35, 0.08),
-      transparent 38%
-    ),
-    rgba(1, 2, 7, 0.38);
+      rgba(126, 200, 255, 0.08),
+      transparent 42%
+    );
+
+  pointer-events: none;
+  will-change: opacity;
 }
 
 .mission-scroll-graph {
+  position: relative;
+  z-index: 2;
+
   width: 100vw;
   height: 100vh;
   padding: 7vh 7vw 6vh;
@@ -2552,7 +2542,10 @@ header h2,
   justify-content: center;
 
   box-sizing: border-box;
+
+  background: transparent;
 }
+
 
 .mission-scroll-graph-header {
   max-width: 900px;
@@ -2726,17 +2719,6 @@ header h2,
   box-shadow: 0 0 12px rgba(126, 200, 255, 0.8);
 }
 
-/*
-
-=== PARA HACER ===
-
-1) Hacer bien las jerarquías de las secciones (como te pase en la foto) y la jerarquia de los titulos
-
-2) ordenar las secciones no entiendo
-3) arreglar sincronizaciones y que el footer arranque al llegar abajo
-4) mejoras personales, revision y hacer algo mejor con los graficos si se me ocurre
-
-*/
 
 .jupiter-saturn-timeline {
   position: absolute;
@@ -2779,12 +2761,20 @@ header h2,
   z-index: 1;
 
   background:
+    linear-gradient(
+      180deg,
+      rgba(1, 2, 7, 0) 0%,
+      rgba(1, 2, 7, 0.22) 18%,
+      rgba(1, 2, 7, 0.52) 38%,
+      rgba(1, 2, 7, 0.52) 62%,
+      rgba(1, 2, 7, 0.22) 82%,
+      rgba(1, 2, 7, 0) 100%
+    ),
     radial-gradient(
       circle at 50% 45%,
       rgba(245, 166, 35, 0.08),
-      transparent 38%
-    ),
-    rgba(1, 2, 7, 0.58);
+      transparent 42%
+    );
 
   pointer-events: none;
 }
@@ -3006,3 +2996,255 @@ canvas {
   filter: blur(7px);
 }
 
+.jupiter-saturn-intro-spacer {
+  height: 160vh;
+  width: 100%;
+  pointer-events: none;
+}
+
+.jupiter-saturn-title-overlay {
+  position: absolute;
+  inset: 0;
+
+  z-index: 6;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  pointer-events: none;
+  text-align: center;
+
+  background: transparent;
+}
+
+.jupiter-saturn-title-overlay .shooting-title {
+  width: min(1550px, 88vw);
+}
+
+.jupiter-saturn-title-overlay .shooting-title h2 {
+  font-size: clamp(1.2rem, 4.3vw, 4.2rem);
+  max-width: 1550px;
+}
+/* ========================= */
+/* TRANSICIONES ENTRE SECCIONES */
+/* ========================= */
+
+.space-transition-section {
+  position: relative;
+  height: 500vh;
+  width: 100%;
+  max-width: 100%;
+  overflow: clip;
+  color: white;
+  background: transparent;
+}
+
+.space-transition-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+.space-transition-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
+.space-transition-canvas canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+@keyframes slowStarDrift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-120px, 80px, 0);
+  }
+}
+
+.space-transition-title {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  text-align: center;
+  transition: opacity 0.08s linear, transform 0.08s linear;
+    white-space: nowrap;
+  text-align: center;
+  max-width: 100vw;
+  font-size: clamp(2.4rem, 5.6vw, 5.8rem);
+  line-height: 0.95;
+}
+
+.space-transition-title .shooting-title {
+  width: min(1450px, 88vw);
+}
+
+.space-transition-title .shooting-title h2 {
+  font-size: clamp(1.35rem, 4.2vw, 4.2rem);
+  max-width: 1450px;
+}
+
+.space-transition-trail {
+  position: absolute;
+  left: 50%;
+  top: 53%;
+  z-index: 1;
+  width: min(720px, 58vw);
+  height: 2px;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(245, 166, 35, 0.18),
+    rgba(255, 255, 255, 0.88),
+    transparent
+  );
+  filter: blur(1px);
+  transform-origin: center;
+  rotate: -12deg;
+}
+
+.space-transition-trail::after {
+  content: "";
+  position: absolute;
+  inset: -16px 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(245, 166, 35, 0.1),
+    rgba(126, 200, 255, 0.16),
+    transparent
+  );
+  filter: blur(16px);
+}
+
+.space-transition-caption {
+  position: absolute;
+  left: 50%;
+  bottom: 12vh;
+  z-index: 4;
+  transform: translateX(-50%);
+  pointer-events: none;
+  text-align: center;
+  transition: opacity 0.08s linear;
+}
+
+.space-transition-caption span {
+  font-family: "BTTF", sans-serif;
+  font-size: clamp(0.8rem, 1vw, 1rem);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.64);
+}
+
+@media (max-width: 900px) {
+  .space-transition-section {
+    height: 190vh;
+  }
+
+  .space-transition-title .shooting-title h2 {
+    font-size: clamp(1.2rem, 8vw, 3rem);
+  }
+
+  .space-transition-caption {
+    width: 86vw;
+  }
+}
+
+.pale-graph-background-blend {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(1, 2, 7, 0) 0%,
+      rgba(1, 2, 7, 0.16) 18%,
+      rgba(1, 2, 7, 0.46) 42%,
+      rgba(1, 2, 7, 0.46) 58%,
+      rgba(1, 2, 7, 0.16) 82%,
+      rgba(1, 2, 7, 0) 100%
+    ),
+    radial-gradient(
+      circle at 50% 45%,
+      rgba(126, 200, 255, 0.08),
+      transparent 44%
+    );
+
+  will-change: opacity;
+}
+
+/*
+
+=== PARA HACER ===
+
+1) Hacer bien las jerarquías de las secciones (como te pase en la foto) y la jerarquia de los titulos - EN PROCESO
+2) Mas espacio entre secciones, dejar mas "aire" ya que es del espacio - EN PROCESO/CREO QUE YA ESTA TERMINADO
+
+5) arreglar sincronizaciones y que el footer arranque al llegar abajo
+6) mejoras personales, revision y hacer algo mejor con los graficos si se me ocurre, cambiar titulos, etc
+
+*/
+
+.sticky-scroll-space-transition {
+  position: absolute;
+  top: 400vh;
+  left: 0;
+
+  width: 100%;
+  height: 220vh;
+
+  z-index: 6;
+  pointer-events: none;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sticky-scroll-space-transition .space-transition-section {
+  height: 220vh;
+  background: transparent;
+}
+
+.sticky-scroll-space-transition .space-transition-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.sticky-scroll-space-transition .space-transition-title {
+  
+ 
+  text-align: center;
+  width: 100%;
+  max-width: 92vw;
+}
+.scale-object-james-webb {
+  width: 760px;
+  height: 560px;
+}
+
+.scale-model-placeholder {
+  width: 100%;
+  height: 100%;
+}
+
+
+.scale-object-perseverance {
+  width: 790px;
+  height: 710px;
+}

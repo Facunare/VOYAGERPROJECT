@@ -213,6 +213,7 @@ function VoyagerDistanceGraphSection() {
 
     update()
 
+    
     return () => {
       cancelAnimationFrame(frame)
       window.removeEventListener('scroll', update)
@@ -220,29 +221,40 @@ function VoyagerDistanceGraphSection() {
     }
   }, [])
 
-  return (
-    <section ref={sectionRef} className="mission-graph-section">
-      <div className="mission-graph-sticky">
-        <div className="mission-scroll-graph">
-          <div className="mission-scroll-graph-header">
-            <span>{voyagerDistanceChart.kicker}</span>
-            <h2>{voyagerDistanceChart.title}</h2>
-            <p>{voyagerDistanceChart.subtitle}</p>
-          </div>
+  const graphFade = clamp(
+  Math.min(progress / 0.35, (1 - progress) / 0.35),
+  0,
+  1
+)
 
-          <VoyagerDistanceGraph
-            chart={voyagerDistanceChart}
-            progress={progress}
-          />
+return (
+  <section ref={sectionRef} className="mission-graph-section">
+    <div className="mission-graph-sticky">
+      <div
+        className="mission-graph-dark-overlay"
+        style={{ opacity: graphFade }}
+      />
 
-          <div className="mission-graph-legend">
-            <span><i />Voyager 1</span>
-            <span><i className="is-blue" />Voyager 2</span>
-          </div>
+      <div className="mission-scroll-graph">
+        <div className="mission-scroll-graph-header">
+          <span>{voyagerDistanceChart.kicker}</span>
+          <h2>{voyagerDistanceChart.title}</h2>
+          <p>{voyagerDistanceChart.subtitle}</p>
+        </div>
+
+        <VoyagerDistanceGraph
+          chart={voyagerDistanceChart}
+          progress={progress}
+        />
+
+        <div className="mission-graph-legend">
+          <span><i />Voyager 1</span>
+          <span><i className="is-blue" />Voyager 2</span>
         </div>
       </div>
-    </section>
-  )
+    </div>
+  </section>
+)
 }
 
 function buildSmoothPath(points) {
@@ -291,13 +303,12 @@ function VoyagerDistanceGraph({ chart, progress }) {
   const width = 1000
   const height = 520
 
-  const padding = {
-    top: 70,
-    right: 90,
-    bottom: 90,
-    left: 120,
-  }
-
+const padding = {
+  top: 70,
+  right: 135,
+  bottom: 90,
+  left: 120,
+}
   const chartWidth = width - padding.left - padding.right
   const chartHeight = height - padding.top - padding.bottom
 
@@ -405,24 +416,23 @@ function VoyagerDistanceGraph({ chart, progress }) {
         className="mission-graph-line-blue"
         progress={draw}
       />
+<text
+  x={v1End.x + 24}
+  y={v1End.y + 4}
+  className="mission-graph-annotation mission-graph-annotation-yellow"
+  style={{ opacity: clamp((draw - 0.82) / 0.12, 0, 1) }}
+>
+  Voyager 1
+</text>
 
-      <text
-        x={v1End.x + 12}
-        y={v1End.y + 4}
-        className="mission-graph-annotation mission-graph-annotation-yellow"
-        style={{ opacity: clamp((draw - 0.82) / 0.12, 0, 1) }}
-      >
-        Voyager 1
-      </text>
-
-      <text
-        x={v2End.x + 12}
-        y={v2End.y + 4}
-        className="mission-graph-annotation mission-graph-annotation-blue"
-        style={{ opacity: clamp((draw - 0.82) / 0.12, 0, 1) }}
-      >
-        Voyager 2
-      </text>
+<text
+  x={v2End.x + 24}
+  y={v2End.y + 4}
+  className="mission-graph-annotation mission-graph-annotation-blue"
+  style={{ opacity: clamp((draw - 0.82) / 0.12, 0, 1) }}
+>
+  Voyager 2
+</text>
     </svg>
   )
 }

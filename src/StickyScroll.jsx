@@ -2,6 +2,7 @@ import { useRef, useEffect, useState, useMemo } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { useGLTF, useTexture } from '@react-three/drei'
 import { DoubleSide, RingGeometry, Vector3, ClampToEdgeWrapping } from 'three'
+import SpaceTransition from './SpaceTransition.jsx'
 
 function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max)
@@ -425,52 +426,19 @@ export default function StickyScroll() {
       </div>
     </div>
     <div className="sticky-right">
-      {datos.map((dato, i) => (
-        <div key={i} className="sticky-block">
-          <span className="sticky-numero">{dato.numero}</span>
-          <span className="sticky-unidad">{dato.unidad}</span>
-        </div>
-      ))}
-      
+  {datos.map((dato, i) => (
+    <div key={i} className="sticky-block">
+      <span className="sticky-numero">{dato.numero}</span>
+      <span className="sticky-unidad">{dato.unidad}</span>
     </div>
-<div
-  className="section-intro-title"
-  style={{
-    opacity:
-      smooth(0.36, 0.42, scrollProgress) *
-      (1 - smooth(0.55, 0.61, scrollProgress)),
-  }}
->
-  <div
-    className="shooting-title"
-    style={{
-      '--starMove': smooth(0.39, 0.56, scrollProgress),
-    }}
-  >
-    <div className="shooting-star" />
-
-    <h2>
-      {'EL VIAJE MÁS LEJANO DE LA HUMANIDAD'.split('').map((char, i) => {
-        const progress = smooth(0.39, 0.56, scrollProgress)
-        const letterProgress = progress * 38 - i
-
-        return (
-          <span
-            key={i}
-            style={{
-              opacity: clamp(letterProgress, 0, 1),
-              filter: `blur(${(1 - clamp(letterProgress, 0, 1)) * 8}px)`,
-              transform: `translateY(${(1 - clamp(letterProgress, 0, 1)) * 18}px)`,
-            }}
-          >
-            {char === ' ' ? '\u00A0' : char}
-          </span>
-        )
-      })}
-    </h2>
-  </div>
+  ))}
 </div>
-    <div className="story-wrapper">
+
+<div className="sticky-scroll-space-transition">
+  <SpaceTransition title="EL VIAJE MÁS LEJANO DE LA HUMANIDAD" showVoyager={false} />
+</div>
+
+<div className="story-wrapper">
       {storyBlocks.map((block, i) => (
         <div key={i} className="story-step">
           <div className="story-text">
