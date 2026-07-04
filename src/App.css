@@ -2588,7 +2588,7 @@ header h2,
 }
 .footer {
   position: relative;
-  height: 75vh;
+  height: 100vh;
   min-height: 520px;
 
   overflow: hidden;
@@ -3481,8 +3481,8 @@ canvas {
 1) Hacer bien las jerarquías de las secciones (como te pase en la foto) y la jerarquia de los titulos - EN PROCESO
 2) Mas espacio entre secciones, dejar mas "aire" ya que es del espacio - EN PROCESO/CREO QUE YA ESTA TERMINADO
 
-5) arreglar sincronizaciones
-6) mejoras personales, revision y hacer algo mejor con los graficos si se me ocurre, cambiar titulos, etc
+3) mejoras personales, revision y hacer algo mejor con los graficos si se me ocurre, cambiar titulos, etc
+4) escena chichito
 
 */
 
@@ -3537,3 +3537,699 @@ canvas {
 }
 
 
+/* ========================= */
+/* ALIEN ENCOUNTER */
+/* ========================= */
+
+.alien-section {
+  position: relative;
+  height: 480vh;
+  width: 100%;
+  overflow-x: clip;
+  color: white;
+}
+
+.alien-sticky {
+  position: sticky;
+  top: 0;
+
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.alien-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.alien-canvas canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.alien-atmosphere {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(2, 3, 10, 0.04) 0%,
+      rgba(86, 43, 24, 0.08) 42%,
+      rgba(18, 7, 4, 0.54) 100%
+    ),
+    radial-gradient(
+      circle at 42% 66%,
+      rgba(255, 164, 96, 0.08),
+      transparent 28%
+    );
+}
+
+/* ========================= */
+/* POLVO DE IMPACTO */
+/* ========================= */
+
+.alien-impact-dust {
+  position: absolute;
+
+  /*
+    Alineado con la posición final de la nave:
+    x = 1, y = -0.9
+  */
+  left: 48%;
+  bottom: 32%;
+
+  width: 520px;
+  height: 220px;
+
+  z-index: 5;
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      circle at 42% 48%,
+      rgba(255, 190, 118, 0.32),
+      transparent 48%
+    ),
+    radial-gradient(
+      circle at 58% 58%,
+      rgba(143, 73, 42, 0.34),
+      transparent 58%
+    ),
+    radial-gradient(
+      circle at 28% 62%,
+      rgba(255, 220, 170, 0.16),
+      transparent 46%
+    );
+
+  filter: blur(22px);
+  transform: rotate(-8deg);
+}
+
+/* ========================= */
+/* CONTADOR DE AÑOS */
+/* ========================= */
+
+.alien-year-counter {
+  position: absolute;
+  top: 6vh;
+  right: 6vw;
+
+  z-index: 12;
+  pointer-events: none;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.35rem;
+
+  color: #ffd576;
+
+  text-shadow:
+    0 0 18px rgba(255, 213, 118, 0.18),
+    0 0 38px rgba(255, 145, 64, 0.14);
+}
+
+.alien-year-counter span {
+  font-family: "BTTF", sans-serif;
+  font-size: clamp(0.9rem, 1vw, 1.1rem);
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(255, 213, 118, 0.72);
+}
+
+.alien-year-counter strong {
+  font-family: "Nasalization", sans-serif;
+  font-size: clamp(4.2rem, 8.5vw, 9.5rem);
+  line-height: 0.86;
+  color: #ffd576;
+}
+
+/* ========================= */
+/* TEXTOS TIPO STICKY SCROLL */
+/* ========================= */
+
+.alien-text-track {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 44vw;
+  height: 480vh;
+
+  z-index: 8;
+  pointer-events: none;
+}
+
+.alien-text-step {
+  height: 100vh;
+  width: 100%;
+
+  padding-left: 6vw;
+  padding-right: 3vw;
+
+  display: flex;
+  align-items: center;
+}
+
+.alien-text-step > div {
+  max-width: 620px;
+}
+
+.alien-text-step span {
+  display: block;
+
+  margin-bottom: 1rem;
+
+  color: #d9a36f;
+  font-family: "Nasalization", sans-serif;
+  font-size: 0.84rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+.alien-text-step h2 {
+  margin-bottom: 1.25rem;
+
+  color: #ffffff;
+  font-family: "Nasalization", sans-serif;
+  font-size: clamp(2.7rem, 4.7vw, 5.8rem);
+  line-height: 0.92;
+  text-transform: uppercase;
+}
+
+.alien-text-step p {
+  max-width: 610px;
+
+  color: rgba(255, 255, 255, 0.84);
+  font-family: "BTTF", sans-serif;
+  font-size: clamp(1rem, 1.08vw, 1.14rem);
+  line-height: 1.72;
+}
+
+/* ========================= */
+/* BOTÓN CONTINUAR */
+/* ========================= */
+
+.alien-continue-button {
+  position: absolute;
+
+  /*
+    Posicionado arriba de la Voyager estrellada.
+    Ajustá left/bottom si la movés.
+  */
+  left: 55%;
+  bottom: 46%;
+
+  z-index: 15;
+
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+
+  padding: 0.9rem 1.25rem 0.88rem;
+
+  border: 1px solid rgba(245, 166, 35, 0.82);
+  border-radius: 999px;
+
+  background:
+    radial-gradient(
+      circle at 25% 20%,
+      rgba(255, 213, 118, 0.22),
+      transparent 38%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(8, 10, 22, 0.94),
+      rgba(8, 10, 22, 0.74)
+    );
+
+  color: #ffd576;
+
+  font-family: "BTTF", sans-serif;
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 0 24px rgba(245, 166, 35, 0.24),
+    0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+    0 14px 38px rgba(0, 0, 0, 0.34);
+
+  backdrop-filter: blur(10px);
+
+  animation: alienContinuePulse 1.9s ease-in-out infinite;
+
+  transition:
+    transform 0.22s ease,
+    border-color 0.22s ease,
+    box-shadow 0.22s ease;
+}
+
+.alien-continue-button span {
+  white-space: nowrap;
+}
+
+.alien-continue-button i {
+  width: 8px;
+  height: 8px;
+
+  border-radius: 50%;
+  background: #ffd576;
+
+  box-shadow:
+    0 0 10px #ffd576,
+    0 0 24px rgba(255, 213, 118, 0.52);
+}
+
+.alien-continue-button::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 100%;
+
+  width: 1px;
+  height: 70px;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 213, 118, 0.9),
+      rgba(255, 213, 118, 0.18),
+      transparent
+    );
+
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.alien-continue-button:hover {
+  transform: translateY(-3px) scale(1.03);
+
+  border-color: rgba(255, 213, 118, 1);
+
+  box-shadow:
+    0 0 34px rgba(245, 166, 35, 0.34),
+    0 0 0 1px rgba(255, 255, 255, 0.08) inset,
+    0 18px 48px rgba(0, 0, 0, 0.46);
+}
+
+.alien-continue-button:active {
+  transform: translateY(0) scale(0.96);
+}
+
+@keyframes alienContinuePulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 22px rgba(245, 166, 35, 0.2),
+      0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+      0 14px 38px rgba(0, 0, 0, 0.34);
+  }
+
+  50% {
+    box-shadow:
+      0 0 38px rgba(245, 166, 35, 0.42),
+      0 0 0 1px rgba(255, 255, 255, 0.1) inset,
+      0 18px 48px rgba(0, 0, 0, 0.44);
+  }
+}
+
+/* ========================= */
+/* VIDEO FULLSCREEN */
+/* ========================= */
+
+.alien-video-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 80;
+
+  width: 100%;
+  height: 100vh;
+
+  background: #000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.alien-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+
+  display: block;
+  background: #000;
+}
+
+.alien-section--video .alien-canvas,
+.alien-section--video .alien-atmosphere,
+.alien-section--video .alien-impact-dust,
+.alien-section--video .alien-year-counter,
+.alien-section--video .alien-continue-button,
+.alien-section--video .alien-text-track {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ========================= */
+/* RESPONSIVE */
+/* ========================= */
+
+@media (max-width: 900px) {
+  .alien-section {
+    height: 500vh;
+  }
+
+  .alien-text-track {
+    width: 100vw;
+    height: 500vh;
+  }
+
+  .alien-text-step {
+    padding-left: 8vw;
+    padding-right: 8vw;
+    align-items: flex-end;
+    padding-bottom: 12vh;
+
+    background:
+      linear-gradient(
+        0deg,
+        rgba(2, 3, 10, 0.86),
+        rgba(2, 3, 10, 0.38) 60%,
+        transparent
+      );
+  }
+
+  .alien-year-counter {
+    top: 5vh;
+    right: 8vw;
+  }
+
+  .alien-year-counter strong {
+    font-size: clamp(3.2rem, 17vw, 6rem);
+  }
+
+  .alien-continue-button {
+    left: 38vw;
+    bottom: 42vh;
+  }
+
+  .alien-impact-dust {
+    left: 34%;
+    bottom: 31%;
+    width: 420px;
+    height: 190px;
+  }
+}
+
+.final-voyage-postcredits-button {
+
+  z-index: 20;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+
+  padding: 1rem 1.55rem;
+
+  border: 1px solid rgba(126, 200, 255, 0.55);
+  border-radius: 999px;
+
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(126, 200, 255, 0.22),
+      transparent 45%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(7, 12, 28, 0.86),
+      rgba(3, 6, 16, 0.72)
+    );
+
+  color: white;
+
+  box-shadow:
+    0 0 28px rgba(126, 200, 255, 0.18),
+    0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+    0 18px 42px rgba(0, 0, 0, 0.38);
+
+  backdrop-filter: blur(12px);
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.22s ease,
+    box-shadow 0.22s ease,
+    transform 0.22s ease;
+}
+
+.final-voyage-postcredits-button span {
+  color: rgba(155, 205, 242, 0.82);
+  font-family: "BTTF", sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.final-voyage-postcredits-button strong {
+  color: #ffffff;
+  font-family: "Nasalization", sans-serif;
+  font-size: clamp(0.95rem, 1.25vw, 1.25rem);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.final-voyage-postcredits-button::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: calc(100% + 10px);
+
+  width: 1px;
+  height: 34px;
+
+  background: linear-gradient(
+    180deg,
+    rgba(126, 200, 255, 0.75),
+    transparent
+  );
+
+  transform: translateX(-50%);
+}
+
+.final-voyage-postcredits-button:hover {
+  border-color: rgba(126, 200, 255, 0.95);
+
+  box-shadow:
+    0 0 38px rgba(126, 200, 255, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.08) inset,
+    0 22px 54px rgba(0, 0, 0, 0.48);
+}
+
+.final-voyage-postcredits-button:active {
+  transform: translate(-50%, 0) scale(0.96) !important;
+}
+
+.final-voyage-actions {
+  position: absolute;
+  left: 50%;
+  bottom: 7vh;
+  z-index: 20;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  gap: 1rem;
+
+  transition:
+    opacity 0.22s ease,
+    transform 0.22s ease;
+}
+
+.final-voyage-postcredits-button {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+
+  padding: 1rem 1.55rem;
+
+  border: 1px solid rgba(126, 200, 255, 0.55);
+  border-radius: 999px;
+
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(126, 200, 255, 0.22),
+      transparent 45%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(7, 12, 28, 0.86),
+      rgba(3, 6, 16, 0.72)
+    );
+
+  color: white;
+
+  box-shadow:
+    0 0 28px rgba(126, 200, 255, 0.18),
+    0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+    0 18px 42px rgba(0, 0, 0, 0.38);
+
+  backdrop-filter: blur(12px);
+  cursor: pointer;
+
+  transition:
+    border-color 0.22s ease,
+    box-shadow 0.22s ease,
+    transform 0.22s ease;
+}
+
+.final-voyage-postcredits-button span {
+  color: rgba(155, 205, 242, 0.82);
+  font-family: "BTTF", sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.final-voyage-postcredits-button strong {
+  color: #ffffff;
+  font-family: "Nasalization", sans-serif;
+  font-size: clamp(0.95rem, 1.25vw, 1.25rem);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.final-voyage-postcredits-button:hover {
+  transform: translateY(-3px);
+  border-color: rgba(126, 200, 255, 0.95);
+
+  box-shadow:
+    0 0 38px rgba(126, 200, 255, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.08) inset,
+    0 22px 54px rgba(0, 0, 0, 0.48);
+}
+
+.final-voyage-skip-button {
+  position: relative;
+
+  width: 58px;
+  height: 58px;
+
+  flex: 0 0 58px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid rgba(255, 80, 80, 0.72);
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle at 50% 25%,
+      rgba(255, 120, 120, 0.32),
+      transparent 42%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(90, 8, 14, 0.92),
+      rgba(35, 2, 7, 0.84)
+    );
+
+  color: #ffb3b3;
+  font-family: "Nasalization", sans-serif;
+  font-size: 2.1rem;
+  line-height: 1;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 0 24px rgba(255, 70, 70, 0.24),
+    0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+    0 16px 38px rgba(0, 0, 0, 0.38);
+
+  backdrop-filter: blur(12px);
+
+  transition:
+    transform 0.22s ease,
+    border-color 0.22s ease,
+    box-shadow 0.22s ease,
+    color 0.22s ease;
+}
+
+.final-voyage-skip-button:hover {
+  transform: translateY(-3px) scale(1.05);
+  border-color: rgba(255, 95, 95, 1);
+  color: #ffffff;
+
+  box-shadow:
+    0 0 34px rgba(255, 70, 70, 0.42),
+    0 0 0 1px rgba(255, 255, 255, 0.08) inset,
+    0 20px 48px rgba(0, 0, 0, 0.48);
+}
+
+.final-voyage-skip-button:active,
+.final-voyage-postcredits-button:active {
+  transform: scale(0.96);
+}
+
+@keyframes alienContinueNudge {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.final-voyage-actions {
+  position: absolute;
+  left: 50%;
+  bottom: 7vh;
+  z-index: 20;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  gap: 1rem;
+
+  transition:
+    opacity 0.22s ease,
+    transform 0.22s ease;
+}
+
+.final-voyage-postcredits-button {
+  position: relative;
+}
+
+.final-voyage-skip-button {
+  position: relative;
+  flex: 0 0 58px;
+}

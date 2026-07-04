@@ -11,6 +11,7 @@ import MissionPowerSection from './MissionPowerSection.jsx'
 import FinalVoyageSection from './FinalVoyageSection.jsx'
 import Footer from './Footer.jsx'
 import SpaceTransition from './SpaceTransition.jsx'
+import AlienEncounterSection from './AlienEncounterSection.jsx'
 import "./App.css"
 function App() {
   return (
@@ -33,7 +34,14 @@ function App() {
       <MissionPowerSection />
       <SpaceTransition title="EL VIAJE QUE SIGUE" />
       <FinalVoyageSection />
+
+<div id="postcredits-transition">
+  <SpaceTransition title="Y SI ALGÚN DÍA..." />
+</div>
+
+<AlienEncounterSection />
       <Footer />
+
       <BackgroundMusic />
     </>
   )

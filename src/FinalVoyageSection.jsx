@@ -1,12 +1,7 @@
 import { Suspense, useEffect, useMemo, useRef, useState } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Line, useGLTF } from '@react-three/drei'
-import {
-  AdditiveBlending,
-  BufferGeometry,
-  Float32BufferAttribute,
-} from 'three'
-
+import { AdditiveBlending } from 'three'
 
 const clamp = (value, min = 0, max = 1) =>
   Math.min(Math.max(value, min), max)
@@ -42,6 +37,7 @@ function VoyagerLeaving({ progress }) {
       y + Math.cos(time * 0.28) * lerp(0.018, 0.003, leaving),
       z
     )
+
     groupRef.current.scale.setScalar(scale)
     groupRef.current.rotation.x = 0.14 + Math.sin(time * 0.18) * 0.035
     groupRef.current.rotation.y = 1.15 + time * 0.025
@@ -59,24 +55,12 @@ function VoyagerLeaving({ progress }) {
     <>
       <group ref={groupRef}>
         <primitive object={voyager} />
-
-        <pointLight
-          position={[0.15, 0.05, 0.2]}
-          color="#e6c982"
-          intensity={1.2}
-          distance={1.4}
-        />
+        <pointLight position={[0.15, 0.05, 0.2]} color="#e6c982" intensity={1.2} distance={1.4} />
       </group>
 
       <mesh ref={glowRef} scale={0}>
         <sphereGeometry args={[1, 24, 24]} />
-        <meshBasicMaterial
-          color="#d9efff"
-          transparent
-          opacity={0}
-          blending={AdditiveBlending}
-          depthWrite={false}
-        />
+        <meshBasicMaterial color="#d9efff" transparent opacity={0} blending={AdditiveBlending} depthWrite={false} />
       </mesh>
     </>
   )
@@ -108,11 +92,7 @@ function FinalScene({ progress }) {
   return (
     <>
       <ambientLight intensity={lerp(0.24, 0.06, progress)} />
-      <directionalLight
-        position={[3, 2, 4]}
-        color="#e8f3ff"
-        intensity={lerp(1.15, 0.18, progress)}
-      />
+      <directionalLight position={[3, 2, 4]} color="#e8f3ff" intensity={lerp(1.15, 0.18, progress)} />
       <EndlessPath progress={progress} />
       <VoyagerLeaving progress={progress} />
     </>
@@ -167,6 +147,34 @@ export default function FinalVoyageSection() {
     }
   }, [])
 
+const goToPostCredits = () => {
+  sessionStorage.removeItem('skipAlienEncounterLock')
+  window.dispatchEvent(new Event('skipAlienEncounterLockChange'))
+
+  const postcreditsTransition = document.querySelector('#postcredits-transition')
+
+  if (postcreditsTransition) {
+    postcreditsTransition.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    })
+  }
+}
+
+  const goToFooter = () => {
+    sessionStorage.setItem('skipAlienEncounterLock', 'true')
+    window.dispatchEvent(new Event('skipAlienEncounterLockChange'))
+
+    const footer = document.querySelector('.footer')
+
+    if (footer) {
+      footer.scrollIntoView({
+        behavior: 'auto',
+        block: 'start',
+      })
+    }
+  }
+
   return (
     <section ref={sectionRef} className="final-voyage-section">
       <div className="final-voyage-sticky">
@@ -190,6 +198,31 @@ export default function FinalVoyageSection() {
             Voyager · 1977 <i>—</i> <strong>∞</strong>
           </span>
         </div>
+
+        <div
+          className="final-voyage-actions"
+          style={{
+            opacity: smooth(0.72, 0.84, progress),
+            pointerEvents: progress > 0.72 ? 'auto' : 'none',
+            transform: `translate(-50%, ${lerp(22, 0, smooth(0.72, 0.84, progress))}px)`,
+          }}
+        >
+          <button
+            className="final-voyage-postcredits-button"
+            onClick={goToPostCredits}
+          >
+            <span>Escena postcréditos</span>
+            <strong>¿Qué pasaría si...?</strong>
+          </button>
+
+          <button
+            className="final-voyage-skip-button"
+            onClick={goToFooter}
+            aria-label="Saltar escena postcréditos"
+          >
+            ×
+          </button>
+        </div>
       </div>
 
       <div className="final-voyage-steps">
@@ -205,6 +238,7 @@ export default function FinalVoyageSection() {
             </div>
           </article>
         ))}
+
         <div className="final-voyage-empty-step" aria-hidden="true" />
       </div>
     </section>

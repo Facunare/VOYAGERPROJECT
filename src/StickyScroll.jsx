@@ -226,21 +226,41 @@ function VoyagerModel({ scrollProgress }) {
 
       const baseX = lerp(-2.4, 2.15, crossProgress)
 
-      const riseY = lerp(0, 1.35, crossProgress)
-      const fallY = lerp(0, -3.0, downProgress)
+const riseY = lerp(0, 1.35, crossProgress)
+const fallY = lerp(0, -3.0, downProgress)
 
-      const baseY = riseY + fallY
-      const baseZ = lerp(0, -0.4, downProgress)
+const baseY = riseY + fallY
+const baseZ = lerp(0, -0.4, downProgress)
 
-      const zigzagStrength = lerp(0, 1, crossProgress) * (1 - exitProgress)
+/*
+  Zigzag real ligado al scroll:
+  - empieza suave cuando cruza
+  - se nota más cuando baja por los planetas
+  - desaparece cuando sale de escena
+*/
+const pathProgress = clamp((scrollProgress - 0.48) / 0.42, 0, 1)
 
-    const zigzagX =
-      Math.sin(time * 0.7) * 0.024 * zigzagStrength
+const zigzagStrength =
+  smooth(0.08, 0.28, pathProgress) *
+  (1 - exitProgress)
 
-    const zigzagY =
-      Math.sin(time * 0.6) * 0.01 * zigzagStrength
+const scrollZigzagX =
+  Math.sin(pathProgress * Math.PI * 5.2) * 0.42 * zigzagStrength
 
-      const waveZ = 0
+const scrollZigzagY =
+  Math.sin(pathProgress * Math.PI * 3.4 + 0.8) * 0.16 * zigzagStrength
+
+const floatingX =
+  Math.sin(time * 0.9) * 0.035 * zigzagStrength
+
+const floatingY =
+  Math.sin(time * 1.1) * 0.025 * zigzagStrength
+
+const zigzagX = scrollZigzagX + floatingX
+const zigzagY = scrollZigzagY + floatingY
+
+const waveZ =
+  Math.sin(pathProgress * Math.PI * 4) * 0.12 * zigzagStrength
 
       /*
         Posición normal de la nave en el recorrido.
@@ -266,9 +286,10 @@ function VoyagerModel({ scrollProgress }) {
 
     groupRef.current.rotation.y =
       lerp(0.9, 2.2, scrollProgress) + manualRotation.current.y + exitProgress * 0.9
-
-    groupRef.current.rotation.z =
-      Math.sin(time * 0.7) * 0.06 - exitProgress * 0.35
+groupRef.current.rotation.z =
+  Math.sin(scrollProgress * Math.PI * 7) * 0.18 +
+  Math.sin(time * 0.7) * 0.05 -
+  exitProgress * 0.35
   })
 
   const handlePointerDown = (e) => {
