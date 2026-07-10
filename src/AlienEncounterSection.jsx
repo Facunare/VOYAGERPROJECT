@@ -130,7 +130,7 @@ function VoyagerCrash({ progress }) {
 
 function PlanetSurface({ progress }) {
   const marsTexture = useTexture('/textures/mars.jpg')
-  const earthTexture = useTexture('/textures/earth.jpg')
+  const earthTexture = useTexture('/textures/haumea.jpg')
 
   useFrame(() => {
     marsTexture.anisotropy = 8

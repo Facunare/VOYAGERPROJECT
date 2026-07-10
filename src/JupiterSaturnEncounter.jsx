@@ -347,7 +347,7 @@ const steps = [
   },
   {
     kicker: '1980',
-    title: 'Saturno y la decisión que cambió el destino',
+    title: 'Saturno',
     text: 'Después de Júpiter, Voyager 1 llegó a Saturno. Allí la misión tuvo uno de sus momentos clave.',
   },
   {

@@ -261,3 +261,7 @@ export default function ScaleComparison() {
     </section>
   )
 }
+
+useGLTF.preload('/VoyagerProbe.glb')
+useGLTF.preload('scale/jmaes-webb.glb')
+useGLTF.preload('scale/perseverance.glb')

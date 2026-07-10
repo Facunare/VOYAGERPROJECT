@@ -40,11 +40,6 @@ function SaturnRing({ size, ringTexture }) {
       const radius = Math.sqrt(v3.x * v3.x + v3.y * v3.y)
       const t = (radius - innerRadius) / (outerRadius - innerRadius)
 
-      /*
-        Esto es lo importante:
-        la textura recorre el radio del anillo,
-        como en el archivo donde Saturno se ve bien.
-      */
       uv.setXY(i, t, 0.5)
     }
 
@@ -103,19 +98,8 @@ function InterstellarBoundary({ position }) {
 }
 
 function Milestones({ scrollProgress }) {
-  /*
-    Los planetas ya existen antes de verse,
-    pero arrancan abajo, fuera de pantalla.
-  */
-
   const enterProgress = clamp((scrollProgress - 0.48) / 0.12, 0, 1)
   const travelProgress = clamp((scrollProgress - 0.55) / 0.30, 0, 1)
-
-  /*
-    - Antes de 0.58: están abajo, fuera de cámara.
-    - Entre 0.58 y 0.70: entran suavemente a la pantalla.
-    - Después de 0.70: siguen subiendo como antes.
-  */
   const enterY = lerp(-4.2, 0.15, enterProgress)
   const travelY = lerp(0, 3.6, travelProgress)
 
@@ -245,10 +229,10 @@ const zigzagStrength =
   (1 - exitProgress)
 
 const scrollZigzagX =
-  Math.sin(pathProgress * Math.PI * 5.2) * 0.42 * zigzagStrength
+  Math.sin(pathProgress * Math.PI * 2.6) * 0.28 * zigzagStrength
 
 const scrollZigzagY =
-  Math.sin(pathProgress * Math.PI * 3.4 + 0.8) * 0.16 * zigzagStrength
+  Math.sin(pathProgress * Math.PI * 2.0 + 0.8) * 0.10 * zigzagStrength
 
 const floatingX =
   Math.sin(time * 0.9) * 0.035 * zigzagStrength
@@ -373,7 +357,7 @@ const storyBlocks = [
   {
     year: 'Júpiter y Saturno',
     title: 'El viaje empieza a revelar mundos',
-    text: 'Voyager 1 y Voyager 2 no fueron pensadas como objetos destinados a sobrevivir por generaciones. Su objetivo era aprovechar una tecnica conocida como asistencia gravitatoria para visitar mundos lejanos y enviar datos e imágenes a la Tierra. Esta técnica permitia usar la gravedad de un planeta para impulsar la nave hacia el siguiente. Lo que en otro contexto hubiera requerido mucho más combustible y tiempo, en ese momento podía lograrse con una trayectoria precisa y ambiciosa.',
+    text: 'Voyager 1 y Voyager 2 fueron lanzadas para explorar planetas lejanos usando asistencia gravitatoria: una técnica que aprovecha la gravedad de un planeta para impulsar la nave hacia el siguiente. Gracias a eso, pudieron viajar más lejos, más rápido y con menos combustible.',
   },
   {
     year: 'Urano y Neptuno',

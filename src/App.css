@@ -1241,7 +1241,7 @@ body {
 }
 
 .graph-axis-title {
-  fill: rgba(255, 255, 255, 0.349);
+  fill: rgba(255, 255, 255, 0.62);
   font-family: "BTTF", sans-serif;
   font-size: 15px;
   letter-spacing: 0.2em;
@@ -3478,11 +3478,9 @@ canvas {
 
 === PARA HACER ===
 
-1) Hacer bien las jerarquías de las secciones (como te pase en la foto) y la jerarquia de los titulos - EN PROCESO
-2) Mas espacio entre secciones, dejar mas "aire" ya que es del espacio - EN PROCESO/CREO QUE YA ESTA TERMINADO
-
-3) mejoras personales, revision y hacer algo mejor con los graficos si se me ocurre, cambiar titulos, etc
-4) escena chichito
+1) TEMA TITULOS -> LO UNICO QUE FALTA CHE
+2) mejoras personales
+3) revision 
 
 */
 

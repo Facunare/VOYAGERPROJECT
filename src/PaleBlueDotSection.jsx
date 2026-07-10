@@ -335,8 +335,8 @@ const padding = {
       preserveAspectRatio="none"
     >
       <text
-        x="-310"
-        y="58"
+        x="-380"
+        y="20"
         transform="rotate(-90)"
         className="mission-axis-title"
       >
