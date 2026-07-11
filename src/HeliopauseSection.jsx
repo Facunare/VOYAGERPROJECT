@@ -220,7 +220,191 @@ function HeliopauseScene({ scrollProgress }) {
   )
 }
 function HeliopauseScrollGraph({ progress }) {
+  const svgRef = useRef(null)
+  const solarPathRef = useRef(null)
+  const cosmicPathRef = useRef(null)
+  const [hoveredPoint, setHoveredPoint] = useState(null)
+
   const draw = clamp(progress, 0, 1)
+
+  const width = 1000
+  const height = 520
+
+  const graphBounds = {
+    x: 125,
+    y: 70,
+    width: 815,
+    height: 360,
+  }
+
+  const crossingX = 635
+
+  const solarPath =
+    'M 130 120 C 240 130, 350 145, 455 170 C 555 210, 630 300, 700 365 C 770 415, 860 425, 940 420'
+
+  const cosmicPath =
+    'M 130 405 C 260 398, 370 390, 485 360 C 585 320, 645 210, 720 140 C 790 88, 865 75, 940 82'
+
+  const getIntensityLabel = (y) => {
+    const intensity = clamp(
+      1 - (y - graphBounds.y) / graphBounds.height,
+      0,
+      1
+    )
+
+    if (intensity > 0.68) return 'Alta'
+    if (intensity > 0.34) return 'Media'
+    return 'Baja'
+  }
+
+  const getPopupData = (point) => {
+    if (!point) return null
+
+    const isSolar = point.type === 'solar'
+    const intensity = getIntensityLabel(point.y)
+
+    if (isSolar) {
+      if (point.x < crossingX - 90) {
+        return {
+          eyebrow: 'Partículas solares',
+          title: 'Dominio del Sol',
+          value: intensity,
+          description:
+            'Antes del cruce, las partículas asociadas al viento solar todavía dominan las mediciones de Voyager 1.',
+        }
+      }
+
+      if (point.x < crossingX + 90) {
+        return {
+          eyebrow: 'Partículas solares',
+          title: 'La señal solar cae',
+          value: intensity,
+          description:
+            'Cerca de la heliopausa, la influencia del Sol empieza a debilitarse de forma clara en los datos.',
+        }
+      }
+
+      return {
+        eyebrow: 'Partículas solares',
+        title: 'El Sol queda atrás',
+        value: intensity,
+        description:
+          'Después del cruce, las partículas solares bajan y Voyager 1 entra en un entorno dominado por el espacio interestelar.',
+      }
+    }
+
+    if (point.x < crossingX - 90) {
+      return {
+        eyebrow: 'Rayos cósmicos',
+        title: 'Señal interestelar baja',
+        value: intensity,
+        description:
+          'Antes de atravesar la heliopausa, las partículas interestelares todavía aparecen con baja intensidad.',
+      }
+    }
+
+    if (point.x < crossingX + 90) {
+      return {
+        eyebrow: 'Rayos cósmicos',
+        title: 'Aumenta lo interestelar',
+        value: intensity,
+        description:
+          'Durante el cruce, los rayos cósmicos empiezan a crecer: los datos muestran que Voyager 1 está cambiando de región.',
+      }
+    }
+
+    return {
+      eyebrow: 'Rayos cósmicos',
+      title: 'Nuevo entorno',
+      value: intensity,
+      description:
+        'Después de la heliopausa, las partículas interestelares dominan la medición: Voyager 1 ya está en el espacio entre las estrellas.',
+    }
+  }
+
+  const getNearestPointOnPath = (pathRef, mouseX, mouseY, type) => {
+    const path = pathRef.current
+    if (!path || draw <= 0.02) return null
+
+    const totalLength = path.getTotalLength()
+    const visibleLength = totalLength * draw
+    const samples = Math.max(12, Math.floor(160 * draw))
+
+    let bestPoint = null
+    let bestDistance = Infinity
+
+    for (let i = 0; i <= samples; i++) {
+      const point = path.getPointAtLength((i / samples) * visibleLength)
+
+      const distance = Math.hypot(
+        (point.x - mouseX) * 1.15,
+        (point.y - mouseY) * 0.85
+      )
+
+      if (distance < bestDistance) {
+        bestDistance = distance
+        bestPoint = {
+          x: point.x,
+          y: point.y,
+          type,
+          distance,
+        }
+      }
+    }
+
+    return bestPoint
+  }
+
+  const handleGraphMouseMove = (event) => {
+    if (!svgRef.current) return
+
+    const rect = svgRef.current.getBoundingClientRect()
+
+    const mouseX = ((event.clientX - rect.left) / rect.width) * width
+    const mouseY = ((event.clientY - rect.top) / rect.height) * height
+
+    const insideGraph =
+      mouseX >= graphBounds.x &&
+      mouseX <= graphBounds.x + graphBounds.width &&
+      mouseY >= graphBounds.y &&
+      mouseY <= graphBounds.y + graphBounds.height
+
+    if (!insideGraph) {
+      setHoveredPoint(null)
+      return
+    }
+
+    const nearestSolar = getNearestPointOnPath(
+      solarPathRef,
+      mouseX,
+      mouseY,
+      'solar'
+    )
+
+    const nearestCosmic = getNearestPointOnPath(
+      cosmicPathRef,
+      mouseX,
+      mouseY,
+      'cosmic'
+    )
+
+    if (!nearestSolar && !nearestCosmic) {
+      setHoveredPoint(null)
+      return
+    }
+
+    if (!nearestCosmic || nearestSolar?.distance < nearestCosmic.distance) {
+      setHoveredPoint(nearestSolar)
+    } else {
+      setHoveredPoint(nearestCosmic)
+    }
+  }
+
+  const handleGraphMouseLeave = () => {
+    setHoveredPoint(null)
+  }
+
+  const popup = getPopupData(hoveredPoint)
 
   return (
     <div className="heliopause-scroll-graph">
@@ -234,71 +418,189 @@ function HeliopauseScrollGraph({ progress }) {
       </div>
 
       <svg
-  className="heliopause-svg-graph"
-  viewBox="0 0 1000 520"
-  preserveAspectRatio="none"
->
-  <line x1="125" y1="430" x2="940" y2="430" className="graph-axis" />
-  <line x1="125" y1="70" x2="125" y2="430" className="graph-axis" />
+        ref={svgRef}
+        className="heliopause-svg-graph"
+        viewBox={`0 0 ${width} ${height}`}
+        preserveAspectRatio="none"
+      >
+        <line x1="125" y1="430" x2="940" y2="430" className="graph-axis" />
+        <line x1="125" y1="70" x2="125" y2="430" className="graph-axis" />
 
-    <text
-      x="-390"
-      y="10"
-      className="graph-axis-title"
-      transform="rotate(-90)"
-    >
-      INTENSIDAD RELATIVA
-    </text>
+        <text
+          x="-390"
+          y="10"
+          className="graph-axis-title"
+          transform="rotate(-90)"
+        >
+          INTENSIDAD RELATIVA
+        </text>
 
-  <text x="42" y="100" className="graph-label">Alta</text>
-  <text x="42" y="430" className="graph-label">Baja</text>
+        <text x="42" y="100" className="graph-label">Alta</text>
+        <text x="42" y="430" className="graph-label">Baja</text>
 
-  <text x="125" y="475" className="graph-label">2011</text>
-  <text x="470" y="475" className="graph-label">2012</text>
-  <text x="820" y="475" className="graph-label">2013</text>
+        <text x="125" y="475" className="graph-label">2011</text>
+        <text x="470" y="475" className="graph-label">2012</text>
+        <text x="820" y="475" className="graph-label">2013</text>
 
-  <path
-    d="M 130 120 C 240 130, 350 145, 455 170 C 555 210, 630 300, 700 365 C 770 415, 860 425, 940 420"
-    className="graph-line graph-line-solar"
-    pathLength="1"
-    style={{ strokeDasharray: 1, strokeDashoffset: 1 - draw }}
-  />
+        <path
+          ref={solarPathRef}
+          d={solarPath}
+          className="graph-line graph-line-solar"
+          pathLength="1"
+          style={{ strokeDasharray: 1, strokeDashoffset: 1 - draw }}
+        />
 
-  <path
-    d="M 130 405 C 260 398, 370 390, 485 360 C 585 320, 645 210, 720 140 C 790 88, 865 75, 940 82"
-    className="graph-line graph-line-cosmic"
-    pathLength="1"
-    style={{ strokeDasharray: 1, strokeDashoffset: 1 - draw }}
-  />
+        <path
+          ref={cosmicPathRef}
+          d={cosmicPath}
+          className="graph-line graph-line-cosmic"
+          pathLength="1"
+          style={{ strokeDasharray: 1, strokeDashoffset: 1 - draw }}
+        />
 
-  <line
-    x1="635"
-    y1="70"
-    x2="635"
-    y2="430"
-    className="graph-crossing-line"
-    style={{ opacity: smoothstep(0.45, 0.62, draw) }}
-  />
+        <line
+          x1="635"
+          y1="70"
+          x2="635"
+          y2="430"
+          className="graph-crossing-line"
+          style={{ opacity: smoothstep(0.45, 0.62, draw) }}
+        />
 
-  <rect
-    x="650"
-    y="82"
-    width="285"
-    height="38"
-    rx="6"
-    className="graph-label-bg"
-    style={{ opacity: smoothstep(0.55, 0.7, draw) }}
-  />
+        <rect
+          x="650"
+          y="82"
+          width="285"
+          height="38"
+          rx="6"
+          className="graph-label-bg"
+          style={{ opacity: smoothstep(0.55, 0.7, draw) }}
+        />
 
-  <text
-    x="665"
-    y="108"
-    className="graph-crossing-label"
-    style={{ opacity: smoothstep(0.55, 0.7, draw) }}
-  >
-    Heliopausa · Agosto 2012
-  </text>
-</svg>
+        <text
+          x="665"
+          y="108"
+          className="graph-crossing-label"
+          style={{ opacity: smoothstep(0.55, 0.7, draw) }}
+        >
+          Heliopausa · Agosto 2012
+        </text>
+
+        <rect
+          x={graphBounds.x}
+          y={graphBounds.y}
+          width={graphBounds.width}
+          height={graphBounds.height}
+          fill="transparent"
+          style={{ cursor: 'crosshair', pointerEvents: 'all' }}
+          onMouseMove={handleGraphMouseMove}
+          onMouseLeave={handleGraphMouseLeave}
+        />
+
+        {hoveredPoint && popup && (
+          <g className="heliopause-hover-popup" style={{ pointerEvents: 'none' }}>
+            <line
+              x1={hoveredPoint.x}
+              x2={hoveredPoint.x}
+              y1={graphBounds.y}
+              y2={graphBounds.y + graphBounds.height}
+              className="mission-hover-line"
+            />
+
+            <circle
+              cx={hoveredPoint.x}
+              cy={hoveredPoint.y}
+              r="8"
+              className="mission-hover-dot"
+            />
+
+            <foreignObject
+              x={
+                hoveredPoint.x > width * 0.64
+                  ? hoveredPoint.x - 360
+                  : hoveredPoint.x + 26
+              }
+              y={clamp(hoveredPoint.y - 105, graphBounds.y + 10, height - 215)}
+              width="340"
+              height="205"
+              style={{ pointerEvents: 'none' }}
+            >
+              <div
+                className="mission-hover-card"
+                style={{
+                  width: '305px',
+                  minHeight: '126px',
+                  padding: '16px 18px',
+                  borderRadius: '18px',
+                  border:
+                    hoveredPoint.type === 'solar'
+                      ? '1px solid rgba(245, 166, 35, 0.6)'
+                      : '1px solid rgba(126, 200, 255, 0.65)',
+                  background:
+                    hoveredPoint.type === 'solar'
+                      ? 'radial-gradient(circle at top left, rgba(245, 166, 35, 0.24), transparent 45%), linear-gradient(135deg, rgba(8, 12, 28, 0.96), rgba(3, 5, 14, 0.9))'
+                      : 'radial-gradient(circle at top left, rgba(126, 200, 255, 0.24), transparent 45%), linear-gradient(135deg, rgba(8, 12, 28, 0.96), rgba(3, 5, 14, 0.9))',
+                  boxShadow:
+                    hoveredPoint.type === 'solar'
+                      ? '0 0 34px rgba(245, 166, 35, 0.28), 0 18px 60px rgba(0, 0, 0, 0.62)'
+                      : '0 0 34px rgba(126, 200, 255, 0.3), 0 18px 60px rgba(0, 0, 0, 0.62)',
+                  color: 'white',
+                }}
+              >
+                <span
+                  style={{
+                    display: 'block',
+                    marginBottom: '6px',
+                    color:
+                      hoveredPoint.type === 'solar' ? '#f5a623' : '#8ecbff',
+                    fontSize: '0.64rem',
+                    letterSpacing: '0.18em',
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  {popup.eyebrow}
+                </span>
+
+                <h3
+                  style={{
+                    margin: 0,
+                    color: 'white',
+                    fontSize: '1.05rem',
+                    lineHeight: 1.1,
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  {popup.title}
+                </h3>
+
+                <strong
+                  style={{
+                    display: 'block',
+                    marginTop: '8px',
+                    color:
+                      hoveredPoint.type === 'solar' ? '#f5a623' : '#8ecbff',
+                    fontSize: '1.65rem',
+                    lineHeight: 1,
+                  }}
+                >
+                  {popup.value}
+                </strong>
+
+                <p
+                  style={{
+                    margin: '8px 0 0',
+                    color: 'rgba(255, 255, 255, 0.78)',
+                    fontSize: '0.72rem',
+                    lineHeight: 1.35,
+                  }}
+                >
+                  {popup.description}
+                </p>
+              </div>
+            </foreignObject>
+          </g>
+        )}
+      </svg>
 
       <div className="heliopause-graph-legend">
         <span><i className="solar" />Partículas solares</span>

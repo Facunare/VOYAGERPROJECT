@@ -298,25 +298,36 @@ function ScrollDrawPath({ d, className, progress }) {
   )
 }
 function VoyagerDistanceGraph({ chart, progress }) {
+  const [hoveredPoint, setHoveredPoint] = useState(null)
+
+  const voyager1CurveRef = useRef(null)
+  const voyager2CurveRef = useRef(null)
+
   const draw = clamp((progress - 0.05) / 0.9, 0, 1)
 
   const width = 1000
   const height = 520
 
-const padding = {
-  top: 70,
-  right: 135,
-  bottom: 90,
-  left: 120,
-}
+  const padding = {
+    top: 70,
+    right: 135,
+    bottom: 90,
+    left: 120,
+  }
+
   const chartWidth = width - padding.left - padding.right
   const chartHeight = height - padding.top - padding.bottom
+
+  const startYear = Number(chart.xStart)
+  const endYear = Number(chart.xEnd)
 
   const makePoints = (values) =>
     values.map((value, index) => {
       const x = padding.left + (index / (values.length - 1)) * chartWidth
       const y = padding.top + chartHeight - (value / chart.yMax) * chartHeight
-      return { x, y, value }
+      const year = Math.round(startYear + (index / (values.length - 1)) * (endYear - startYear))
+
+      return { x, y, value, index, year }
     })
 
   const voyager1Points = makePoints(chart.voyager1)
@@ -327,6 +338,158 @@ const padding = {
 
   const v1End = voyager1Points[voyager1Points.length - 1]
   const v2End = voyager2Points[voyager2Points.length - 1]
+
+  const getNearestDataPoint = (points, mouseX) => {
+    const visiblePoints = points.filter((_, index) => {
+      const pointProgress = index / (points.length - 1)
+      return pointProgress <= draw
+    })
+
+    if (visiblePoints.length === 0) return null
+
+    return visiblePoints.reduce((nearest, point) => {
+      const currentDistance = Math.abs(point.x - mouseX)
+      const nearestDistance = Math.abs(nearest.x - mouseX)
+
+      return currentDistance < nearestDistance ? point : nearest
+    })
+  }
+
+  const getNearestCurvePoint = (pathRef, mouseX) => {
+    const path = pathRef.current
+    if (!path) return null
+
+    const totalLength = path.getTotalLength()
+    const visibleLength = totalLength * draw
+
+    if (visibleLength <= 0) return null
+
+    let bestPoint = null
+    let bestDistance = Infinity
+
+    for (let i = 0; i <= 160; i++) {
+      const currentLength = (i / 160) * visibleLength
+      const point = path.getPointAtLength(currentLength)
+      const distance = Math.abs(point.x - mouseX)
+
+      if (distance < bestDistance) {
+        bestDistance = distance
+        bestPoint = point
+      }
+    }
+
+    return bestPoint
+  }
+
+  const getPopupData = (point) => {
+    if (!point) return null
+
+    const isVoyager1 = point.series === 'voyager1'
+
+    if (point.year < 1977) {
+      return {
+        eyebrow: 'Antes del lanzamiento',
+        title: isVoyager1 ? 'Voyager 1 todavía no partió' : 'Voyager 2 todavía no partió',
+        value: `${point.value} AU`,
+        description:
+          'La distancia todavía está cerca del punto de partida. La misión recién está por comenzar.',
+      }
+    }
+
+    if (point.year < 1990) {
+      return isVoyager1
+        ? {
+            eyebrow: 'Planetas gigantes',
+            title: 'Voyager 1 acelera hacia afuera',
+            value: `${point.value} AU`,
+            description:
+              'Tras Júpiter y Saturno, Voyager 1 empieza a tomar el camino más directo hacia las afueras del sistema solar.',
+          }
+        : {
+            eyebrow: 'Gran recorrido',
+            title: 'Voyager 2 sigue explorando',
+            value: `${point.value} AU`,
+            description:
+              'Mientras Voyager 1 se aleja, Voyager 2 continúa visitando los mundos exteriores: Júpiter, Saturno, Urano y Neptuno.',
+          }
+    }
+
+    if (point.year < 2012) {
+      return isVoyager1
+        ? {
+            eyebrow: 'Más allá de los planetas',
+            title: 'Voyager 1 gana distancia',
+            value: `${point.value} AU`,
+            description:
+              'La nave ya dejó atrás los encuentros planetarios y avanza cada vez más lejos del Sol.',
+          }
+        : {
+            eyebrow: 'Camino exterior',
+            title: 'Voyager 2 avanza más lento',
+            value: `${point.value} AU`,
+            description:
+              'Su ruta permitió explorar más planetas, pero por eso quedó a menor distancia que Voyager 1.',
+          }
+    }
+
+    return isVoyager1
+      ? {
+          eyebrow: 'Espacio interestelar',
+          title: 'Voyager 1 cruza una frontera',
+          value: `${point.value} AU`,
+          description:
+            'Desde 2012, Voyager 1 viaja por el espacio interestelar: es el objeto humano más lejano.',
+        }
+      : {
+          eyebrow: 'Después de Neptuno',
+          title: 'Voyager 2 también se aleja',
+          value: `${point.value} AU`,
+          description:
+            'Voyager 2 continúa su viaje hacia afuera después de haber completado la exploración de los cuatro planetas gigantes.',
+        }
+  }
+
+  const handleGraphMouseMove = (event) => {
+    const rect = event.currentTarget.getBoundingClientRect()
+
+    const mouseX = padding.left + ((event.clientX - rect.left) / rect.width) * chartWidth
+    const mouseY = padding.top + ((event.clientY - rect.top) / rect.height) * chartHeight
+
+    const v1CurvePoint = getNearestCurvePoint(voyager1CurveRef, mouseX)
+    const v2CurvePoint = getNearestCurvePoint(voyager2CurveRef, mouseX)
+
+    if (!v1CurvePoint || !v2CurvePoint) {
+      setHoveredPoint(null)
+      return
+    }
+
+    const v1Distance = Math.abs(v1CurvePoint.y - mouseY)
+    const v2Distance = Math.abs(v2CurvePoint.y - mouseY)
+
+    const selectedSeries = v1Distance <= v2Distance ? 'voyager1' : 'voyager2'
+    const selectedPoints = selectedSeries === 'voyager1' ? voyager1Points : voyager2Points
+    const selectedCurvePoint = selectedSeries === 'voyager1' ? v1CurvePoint : v2CurvePoint
+    const selectedLabel = selectedSeries === 'voyager1' ? 'Voyager 1' : 'Voyager 2'
+
+    const dataPoint = getNearestDataPoint(selectedPoints, mouseX)
+
+    if (!dataPoint) {
+      setHoveredPoint(null)
+      return
+    }
+
+    setHoveredPoint({
+      ...dataPoint,
+      series: selectedSeries,
+      label: selectedLabel,
+      curveX: selectedCurvePoint.x,
+      curveY: selectedCurvePoint.y,
+    })
+  }
+
+  const handleGraphMouseLeave = () => {
+    setHoveredPoint(null)
+  }
 
   return (
     <svg
@@ -402,8 +565,8 @@ const padding = {
         {chart.xEnd}
       </text>
 
-      <path d={voyager1Path} className="mission-graph-line-shadow" />
-      <path d={voyager2Path} className="mission-graph-line-shadow" />
+      <path ref={voyager1CurveRef} d={voyager1Path} className="mission-graph-line-shadow" />
+      <path ref={voyager2CurveRef} d={voyager2Path} className="mission-graph-line-shadow" />
 
       <ScrollDrawPath
         d={voyager1Path}
@@ -416,23 +579,96 @@ const padding = {
         className="mission-graph-line-blue"
         progress={draw}
       />
-<text
-  x={v1End.x + 24}
-  y={v1End.y + 4}
-  className="mission-graph-annotation mission-graph-annotation-yellow"
-  style={{ opacity: clamp((draw - 0.82) / 0.12, 0, 1) }}
->
-  Voyager 1
-</text>
 
-<text
-  x={v2End.x + 24}
-  y={v2End.y + 4}
-  className="mission-graph-annotation mission-graph-annotation-blue"
-  style={{ opacity: clamp((draw - 0.82) / 0.12, 0, 1) }}
->
-  Voyager 2
-</text>
+      <text
+        x={v1End.x + 24}
+        y={v1End.y + 4}
+        className="mission-graph-annotation mission-graph-annotation-yellow"
+        style={{ opacity: clamp((draw - 0.82) / 0.12, 0, 1) }}
+      >
+        Voyager 1
+      </text>
+
+      <text
+        x={v2End.x + 24}
+        y={v2End.y + 4}
+        className="mission-graph-annotation mission-graph-annotation-blue"
+        style={{ opacity: clamp((draw - 0.82) / 0.12, 0, 1) }}
+      >
+        Voyager 2
+      </text>
+
+      <rect
+        x={padding.left}
+        y={padding.top}
+        width={chartWidth}
+        height={chartHeight}
+        fill="transparent"
+        style={{ cursor: 'crosshair', pointerEvents: 'all' }}
+        onMouseMove={handleGraphMouseMove}
+        onMouseLeave={handleGraphMouseLeave}
+      />
+
+      {hoveredPoint && (() => {
+        const popup = getPopupData(hoveredPoint)
+        const isVoyager1 = hoveredPoint.series === 'voyager1'
+        const popupX = hoveredPoint.curveX > width * 0.65
+          ? hoveredPoint.curveX - 350
+          : hoveredPoint.curveX + 24
+
+        const popupY = clamp(hoveredPoint.curveY - 110, padding.top + 10, height - 215)
+
+        return (
+          <g className="mission-hover-popup" style={{ pointerEvents: 'none' }}>
+            <line
+              x1={hoveredPoint.curveX}
+              x2={hoveredPoint.curveX}
+              y1={padding.top}
+              y2={padding.top + chartHeight}
+              className="mission-hover-line"
+            />
+
+            <circle
+              cx={hoveredPoint.curveX}
+              cy={hoveredPoint.curveY}
+              r="8"
+              className={isVoyager1 ? 'mission-hover-dot' : 'mission-hover-dot mission-hover-dot-blue'}
+            />
+
+            <foreignObject
+              x={popupX}
+              y={popupY}
+              width="340"
+              height="215"
+              style={{ pointerEvents: 'none' }}
+            >
+              <div
+                className="mission-hover-card"
+                style={{
+                  width: '310px',
+                  padding: '16px 18px',
+                  borderRadius: '18px',
+                  border: isVoyager1
+                    ? '1px solid rgba(245, 166, 35, 0.55)'
+                    : '1px solid rgba(100, 190, 255, 0.55)',
+                  background:
+                    'radial-gradient(circle at top left, rgba(245, 166, 35, 0.18), transparent 45%), linear-gradient(135deg, rgba(8, 12, 28, 0.96), rgba(3, 5, 14, 0.9))',
+                  boxShadow: isVoyager1
+                    ? '0 0 34px rgba(245, 166, 35, 0.28), 0 18px 60px rgba(0, 0, 0, 0.62)'
+                    : '0 0 34px rgba(100, 190, 255, 0.28), 0 18px 60px rgba(0, 0, 0, 0.62)',
+                  backdropFilter: 'blur(14px)',
+                  color: 'white',
+                }}
+              >
+                <span>{popup.eyebrow}</span>
+                <h3>{popup.title}</h3>
+                <strong>{hoveredPoint.label} · {popup.value}</strong>
+                <p>{popup.description}</p>
+              </div>
+            </foreignObject>
+          </g>
+        )
+      })()}
     </svg>
   )
 }

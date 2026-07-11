@@ -469,6 +469,7 @@ function MagnetometerGraphSection({ chart, sceneStart, sceneEnd }) {
     </section>
   )
 }
+
 function MagnetometerGraphStep({ chart, progress }) {
   return (
     <article className="jupiter-saturn-graph-step">
@@ -515,6 +516,9 @@ function ScrollDrawPath({ d, className, progress }) {
 }
 
 function MagnetometerGraph({ chart, progress }) {
+  const [hoveredPoint, setHoveredPoint] = useState(null)
+  const svgRef = useRef(null)
+
   const draw = clamp((progress - 0.05) / 0.9, 0, 1)
 
   const width = 1000
@@ -537,29 +541,141 @@ function MagnetometerGraph({ chart, progress }) {
     return { x, y, value }
   })
 
-  const path = points.reduce((acc, point, index) => {
+const smoothPath = points.reduce((acc, point, index) => {
   if (index === 0) {
     return `M ${point.x} ${point.y}`
   }
 
   const prev = points[index - 1]
-  const midX = (prev.x + point.x) / 2
-  const midY = (prev.y + point.y) / 2
 
-  return `${acc} Q ${prev.x} ${prev.y} ${midX} ${midY}`
+  const controlX = (prev.x + point.x) / 2
+  const controlY = prev.y
+
+  return `${acc} C ${controlX} ${controlY}, ${controlX} ${point.y}, ${point.x} ${point.y}`
 }, '')
-
-const lastPoint = points[points.length - 1]
-const beforeLastPoint = points[points.length - 2]
-
-const smoothPath = `${path} Q ${beforeLastPoint.x} ${beforeLastPoint.y} ${lastPoint.x} ${lastPoint.y}`
 
   const maxPoint = points.reduce((best, point) =>
     point.value > best.value ? point : best
   )
 
+  const getPopupData = (point) => {
+  if (!point) return null
+
+  const isJupiter = chart.annotation.toLowerCase().includes('jupiter')
+  const intensityRatio = point.value / chart.yMax
+  const isAfterPeak = point.x > maxPoint.x
+  const isPeakZone = intensityRatio > 0.75
+
+  if (isPeakZone) {
+    return isJupiter
+      ? {
+          title: 'Zona crítica',
+          value: `${point.value} nT`,
+          description:
+            'La señal alcanza su punto máximo: Voyager 1 atraviesa la región de mayor intensidad magnética cerca de Júpiter.',
+        }
+      : {
+          title: 'Pico magnético',
+          value: `${point.value} nT`,
+          description:
+            'El campo magnético llega a su máxima intensidad durante el encuentro con Saturno.',
+        }
+  }
+
+  if (isAfterPeak) {
+    return isJupiter
+      ? {
+          title: 'Salida del entorno joviano',
+          value: `${point.value} nT`,
+          description:
+            'Después del máximo acercamiento, la señal empieza a caer mientras Voyager 1 se aleja de Júpiter.',
+        }
+      : {
+          title: 'Después del encuentro',
+          value: `${point.value} nT`,
+          description:
+            'Tras el máximo acercamiento, la intensidad disminuye mientras Voyager 1 deja atrás el sistema de Saturno.',
+        }
+  }
+
+  if (intensityRatio > 0.35) {
+    return isJupiter
+      ? {
+          title: 'Entrada al entorno joviano',
+          value: `${point.value} nT`,
+          description:
+            'La intensidad empieza a crecer. Voyager 1 se aproxima al dominio magnético de Júpiter.',
+        }
+      : {
+          title: 'Aproximación a Saturno',
+          value: `${point.value} nT`,
+          description:
+            'La señal aumenta mientras la nave se acerca al sistema de Saturno.',
+        }
+  }
+
+  return isJupiter
+    ? {
+        title: 'Antes del encuentro',
+        value: `${point.value} nT`,
+        description:
+          'La señal todavía es baja. Voyager 1 se encuentra antes de la zona de mayor influencia magnética de Júpiter.',
+      }
+    : {
+        title: 'Antes del encuentro',
+        value: `${point.value} nT`,
+        description:
+          'La medición permanece estable antes de que Saturno empiece a dominar los datos.',
+      }
+}
+
+  const getNearestPoint = (mouseX) => {
+    const visiblePoints = points.filter((_, index) => {
+      const pointProgress = index / (points.length - 1)
+      return pointProgress <= draw
+    })
+
+    if (visiblePoints.length === 0) return null
+
+    return visiblePoints.reduce((nearest, point) => {
+      const currentDistance = Math.abs(point.x - mouseX)
+      const nearestDistance = Math.abs(nearest.x - mouseX)
+
+      return currentDistance < nearestDistance ? point : nearest
+    })
+  }
+
+  const handleGraphMouseMove = (event) => {
+    const svg = svgRef.current
+    if (!svg) return
+
+    const svgPoint = svg.createSVGPoint()
+    svgPoint.x = event.clientX
+    svgPoint.y = event.clientY
+
+    const cursor = svgPoint.matrixTransform(svg.getScreenCTM().inverse())
+
+    const insideChart =
+      cursor.x >= padding.left &&
+      cursor.x <= padding.left + chartWidth &&
+      cursor.y >= padding.top &&
+      cursor.y <= padding.top + chartHeight
+
+    if (!insideChart) {
+      setHoveredPoint(null)
+      return
+    }
+
+    setHoveredPoint(getNearestPoint(cursor.x))
+  }
+
+  const handleGraphMouseLeave = () => {
+    setHoveredPoint(null)
+  }
+
   return (
     <svg
+      ref={svgRef}
       className="mission-svg-graph"
       viewBox={`0 0 ${width} ${height}`}
       preserveAspectRatio="none"
@@ -686,6 +802,54 @@ const smoothPath = `${path} Q ${beforeLastPoint.x} ${beforeLastPoint.y} ${lastPo
       >
         BMAG_NT = MAGNITUD DEL CAMPO MAGNETICO
       </text>
+
+      <rect
+        x={padding.left}
+        y={padding.top}
+        width={chartWidth}
+        height={chartHeight}
+        fill="transparent"
+        style={{ cursor: 'crosshair', pointerEvents: 'all' }}
+        onMouseMove={handleGraphMouseMove}
+        onMouseLeave={handleGraphMouseLeave}
+      />
+
+      {hoveredPoint && (() => {
+  const popup = getPopupData(hoveredPoint)
+
+  return (
+    <g className="mission-hover-popup" pointerEvents="none">
+      <line
+        x1={hoveredPoint.x}
+        x2={hoveredPoint.x}
+        y1={padding.top}
+        y2={padding.top + chartHeight}
+        className="mission-hover-line"
+      />
+
+      <circle
+        cx={hoveredPoint.x}
+        cy={hoveredPoint.y}
+        r="8"
+        className="mission-hover-dot"
+      />
+
+      <foreignObject
+        x={hoveredPoint.x > width * 0.65 ? hoveredPoint.x - 330 : hoveredPoint.x + 24}
+        y={Math.max(hoveredPoint.y - 95, padding.top + 10)}
+        width="340"
+        height="210"
+      >
+        <div className="mission-hover-card">
+          <span>Lectura detectada</span>
+          <h3>{popup.title}</h3>
+          <strong>{popup.value}</strong>
+          <p>{popup.description}</p>
+        </div>
+      </foreignObject>
+    </g>
+  )
+})()}
     </svg>
   )
 }
