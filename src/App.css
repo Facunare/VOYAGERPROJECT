@@ -251,13 +251,13 @@ body {
 .story-text h2 {
   font-family: 'Nasalization', serif;
   font-weight: 700;
-
   font-size: clamp(2.3rem, 4vw, 3rem);
   line-height: 0.95;
   text-transform: uppercase;
   color: #ffffff;
   font-family: "Nasalization", sans-serif;
   margin-bottom: 1.5rem;
+
 }
 
 .story-text p {
@@ -3980,7 +3980,7 @@ canvas {
   backdrop-filter: blur(12px);
 
   cursor: pointer;
-
+  pointer-events:none;
   transition:
     border-color 0.22s ease,
     box-shadow 0.22s ease,
@@ -4032,7 +4032,7 @@ canvas {
 }
 
 .final-voyage-postcredits-button:active {
-  transform: translate(-50%, 0) scale(0.96) !important;
+  transform: scale(0.96) !important;
 }
 
 .final-voyage-actions {
@@ -4500,10 +4500,13 @@ canvas {
 
 /*
 
-=== PARA HACER ===
+=== MAÑANA ===
 
-1) TEMA TITULOS -> LO UNICO QUE FALTA CHE y feedback
-2) mejoras personales
-3) revision 
+1) Arreglar titulos
+2) Arreglar escala
+3) Revision
+4) Que se vea bien en mac
+5) Preparar datasets
+6) Estudiar historia
 
 */

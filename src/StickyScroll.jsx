@@ -361,7 +361,7 @@ const storyBlocks = [
   },
   {
     year: 'Urano y Neptuno',
-    title: 'Dos caminos distintos',
+    title: 'Dos caminos',
     text: 'Mientras Voyager 1 siguió su camino hacia las afueras del sistema solar, Voyager 2 continuó explorando Urano y Neptuno.',
   },
   {
@@ -371,7 +371,7 @@ const storyBlocks = [
   },
   {
     year: '2012',
-    title: 'Espacio interestelar',
+    title: 'Interstellar',
     text: 'Voyager 1 cruzó una frontera invisible y se convirtió en el primer objeto humano en entrar al espacio interestelar.',
   },
 ]
