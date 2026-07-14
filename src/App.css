@@ -4498,6 +4498,263 @@ canvas {
   }
 }
 
+
+.scale-section-fullscreen {
+  position: relative;
+  height: 620vh;
+  color: white;
+  overflow: visible;
+  overflow-x: clip;
+
+  background-color: rgba(2, 3, 10, 0.65);
+  background-image:
+    linear-gradient(
+      rgba(2, 3, 10, 0.78),
+      rgba(2, 3, 10, 0.88)
+    ),
+    url('./assets/espacio.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.scale-section-fullscreen .scale-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.scale-top-title {
+  position: absolute;
+  top: 5vh;
+  left: 7vw;
+  z-index: 30;
+
+  width: min(560px, 45vw);
+
+  text-align: left;
+  pointer-events: none;
+}
+
+.scale-top-title span {
+  display: block;
+  margin-bottom: 0.8rem;
+
+  color: white;
+  font-family: "Nasalization", sans-serif;
+  font-size: 3rem;
+  font-weight: 700;
+
+  text-transform: uppercase;
+}
+
+.scale-top-title p {
+  margin: 0;
+
+  color: rgba(255, 255, 255, 0.74);
+  font-family: "BTTF", sans-serif;
+  font-size: clamp(0.82rem, 1vw, 0.98rem);
+  line-height: 1.55;
+}
+
+.scale-section-fullscreen .scale-viewport-fullscreen {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+.scale-section-fullscreen .scale-horizontal-track {
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  display: flex;
+  flex-direction: row;
+
+  height: 100vh;
+  width: max-content;
+
+  will-change: transform;
+  transition: transform 0.08s linear;
+}
+
+.scale-section-fullscreen .scale-panel-fullscreen {
+  position: relative;
+
+  width: 100vw;
+  height: 100vh;
+  flex: 0 0 100vw;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  transform-origin: center;
+  will-change: opacity, filter, transform;
+
+  transition:
+    opacity 0.12s linear,
+    filter 0.12s linear,
+    transform 0.12s linear;
+}
+
+.scale-section-fullscreen .scale-object-stage {
+  position: relative;
+
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+
+  padding-top: 18vh;
+  padding-bottom: 13vh;
+}
+
+.scale-section-fullscreen .scale-object-visual {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+
+  overflow: visible;
+}
+
+.scale-section-fullscreen .scale-object-visual canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.scale-section-fullscreen .scale-object-visual img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* Tamaños de objetos en fullscreen */
+.scale-section-fullscreen .scale-object-eiffel {
+  width: min(42vw, 620px);
+  height: 50vh;
+}
+
+.scale-section-fullscreen .scale-object-airplane {
+  width: min(62vw, 860px);
+  height: 32vh;
+}
+
+.scale-section-fullscreen .scale-object-james-webb {
+  width: min(50vw, 720px);
+  height: 45vh;
+}
+
+.scale-section-fullscreen .scale-object-voyager {
+  width: min(42vw, 560px);
+  height: 42vh;
+}
+
+.scale-section-fullscreen .scale-object-perseverance {
+  width: min(38vw, 500px);
+  height: 38vh;
+}
+
+.scale-section-fullscreen .scale-object-person {
+  width: 72px;
+  height: 145px;
+}
+
+.scale-section-fullscreen .scale-object-info {
+  position: static;
+
+  margin-top: 1.6rem;
+  margin-bottom: 0;
+
+  text-align: center;
+  transform: none;
+}
+
+.scale-section-fullscreen .scale-object-info p {
+  margin: 0 0 0.7rem;
+
+  color: rgba(255, 255, 255, 0.78);
+  font-family: "BTTF", sans-serif;
+  font-size: clamp(0.8rem, 1.1vw, 1rem);
+  letter-spacing: 0.16em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.scale-section-fullscreen .scale-object-info span {
+  display: block;
+
+  padding: 0;
+
+  color: #f5a623;
+  font-family: "Nasalization", sans-serif;
+  font-size: clamp(1.8rem, 4vw, 4.3rem);
+  font-weight: 700;
+  line-height: 0.95;
+  text-shadow: 0 0 22px rgba(245, 166, 35, 0.42);
+}
+
+.scale-section-fullscreen .scale-ground-line {
+  position: absolute;
+  left: 8vw;
+  right: 8vw;
+  bottom: 12vh;
+
+  width: auto;
+  height: 1px;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(245, 166, 35, 0.75),
+    rgba(255, 255, 255, 0.22),
+    transparent
+  );
+
+  z-index: 1;
+}
+
+@media (max-width: 900px) {
+  .scale-top-title {
+    left: 8vw;
+    width: 84vw;
+  }
+
+  .scale-top-title p {
+    display: none;
+  }
+
+  .scale-section-fullscreen .scale-object-stage {
+    padding-top: 16vh;
+    padding-bottom: 16vh;
+  }
+
+  .scale-section-fullscreen .scale-object-eiffel {
+    width: 78vw;
+    height: 56vh;
+  }
+
+  .scale-section-fullscreen .scale-object-airplane,
+  .scale-section-fullscreen .scale-object-james-webb,
+  .scale-section-fullscreen .scale-object-voyager,
+  .scale-section-fullscreen .scale-object-perseverance {
+    width: 84vw;
+    height: 42vh;
+  }
+}
 /*
 
 === MAÑANA ===
