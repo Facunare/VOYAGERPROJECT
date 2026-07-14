@@ -54,6 +54,8 @@ function TransitionScene({ progress }) {
 function ShootingTitleText({ title, progress }) {
   const writeProgress = smooth(0.06, 0.42, progress)
 
+  const words = title.split(' ')
+
   return (
     <div
       className="shooting-title"
@@ -64,23 +66,36 @@ function ShootingTitleText({ title, progress }) {
       <div className="shooting-star" />
 
       <h2>
-        {title.split('').map((char, i) => {
-          const letterProgress = writeProgress * title.length - i
-          const visible = clamp(letterProgress, 0, 1)
+        {words.map((word, wordIndex) => (
+          <span className="shooting-word" key={`${word}-${wordIndex}`}>
+            {word.split('').map((char, charIndex) => {
+              const globalIndex =
+                words
+                  .slice(0, wordIndex)
+                  .join('')
+                  .length +
+                wordIndex +
+                charIndex
 
-          return (
-            <span
-              key={`${char}-${i}`}
-              style={{
-                opacity: visible,
-                filter: `blur(${(1 - visible) * 8}px)`,
-                transform: `translateY(${(1 - visible) * 18}px)`,
-              }}
-            >
-              {char === ' ' ? '\u00A0' : char}
-            </span>
-          )
-        })}
+              const letterProgress = writeProgress * title.length - globalIndex
+              const visible = clamp(letterProgress, 0, 1)
+
+              return (
+                <span
+                  key={`${char}-${charIndex}`}
+                  className="shooting-letter"
+                  style={{
+                    opacity: visible,
+                    filter: `blur(${(1 - visible) * 8}px)`,
+                    transform: `translateY(${(1 - visible) * 18}px)`,
+                  }}
+                >
+                  {char}
+                </span>
+              )
+            })}
+          </span>
+        ))}
       </h2>
     </div>
   )
@@ -136,16 +151,20 @@ export default function SpaceTransition({ title, showVoyager = true }) {
 )}
 
         {title && (
-          <div
-            className="space-transition-title"
-            style={{
-              opacity: titleOpacity,
-              transform: `translateY(${lerp(22, -8, smooth(0.02, 0.62, progress))}px)`,
-            }}
-          >
-            <ShootingTitleText title={title} progress={progress} />
-          </div>
-        )}
+  <div
+    className="space-transition-title"
+    style={{
+      opacity: titleOpacity,
+      transform: `translate(-50%, calc(-50% + ${lerp(
+        22,
+        -8,
+        smooth(0.02, 0.62, progress)
+      )}px))`,
+    }}
+  >
+    <ShootingTitleText title={title} progress={progress} />
+  </div>
+)}
 
         <div
           className="space-transition-caption"

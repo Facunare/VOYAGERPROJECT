@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { useGLTF, useTexture } from '@react-three/drei'
+import { useNarrativeTitlesHidden } from './useNarrativeTitlesHidden.js'
 
 function clamp(value, min = 0, max = 1) {
   return Math.min(Math.max(value, min), max)
@@ -231,6 +232,7 @@ export default function AlienEncounterSection() {
   const sectionRef = useRef(null)
   const [progress, setProgress] = useState(0)
   const [showAlienVideo, setShowAlienVideo] = useState(false)
+  const hideStoryTitles = useNarrativeTitlesHidden()
   const [skipLock, setSkipLock] = useState(
     () => sessionStorage.getItem('skipAlienEncounterLock') === 'true'
   )
@@ -397,8 +399,8 @@ const shouldLockAlienScroll = progress > 0.62 && !showAlienVideo && !skipLock
       className="alien-text-step"
     >
               <div>
-                <span>{step.kicker}</span>
-                <h2>{step.title}</h2>
+                <span>{hideStoryTitles ? step.title : step.kicker}</span>
+                {!hideStoryTitles && <h2>{step.title}</h2>}
                 <p>{step.text}</p>
               </div>
             </article>

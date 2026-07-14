@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { useGLTF, useTexture } from '@react-three/drei'
 import { DoubleSide, RingGeometry, Vector3, ClampToEdgeWrapping } from 'three'
+import { useNarrativeTitlesHidden } from './useNarrativeTitlesHidden.js'
 
 function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max)
@@ -903,8 +904,8 @@ function JupiterSaturnStoryBlock({ blockSteps, sceneStart, sceneEnd }) {
       >
         {blockSteps.map((step, index) => (
           <article key={index} className="jupiter-saturn-text-step">
-            <span>{step.kicker}</span>
-            <h2>{step.title}</h2>
+            <span>{hideStoryTitles ? step.title : step.kicker}</span>
+            {!hideStoryTitles && <h2>{step.title}</h2>}
             <p>{step.text}</p>
           </article>
         ))}
@@ -915,6 +916,7 @@ function JupiterSaturnStoryBlock({ blockSteps, sceneStart, sceneEnd }) {
 export default function JupiterSaturnEncounter() {
   const sectionRef = useRef()
   const [scrollProgress, setScrollProgress] = useState(0)
+  const hideStoryTitles = useNarrativeTitlesHidden()
 
 
   const timelineItems = [
@@ -1044,8 +1046,8 @@ export default function JupiterSaturnEncounter() {
               key={index}
               className="jupiter-saturn-text-step"
             >
-              <span>{item.step.kicker}</span>
-              <h2>{item.step.title}</h2>
+              <span>{hideStoryTitles ? item.step.title : item.step.kicker}</span>
+              {!hideStoryTitles && <h2>{item.step.title}</h2>}
               <p>{item.step.text}</p>
             </article>
           )

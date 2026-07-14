@@ -2,6 +2,7 @@ import { Suspense, useEffect, useMemo, useRef, useState } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Line, useGLTF } from '@react-three/drei'
 import { AdditiveBlending } from 'three'
+import { useNarrativeTitlesHidden } from './useNarrativeTitlesHidden.js'
 
 const clamp = (value, min = 0, max = 1) =>
   Math.min(Math.max(value, min), max)
@@ -120,6 +121,7 @@ const steps = [
 export default function FinalVoyageSection() {
   const sectionRef = useRef(null)
   const [progress, setProgress] = useState(0)
+  const hideStoryTitles = useNarrativeTitlesHidden()
 
   useEffect(() => {
     let frame = 0
@@ -232,8 +234,8 @@ const goToPostCredits = () => {
             key={step.title}
           >
             <div>
-              <span>{step.kicker}</span>
-              <h2>{step.title}</h2>
+              <span>{hideStoryTitles ? step.title : step.kicker}</span>
+              {!hideStoryTitles && <h2>{step.title}</h2>}
               <p>{step.text}</p>
             </div>
           </article>

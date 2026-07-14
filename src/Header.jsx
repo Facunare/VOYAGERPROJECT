@@ -31,7 +31,6 @@ function VoyagerFloat() {
 function Header() {
   return (
     <header className="hero-header">
-
       <div className="hero-voyager">
         <Canvas camera={{ position: [0, 0, 6], fov: 40 }}>
           <ambientLight intensity={2} />
@@ -41,21 +40,20 @@ function Header() {
       </div>
 
       <div className="hero-text">
-        <h1>
-          <span style={{ color: '#f5a623' }}>
-            VOYAGER:
-          </span>{' '}
-          <span className="title">
-            LA HISTORIA EN EL MAS ALLA
-          </span>
-        </h1>
+  <h1>
+    <span className="voyager-word">
+      VOYAGER:
+    </span>{' '}
+    <span className="title">
+      LA HISTORIA EN EL MAS ALLA
+    </span>
+  </h1>
 
-        <h2>
-          El viaje que empezó como una misión y terminó
-          como una historia de la humanidad
-        </h2>
-      </div>
-
+  <h2>
+    El viaje que empezó como una misión y terminó
+    como una historia de la humanidad
+  </h2>
+</div>
     </header>
   )
 }

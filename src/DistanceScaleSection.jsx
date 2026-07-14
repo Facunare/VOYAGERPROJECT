@@ -6,6 +6,7 @@ import {
   BufferGeometry,
   Float32BufferAttribute,
 } from 'three'
+import { useNarrativeTitlesHidden } from './useNarrativeTitlesHidden.js'
 
 const clamp = (value, min = 0, max = 1) =>
   Math.min(Math.max(value, min), max)
@@ -315,6 +316,7 @@ function ScaleIndicator({ progress }) {
 export default function DistanceScaleSection() {
   const sectionRef = useRef(null)
   const [progress, setProgress] = useState(0)
+  const hideStoryTitles = useNarrativeTitlesHidden()
 
   useEffect(() => {
     let frame = 0
@@ -359,8 +361,8 @@ export default function DistanceScaleSection() {
   {steps.map((step) => (
     <article className="distance-scale-step" key={step.title}>
       <div>
-        <span>{step.kicker}</span>
-        <h2>{step.title}</h2>
+        <span>{hideStoryTitles ? step.title : step.kicker}</span>
+        {!hideStoryTitles && <h2>{step.title}</h2>}
         <p>{step.text}</p>
       </div>
     </article>

@@ -3,6 +3,7 @@ import { Canvas, useFrame } from '@react-three/fiber'
 import { useGLTF, useTexture } from '@react-three/drei'
 import { DoubleSide, RingGeometry, Vector3, ClampToEdgeWrapping } from 'three'
 import SpaceTransition from './SpaceTransition.jsx'
+import { toggleNarrativeTitlesHidden, useNarrativeTitlesHidden } from './useNarrativeTitlesHidden.js'
 
 function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max)
@@ -379,6 +380,7 @@ const storyBlocks = [
 export default function StickyScroll() {
   const sectionRef = useRef()
   const [scrollProgress, setScrollProgress] = useState(0)
+  const hideStoryTitles = useNarrativeTitlesHidden()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -416,9 +418,15 @@ export default function StickyScroll() {
     >
       <div className="hero-text">
         <h1>
-          <span style={{ color: '#f5a623' }}>
+          <button
+            type="button"
+            className={`voyager-secret-title-toggle ${hideStoryTitles ? 'is-active' : ''}`}
+            onClick={toggleNarrativeTitlesHidden}
+            title={hideStoryTitles ? 'Mostrar títulos narrativos' : 'Ocultar títulos narrativos'}
+            aria-pressed={hideStoryTitles}
+          >
             VOYAGER:
-          </span>{' '}
+          </button>{' '}
           <span className="title">
             LA HISTORIA EN EL MAS ALLA
           </span>
@@ -447,8 +455,10 @@ export default function StickyScroll() {
       {storyBlocks.map((block, i) => (
         <div key={i} className="story-step">
           <div className="story-text">
-            <span className="story-year">{block.year}</span>
-            <h2>{block.title}</h2>
+            <span className="story-year">
+              {hideStoryTitles ? block.title : block.year}
+            </span>
+            {!hideStoryTitles && <h2>{block.title}</h2>}
             <p>{block.text}</p>
           </div>
         </div>

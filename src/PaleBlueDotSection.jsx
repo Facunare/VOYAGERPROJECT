@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { useGLTF, useTexture } from '@react-three/drei'
+import { useNarrativeTitlesHidden } from './useNarrativeTitlesHidden.js'
 
 function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max)
@@ -676,6 +677,7 @@ function VoyagerDistanceGraph({ chart, progress }) {
 export default function PaleBlueDotSection() {
   const sectionRef = useRef()
   const [scrollProgress, setScrollProgress] = useState(0)
+  const hideStoryTitles = useNarrativeTitlesHidden()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -709,8 +711,8 @@ export default function PaleBlueDotSection() {
       <div className="pale-text-steps">
         {steps.map((step, index) => (
           <article key={index} className="pale-text-step">
-            <span>{step.kicker}</span>
-            <h2>{step.title}</h2>
+            <span>{hideStoryTitles ? step.title : step.kicker}</span>
+            {!hideStoryTitles && <h2>{step.title}</h2>}
             <p>{step.text}</p>
           </article>
         ))}

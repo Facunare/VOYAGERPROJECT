@@ -4760,9 +4760,114 @@ canvas {
 
 === MAÑANA ===
 
-1) Que se vea bien en mac
 2) Preparar datasets
 3) Estudiar historia
 4) Revision
 
 */
+
+
+/* ===================================== */
+/* SECRET TITLE MODE TOGGLE */
+/* ===================================== */
+
+.voyager-secret-title-toggle {
+  appearance: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+
+  color: #f5a623;
+  background: transparent;
+
+  font: inherit;
+  font-family: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+
+  cursor: pointer;
+}
+
+.voyager-secret-title-toggle:hover {
+  color: #ffd576;
+  text-shadow:
+    0 0 12px rgba(245, 166, 35, 0.35),
+    0 0 28px rgba(245, 166, 35, 0.22);
+}
+
+
+html.voyager-no-story-titles .story-text h2,
+html.voyager-no-story-titles .jupiter-saturn-text-step h2,
+html.voyager-no-story-titles .heliopause-text-step h2,
+html.voyager-no-story-titles .mission-power-step h2,
+html.voyager-no-story-titles .distance-scale-step h2,
+html.voyager-no-story-titles .pale-text-step h2,
+html.voyager-no-story-titles .alien-text-step h2,
+html.voyager-no-story-titles .final-voyage-step h2 {
+  display: none;
+}
+
+
+.space-transition-title {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  right: auto;
+
+  width: 100vw;
+  max-width: 100vw;
+
+  z-index: 6;
+  pointer-events: none;
+
+  text-align: center;
+}
+
+.shooting-title {
+  width: 100vw;
+  max-width: 100vw;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+}
+
+.shooting-title h2 {
+  width: 100vw;
+  max-width: 100vw;
+
+  margin: 0 auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+
+  gap: 0.28em;
+
+  white-space: nowrap;
+
+  font-family: "Nasalization", sans-serif;
+  font-size: clamp(2.2rem, 4.7vw, 5.8rem);
+  line-height: 1.05;
+  text-align: center;
+  text-transform: uppercase;
+
+  color: #ffffff;
+
+  text-shadow:
+    0 0 12px rgba(255, 255, 255, 0.58),
+    0 0 28px rgba(255, 255, 255, 0.22);
+}
+
+.shooting-word {
+  display: inline-flex;
+  white-space: nowrap;
+}
+
+.shooting-letter {
+  display: inline-block;
+  will-change: opacity, filter, transform;
+}

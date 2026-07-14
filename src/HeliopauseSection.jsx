@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
 import { AdditiveBlending, DoubleSide } from 'three'
+import { useNarrativeTitlesHidden } from './useNarrativeTitlesHidden.js'
 
 function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max)
@@ -639,6 +640,7 @@ export default function HeliopauseSection() {
   const graphRef = useRef()
   const [scrollProgress, setScrollProgress] = useState(0)
   const [graphProgress, setGraphProgress] = useState(0)
+  const hideStoryTitles = useNarrativeTitlesHidden()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -682,8 +684,8 @@ export default function HeliopauseSection() {
       <div className="heliopause-text-steps">
         {steps.map((step, index) => (
           <article key={index} className="heliopause-text-step">
-            <span>{step.kicker}</span>
-            <h2>{step.title}</h2>
+            <span>{hideStoryTitles ? step.title : step.kicker}</span>
+            {!hideStoryTitles && <h2>{step.title}</h2>}
             <p>{step.text}</p>
           </article>
         ))}
