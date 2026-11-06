@@ -66,7 +66,7 @@ body {
   font-size: clamp(2rem, 5vw, 3.5rem);
   font-weight: 700;
   color: #ffffff;
-  
+  color: red;
   margin-bottom: 1.25rem;
   font-family: "Nasalization", sans-serif;
   
@@ -76,7 +76,7 @@ body {
 
 .hero-text h2{
   font-size: clamp(0.95rem, 2vw, 1.15rem);
-  color: #ffffff;
+  color: red;
   max-width: 1700px;
   line-height: 1.5;
   font-family: "BTTF", sans-serif;
@@ -115,7 +115,7 @@ body {
   font-size: clamp(2.8rem, 6vw, 6rem);
   line-height: 0.95;
   text-transform: uppercase;
-  color: #ffffff;
+  color: red;
   margin-bottom: 1.5rem;
 }
 
@@ -2648,7 +2648,7 @@ header h2,
 .title h2 {
   margin: 0;
   text-align: center;
-  color: #ffd576;
+  color: red;
 }
 
 .title h1 {
@@ -4760,9 +4760,7 @@ canvas {
 
 === MAÑANA ===
 
-2) Preparar datasets
 3) Estudiar historia
-4) Revision
 
 */
 
